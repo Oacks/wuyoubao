@@ -1,13 +1,44 @@
 //index.js
 //获取应用实例
 const app = getApp()
+import api from '../../api/api'
 
 Page({
   data: {
     motto: 'Hello World',
+    timer: null,
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    currentSwiper: 0,
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    imgsArr: [{ url: "/images/swiper-1.png" }, { url: "/images/2.jpg" }, { url: "/images/2.jpg" }],
+    previousmargin: '40rpx',//前边距
+    nextmargin: '40rpx',//后边距
+    page: 0,
+    totalList: 0, // 总数
+    raceList: [
+      // {
+      // id: 0,
+      // picUrl: '/images/race-list1.png',
+      // eventName: '要你好看',
+      // beginTime: '2019/10/29',
+      // endTime: '2019/11/1',
+      // address: '四川 成都市金牛区',
+      // flowStatus: 0 // 0未开始 1进行中
+      // },
+    ]
+  },
+  // 下拉加载更多
+  onReachBottom() {
+    this.getMoreList()
+  },
+  // 下拉刷新
+  onPullDownRefresh() {
+    this.setData({
+      page: 0,
+      raceList: []
+    })
+    this.getList()
   },
   //事件处理函数
   bindViewTap: function() {
@@ -15,40 +46,76 @@ Page({
       url: '../logs/logs'
     })
   },
-  onLoad: function () {
-    if (app.globalData.userInfo) {
+  swiperChange: function (e) {
+    let { source } = e.detail
+    if (source === 'autoplay' || source === 'touch') {
       this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-        }
+        currentSwiper: e.detail.current
       })
     }
   },
-  getUserInfo: function(e) {
-    console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
+  // 展示详情
+  showDetail(evt){
+      let id = evt.detail.id
+      wx.navigateTo({
+        url: '/pages/race/raceDetail/raceDetail?id=' + id,
+      })
+  },
+  // 获取赛事列表
+  debounceGetList() {
+    clearTimeout(this.data.timer)
+    let timer = setTimeout(() => {
+      this.getList()
+    }, 1000)
     this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
+      timer: timer
     })
+  },
+  // 获取当前页
+  getList() {
+    console.log('当前页' + this.data.page);
+    wx.showLoading({
+      mask: true,
+    });
+    let that = this
+    api.post('event/list', {
+      page: this.data.page,
+      pageSize: 10,
+    }).then(res => {
+      let arr = res.records
+      arr.forEach(ele => {
+        ele.beginTime = ele.beginTime.slice(0, 10)
+        ele.endTime = ele.endTime.slice(0, 10)
+      });
+      let orginArr = that.data.raceList
+      orginArr.push(...arr)
+      that.setData({
+        totalList: res.total, 
+        raceList: orginArr
+      })
+      wx.stopPullDownRefresh()
+      wx.hideLoading();
+    })
+  },
+  // 底部加载更多
+  getMoreList() {
+    let {totalList, raceList, page} = this.data
+    if (totalList <= raceList.length) {return}
+    this.setData({
+      page: Number(page) + 1,
+    })
+    this.debounceGetList()
+  },
+
+  onLoad: function () {
+    this.getList()
+  },
+  onShow: function() {
+    if (typeof this.getTabBar === 'function' &&
+      this.getTabBar()) {
+      this.getTabBar().setData({
+        selected: 0
+      })
+    }
   }
 })

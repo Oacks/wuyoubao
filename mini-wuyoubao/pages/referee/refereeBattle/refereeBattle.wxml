@@ -1,0 +1,36 @@
+<!--pages/referee/refereeBattle/refereeBattle.wxml-->
+<view class="container bgo flex-column-layout">
+    <navBar title="" back="{{true}}" home="{{false}}" background="{{'transparent'}}" backgroundColorTop="{{'transparent'}}" bindback="back">
+        <view class="white ml20 barTitle" slot="center">裁判</view>
+    </navBar>
+    <view class="battle-container">
+        <image class="vs-pic" src="/images/vs-pic.png"></image>
+        <view class="abstain-btn" catchtap="giveup">
+            <view class="abstain-btn-inner">弃权</view>
+        </view>
+        <!-- <view class="tonext-btn" catchtap="canNext">
+            <view class="tonext-btn-inner">下一组</view>
+        </view> -->
+        <view class="list-pic" catchtap="toList">
+            <image class="list-pic-inner" src="/images/icon/menu-icon.png" catchtap="toList"></image>
+        </view>
+        <view class="left">
+            <view class="leftClick click" catchtap="chose" data-side="left"></view>
+            <view class="leftMask mask"></view>
+            <image class="player-pic1" src="/images/player-video.png" catchtap="chose" data-side="left"></image>
+            <view class="info1">
+                <text class="group">{{leftInfo.itemNum}}</text>
+                <text class="name">{{leftInfo.nickName}}</text>
+            </view>
+        </view>
+        <view class="right">
+            <view class="rightClick click" catchtap="chose" data-side="right"></view>
+            <view class="rightMask mask"></view>
+            <image class="player-pic2" src="/images/player-video.png" catchtap="chose" data-side="right"></image>
+            <view class="info2">
+                <text class="group">{{rightInfo.itemNum}}</text>
+                <text class="name">{{rightInfo.nickName}}</text>
+            </view>
+        </view>
+    </view>
+</view>

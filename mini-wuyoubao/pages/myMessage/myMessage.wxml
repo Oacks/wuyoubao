@@ -1,0 +1,43 @@
+<!--pages/myMessage/myMessage.wxml-->
+<view class="container">
+    <navBar title="" back="{{true}}" home="{{false}}" bindback="onBack">
+        <view class="white barTitle" slot="center">我的消息</view>
+    </navBar>
+    <view class="my-msg-container">
+        <view class="msg-head">
+            <text class="head-word">消息数：</text>
+            <text class="head-word2">{{msgLists.length}}条</text>
+        </view>
+        <view class="msg-lists">
+            <view class="msg-list" wx:for="{{msgLists}}" wx:key="index" wx:for-item="info">
+                <view class="user-info">
+                    <image class="user-avatar" src="{{info.sendUserPic}}"></image>
+                    <text class="user-name">{{info.createName}}</text>
+                    <view class="user-group">{{info.groupName}}</view>
+                    <view class="user-identity">{{info.roleName}}</view>
+                    <view class="msg-time">{{info.createTime}}</view>
+                </view>
+                <view class="user-msg">
+                    {{info.content}}
+                </view>
+                    <!-- <view class="msg-from">回复了你在<text class="hl-from">{{info.taskName}}</text>中的信息</view> -->
+
+                <view class="reply-list" wx:for="{{info.replyList}}" wx:key="index" wx:for-item="rlist">
+                    <image class="reply-avatar" src="{{rlist.userPic}}"></image>
+                    <text class="reply-name">{{rlist.replyName}}</text>
+                    <view class="msg-from">回复：</view>
+                    <view class="reply-word">{{rlist.content}}</view>
+                </view>
+                <view class="input-area">
+                    <textarea class="reply-textarea-style" placeholder-class="textarea-placeholder" value="{{info.replyContent}}" id=""  bindinput="contentChange" data-index="{{index}}"></textarea>
+                </view>
+                <view class="operate-area">
+                    <view class="operate-btn">
+                        <view class="reply-btn" catchtap="reply" data-index="{{index}}">回复</view>
+                        <!-- <view class="delete-btn">删除</view> -->
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

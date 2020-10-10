@@ -35,9 +35,9 @@
     "packNpmRelationList": []
   },
   "compileType": "miniprogram",
-  "libVersion": "2.13.0",
+  "libVersion": "2.13.1",
   "appid": "wx231ecd8ca8d2416c",
-  "projectname": "wuyoubao",
+  "projectname": "mini-wuyoubao",
   "debugOptions": {
     "hidedInDevtools": []
   },

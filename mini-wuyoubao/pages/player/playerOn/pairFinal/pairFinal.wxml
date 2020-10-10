@@ -1,0 +1,43 @@
+<!--决赛界面-->
+<view class="final-container">
+    <view class="once-more" wx:if="{{playerInfo.battleLeft.isWin == 0 && playerInfo.battleRight.isWin == 0}}">one more</view>
+    <view class="left">
+        <view class="player-vs">
+            <view class="player-square">
+                <image class="question-mark" src="/images/ask.png"></image>
+                <image class="player-pic1" ></image>
+            </view>
+        </view>
+        <view class="result">
+            <view class="res-word">
+                <view class="unknow" wx:if="{{judge == ''}}">?</view>
+                <view class="win" wx:if="{{judge == 'left'}}">win</view>
+                <view class="lose" wx:if="{{judge == 'right'}}">lose</view>
+            </view>
+            <view class="res-group">
+                <view class="group-left">{{playerInfo.battleLeft.itemNum}}</view>
+            </view>
+        </view>
+    </view>
+    <view class="middle">
+        <image class="final-vs" src="/images/final-vs.png"></image>
+    </view>
+    <view class="right">
+    <view class="player-vs">
+        <view class="player-square">
+            <image class="question-mark" src="/images/ask.png"></image>
+            <image class="player-pic2"></image>
+        </view>
+        </view>
+        <view class="result">
+            <view class="res-word">
+                <view class="unknow" wx:if="{{judge == ''}}">?</view>
+                <view class="win" wx:if="{{judge == 'right'}}">win</view>
+                <view class="lose" wx:if="{{judge == 'left'}}">lose</view>
+            </view>
+            <view class="res-group">
+                <view class="group-right">{{playerInfo.battleRight.itemNum}}</view>
+            </view>
+        </view>
+    </view>
+</view>

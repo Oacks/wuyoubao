@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "ctrl-detail": "/pages/masterCtrl/ctrlDetail/ctrlDetail",
+    "repick": "/components/repick/repick",
+    "my-picker": "/components/myPicker/myPicker",
+    "mp-badge": "/components/badge/badge"
+  }
+}

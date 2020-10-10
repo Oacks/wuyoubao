@@ -1,181 +1,137 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
-Vue.use(Router)
+Vue.use(Router);
 
-/* Layout */
-import Layout from '@/layout'
-
-/**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
- */
-
-/**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
- */
-export const constantRoutes = [
-  {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
-
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
-
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
-    }]
-  },
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
+export default new Router({
+    routes: [
+        {
+            path: '/',
+            redirect: '/contract'
+        },
+        {
+            path: '/',
+            component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
+            meta: { title: '自述文件' },
             children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
+                {
+                    path: '/contract',
+                    name: 'contract',
+                    component: () => import(/* webpackChunkName: "contract" */ '../components/page/main/ContractManage.vue'),
+                    meta: { title: '合同管理' }
+                },
+                {
+                    path: '/card',
+                    name: 'card',
+                    component: () => import(/* webpackChunkName: "card" */ '../components/page/main/CardManage.vue'),
+                    meta: { title: '无忧宝卡管理' }
+                },
+                {
+                    path: '/postprodt',
+                    name: 'postprodt',
+                    component: () => import(/* webpackChunkName: "postprodt" */ '../components/page/main/PostProductManage.vue'),
+                    meta: { title: '邮品管理' }
+                },
+                {
+                    path: '/user',
+                    name: 'user',
+                    // component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/main/UserManage.vue'),
+                    meta: { title: '会员管理' }
+                },
+                {
+                    path: '/icon',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
+                    meta: { title: '自定义图标' }
+                },
+                {
+                    path: '/table',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
+                    meta: { title: '基础表格' }
+                },
+                {
+                    path: '/tabs',
+                    component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
+                    meta: { title: 'tab选项卡' }
+                },
+                {
+                    path: '/form',
+                    component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
+                    meta: { title: '基本表单' }
+                },
+                {
+                    // 富文本编辑器组件
+                    path: '/editor',
+                    component: () => import(/* webpackChunkName: "editor" */ '../components/page/VueEditor.vue'),
+                    meta: { title: '富文本编辑器' }
+                },
+                {
+                    // markdown组件
+                    path: '/markdown',
+                    component: () => import(/* webpackChunkName: "markdown" */ '../components/page/Markdown.vue'),
+                    meta: { title: 'markdown编辑器' }
+                },
+                {
+                    // 图片上传组件
+                    path: '/upload',
+                    component: () => import(/* webpackChunkName: "upload" */ '../components/page/Upload.vue'),
+                    meta: { title: '文件上传' }
+                },
+                {
+                    // vue-schart组件
+                    path: '/charts',
+                    component: () => import(/* webpackChunkName: "chart" */ '../components/page/BaseCharts.vue'),
+                    meta: { title: 'schart图表' }
+                },
+                {
+                    // 拖拽列表组件
+                    path: '/drag',
+                    component: () => import(/* webpackChunkName: "drag" */ '../components/page/DragList.vue'),
+                    meta: { title: '拖拽列表' }
+                },
+                {
+                    // 拖拽Dialog组件
+                    path: '/dialog',
+                    component: () => import(/* webpackChunkName: "dragdialog" */ '../components/page/DragDialog.vue'),
+                    meta: { title: '拖拽弹框' }
+                },
+                {
+                    // 国际化组件
+                    path: '/i18n',
+                    component: () => import(/* webpackChunkName: "i18n" */ '../components/page/I18n.vue'),
+                    meta: { title: '国际化' }
+                },
+                {
+                    // 权限页面
+                    path: '/permission',
+                    component: () => import(/* webpackChunkName: "permission" */ '../components/page/Permission.vue'),
+                    meta: { title: '权限测试', permission: true }
+                },
+                {
+                    path: '/404',
+                    component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
+                    meta: { title: '404' }
+                },
+                {
+                    path: '/403',
+                    component: () => import(/* webpackChunkName: "403" */ '../components/page/403.vue'),
+                    meta: { title: '403' }
+                },
+                {
+                    path: '/donate',
+                    component: () => import(/* webpackChunkName: "donate" */ '../components/page/Donate.vue'),
+                    meta: { title: '支持作者' }
+                }
             ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
-      }
+        },
+        {
+            path: '/login',
+            component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
+            meta: { title: '登录' }
+        },
+        {
+            path: '*',
+            redirect: '/404'
+        }
     ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
-]
-
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
-
-const router = createRouter()
-
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
-}
-
-export default router
+});

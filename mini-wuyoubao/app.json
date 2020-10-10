@@ -1,14 +1,47 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/nodeCtrl/nodeCtrl",
+    "pages/masterCtrl/masterCtrl",
+    "pages/player/playerOn/playerOn",
+    "pages/referee/refereeBattle/refereeBattle",
+    "pages/referee/refereeRate/refereeRate",
+    "pages/activityProcess/activityProcess",
+    "pages/race/raceSignIn/raceSignIn",
+    "pages/user/user",
+    "pages/race/raceDetail/raceDetail",
+    "pages/myMessage/myMessage",
+    "pages/playerInfoForm/playerInfoForm",
+    "pages/referee/referee",
+    "pages/referee/refereeBattle/refereeBattleList/refereeBattleList",
+    "pages/demo/demoBindRole/demoBindRole",
+    "pages/race/raceSignUp/raceSignUp",
+    "pages/player/playerOnAudition/playerOnAudition",
+    "pages/authorization/authorization",
+    "pages/authorizationPhone/authorizationPhone",
+    "pages/pay/pay",
+    "pages/scan/scan"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
-    "navigationBarTextStyle":"black"
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationStyle": "custom",
+    "enablePullDownRefresh": true
   },
-  "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "usingComponents": {
+    "navBar": "/components/navBar/navBar"
+  },
+  "tabBar": {
+    "custom": true,
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "首页"
+      }
+    ]
+  }
 }
