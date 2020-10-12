@@ -83,10 +83,6 @@ export const createShop = query => {
     return post('wyht/createShop', query)
 }
 
-// 4s店销售列表
-export const salerList = query => {
-    return get('wyht/salerList', query)
-}
 
 // 4s店详情
 export const shopDetail = query => {
@@ -128,5 +124,27 @@ export const accessoriesList = query => {
 // 七牛云上传
 export const uploadToken = query => {
     return get('file/uploadQniuToken', query)
+}
+
+// 无忧宝卡列表
+export const insuranceList = query => {
+    return get('wyht/carInsuranceList', query)
+}
+
+// 创建销售
+export const addSaler = query => {
+    return post('wyht/addSaler', query)
+}
+
+export const delSaler = query => {
+    return post('wyht/delSaler', query)
+}
+
+export const salerList = query => {
+    return get('wyht/salerList', query)
+}
+
+export const updateSaler = query => {
+    return post('wyht/updateSaler', query)
 }
 

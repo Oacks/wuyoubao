@@ -22,7 +22,7 @@ Page({
         var that = this;
         //插入登录的用户的相关信息到数据库
         let {signature, rawData, encryptedData, iv} = e.detail
-        api.post('getUserInfo', {
+        api.post('sale/getSalerInfo', {
           signature: signature,
           rawData: rawData,
           encryptedData: encryptedData,
@@ -47,7 +47,7 @@ Page({
         //用户按了拒绝按钮
         wx.showModal({
             title:'警告',
-            content:'您点击了拒绝授权，将无法执行报名或签到!',
+            content:'您点击了拒绝授权，将无法执行用户操作!',
             showCancel:false,
             confirmText:'返回授权',
             success:function(res){

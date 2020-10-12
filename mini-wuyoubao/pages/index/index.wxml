@@ -1,22 +1,42 @@
 <!-- index.wxml -->
 <view class="container">
-  <navBar title="" back="{{false}}" home="{{false}}" background="{{'#191919'}}">
-    <view class="white ml20 barTitle" slot="left">首页</view>
+  <navBar title="" back="{{false}}" home="{{false}}" background="{{'#393939'}}">
+    <view class="white ml20 barTitle" slot="center">无忧宝</view>
   </navBar>
-  <view class="swiper-container">
-    <swiper class="swiper" circular="{{true}}" autoplay="{{true}}" indicator-dots="{{indicatorDots}}" bindchange="swiperChange" previous-margin="{{previousmargin}}" next-margin="{{nextmargin}}">
+  <view class="top-container index-bg">
+  </view>
+
+  <!-- <view class="swiper-container"> -->
+    <!-- <swiper class="swiper" circular="{{true}}" autoplay="{{true}}" indicator-dots="{{indicatorDots}}" bindchange="swiperChange" previous-margin="{{previousmargin}}" next-margin="{{nextmargin}}">
       <block wx:for="{{imgsArr}}" wx:key="index">
         <swiper-item>
           <image class="{{index == currentSwiper ? ' active' : ' quiet'}}" src="{{item.url}}"></image>
         </swiper-item>
       </block>
-    </swiper>
+    </swiper> -->
     <!-- 重置小圆点的样式 -->
-    <view class="dots">
+    <!-- <view class="dots">
       <block wx:for="{{imgsArr}}" wx:key="index">
         <view class="dot{{index == currentSwiper ? ' active' : ''}}"></view>
       </block>
+    </view> -->
+  <!-- </view> -->
+
+  <!-- 按钮 -->
+  <view class="btn-container">
+    <view class="btns-box">
+      <view class="center-box" bind:tap="order">
+        <view class="pic-box">
+          <image class="btns-pic center-box special-pic" src="/images/note.png">
+          </image>
+        </view>
+        <text class="btns-word word-color">
+          下单
+        </text>
+      </view>
     </view>
+
+
   </view>
-  <race-list raceList="{{raceList}}" bind:showDetail="showDetail"></race-list>
+
 </view>

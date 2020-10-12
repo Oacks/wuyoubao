@@ -46,6 +46,7 @@
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
                     <el-button type="primary" @click="detail(scope.row)">查看</el-button>
+                    <el-button type="primary" @click="saleDetail(scope.row)">查看销售列表</el-button>
                     <!-- <el-button type="danger" @click="del(scope.row)">注销</el-button> -->
                 </template>
             </el-table-column>
@@ -113,6 +114,50 @@
                 <el-button type="primary" @click="save">确 定</el-button>
             </span>
         </el-dialog>
+        <el-dialog
+            class="user-dialog"
+            :close-on-click-modal='false'
+            :title="'销售详情'"
+            :visible="salerDialogVisible"
+            :before-close="closeDialog"
+            width="800px">
+            <el-table
+            :data="salerTableData"
+            border
+            class="table"
+            ref="multipleTable"
+            row-key="id"
+            header-cell-class-name="table-header"
+            @selection-change="handleSelectionChange"
+            >
+            <el-table-column type="selection" width="55" align="center"></el-table-column>
+            <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
+            <!-- <el-table-column type="index" label="序号" width="55" align="center"></el-table-column> -->
+
+            <el-table-column prop="memberName" label="会员呢称">
+            </el-table-column>
+          
+            <el-table-column prop="status" label="会员状态">
+                <template slot-scope="scope">
+                    {{scope.row.status == 1  ? '激活' : '注销'}}
+                </template>
+            </el-table-column>
+            <el-table-column prop="remarks" label="备注">
+            </el-table-column>
+            <el-table-column prop="status" label="操作" width="180">
+                <template slot-scope="scope">
+                    <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
+                    <el-button type="primary" @click="detail(scope.row)">查看</el-button>
+                    <el-button type="primary" @click="saleDetail(scope.row)">查看销售列表</el-button>
+                    <!-- <el-button type="danger" @click="del(scope.row)">注销</el-button> -->
+                </template>
+            </el-table-column>
+        </el-table>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="save">确 定</el-button>
+            </span>
+        </el-dialog>
         </div>
     </div>
 </template>
@@ -121,6 +166,9 @@
 import { 
     createShop,
     salerList,
+    addSaler,
+    delSaler,
+    updateSaler,
     shopDetail,
     shopList,
     updateShop
@@ -154,6 +202,7 @@ export default {
             },
             operate: 'create',
             tableData: [],
+            salerTableData: [],
             page: {
                 no: 1,
                 total: 0,
@@ -170,6 +219,7 @@ export default {
                 // userIds: '',
             },
             dialogVisible: false,
+            salerDialogVisible: false,
             selectRow: [],
             brand: '',
             shopName: ''
@@ -250,11 +300,17 @@ export default {
         },
         // 详情
         detail(row) {
-            shopDetail(row.id).then(res => {
-                console.log(res);
+            shopDetail({id: row.id}).then(res => {
                 this.operate = 'detail'
                 this.form = res
                 this.openDialog()
+            })
+        },
+        saleDetail(row) {
+            salerList({id: row.id, page: 1, pageSize: 20}).then(res => {
+                console.log(res);
+                this.salerTableData = res.records
+                this.salerDialogVisible = true
             })
         },
         del(row) {
@@ -270,7 +326,7 @@ export default {
             params.lng = this.mapCenter[0]
             params.lat = this.mapCenter[1]
             if (this.operate == 'create') {
-                let obj = {shop: params}
+                let obj = params
                 createShop(obj).then(res => {
                     if (res) {
                         this.$message.success({message: '创建成功',});

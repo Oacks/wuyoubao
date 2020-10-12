@@ -1,22 +1,28 @@
 /* pages/user/user.wxss */
+
+.user-bg {
+  background: linear-gradient(to right, #6ea9cd, #417dbd);
+}
 .avatar {
     position: relative;
-    height: 270rpx;
+    height: 230rpx;
 }
 
 .avatar-bg {
     position: absolute;
     top: 0;
     left: 0;
-    height: 270rpx;
+    height: 230rpx;
     width: 100%;
 }
 
 .avatar-pic {
     position: absolute;
-    top: 46rpx;
+    top: 60rpx;
     left: 50%;
     transform: translateX(-50%);
+    width: 80rpx;
+    height: 80rpx;
 }
 
 .name {
@@ -28,8 +34,6 @@
     transform: translateX(-50%);
 }
 
-.avatar-pic {
-    width: 128rpx;
-    height: 128rpx;
-    border-radius: 50%;
+.auth-btn {
+    background-color: transparent !important;
 }

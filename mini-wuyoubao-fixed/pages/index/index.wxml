@@ -1,13 +1,21 @@
-<!--index.wxml-->
+<!-- index.wxml -->
 <view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
-  </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+  <navBar title="" back="{{false}}" home="{{false}}" background="{{'#393939'}}">
+    <view class="white ml20 barTitle" slot="center">无忧宝</view>
+  </navBar>
+  <view class="swiper-container">
+    <!-- <swiper class="swiper" circular="{{true}}" autoplay="{{true}}" indicator-dots="{{indicatorDots}}" bindchange="swiperChange" previous-margin="{{previousmargin}}" next-margin="{{nextmargin}}">
+      <block wx:for="{{imgsArr}}" wx:key="index">
+        <swiper-item>
+          <image class="{{index == currentSwiper ? ' active' : ' quiet'}}" src="{{item.url}}"></image>
+        </swiper-item>
+      </block>
+    </swiper> -->
+    <!-- 重置小圆点的样式 -->
+    <!-- <view class="dots">
+      <block wx:for="{{imgsArr}}" wx:key="index">
+        <view class="dot{{index == currentSwiper ? ' active' : ''}}"></view>
+      </block>
+    </view> -->
   </view>
 </view>

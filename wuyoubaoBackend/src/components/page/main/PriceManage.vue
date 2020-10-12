@@ -42,6 +42,12 @@
                     <span v-for="(list, i) in scope.row.accessoriesList" :key="i">{{list.title}} {{i !== scope.row.accessoriesList.length - 1 ? ',' : ''}}</span>
                 </template>
             </el-table-column>
+
+            <el-table-column label="卡券">
+                <template slot-scope="scope">
+                    <span>{{getCarInsuranceTitle(scope.row.carInsuranceId)}}</span>
+                </template>
+            </el-table-column>
             
             <el-table-column prop="priceContract" label="合同定价">
             </el-table-column>
@@ -109,6 +115,16 @@
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="卡券">
+                                <el-select v-model="form.carInsuranceId" placeholder="请选择">
+                                    <el-option v-for="(card, i) in cardList" :key="i" :label="card.title" :value="card.id"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="邮品">
                                 <el-checkbox-group v-model="form.accessoriesList">
@@ -134,6 +150,7 @@ import {
     priceDetele,
     priceUpdate,
     accessoriesList,
+    insuranceList
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
 // import RSA from '../../../utils/rsa'
@@ -182,20 +199,41 @@ export default {
                     label: '全部'
                 },
             ],
-            postProd: []
+            postProd: [],
+            cardList: []
         };
     },
     created() {
         this.getData();
         this.getPostProduct()
+        this.getCard()
     },
     methods: {
+        // 匹配title
+        getCarInsuranceTitle(id) {
+            if (this.cardList.length == 0) {
+                return ''
+            }
+            for (let i = 0; i < this.cardList.length; i++) {
+                const element = this.cardList[i];
+                if (element.id == id) {
+                    return element.title
+                }
+            }
+        },
         // 获取邮品列表
         getPostProduct() {
             let param = {
             }
             accessoriesList(param).then(res => {
                 this.postProd = res
+            })
+        },
+        // 获取卡券
+        getCard() {
+            let param = {}
+            insuranceList(param).then(res => {
+                this.cardList = res
             })
         },
         search() {
@@ -245,10 +283,15 @@ export default {
             })
         },
         del(row) {
-            this.operate = 'edit'
-            row.status = Number(row.status)
-            this.form = row
-            this.form.status = 0
+            this.$confirm('确认删除当前定价？').then(_ => {
+                    let id =  row.id
+                    let obj = {id: id}
+                    priceDetele(obj).then(res => {
+                        this.$message.success({message: '删除成功',});
+                        this.getData()
+                    })
+                })
+                .catch(_ => {});
         },
         // 保存
         save() {

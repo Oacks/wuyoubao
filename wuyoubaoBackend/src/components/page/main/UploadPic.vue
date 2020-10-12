@@ -27,7 +27,17 @@
         },
         methods:{
             setImage(e){
-                uploadToken
+                uploadToken().then(res => {
+                    const file = e.target.files[0];
+                    console.log(file);
+                    const observable = qiniu.upload(file, file.name, res, {}, {
+                    useCdnDomain: true,
+                    region: qiniu.region.z2
+                    })
+                    const subscription = observable.subscribe((result) => {
+                        console.log(result);
+                    }) // 上传开始
+                })
                 const file = e.target.files[0];
                 if (!file.type.includes('image/')) {
                     return;

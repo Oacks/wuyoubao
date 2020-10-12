@@ -1,0 +1,153 @@
+<!--pages/order/order.wxml-->
+<view class="container">
+    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#393939'}}" bindback="onBack">
+        <view class="white ml20 barTitle" slot="center">订单</view>
+    </navBar>
+    <view class="order-container" hover-class="none" hover-stop-propagation="false">
+        <form catchsubmit="formSubmit" catchreset="formReset">
+            <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">延长保修服务</view>
+                </view>
+                <view class="item-content">
+                    <view class="content-title">保修合同号</view>
+                    <input class="content-input" name="contractNo" placeholder="请填写" />
+                </view>
+            </view>
+
+            <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">客户信息</view>
+                </view>
+                <view class="item-content">
+                    <view class="content-title">车主姓名</view>
+                    <input class="content-input" name="memberName" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">联系电话</view>
+                    <input class="content-input" name="mobile" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">联系地址</view>
+                    <input class="content-input" name="address" placeholder="请填写" />
+                </view>
+            </view>
+
+            <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">车辆信息</view>
+                </view>
+                <view class="item-content">
+                    <view class="content-title">车辆品牌</view>
+                    <input class="content-input" bindtap="toSelectBrand" value="{{carBrand}}" placeholder="请选择" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">车辆型号</view>
+                    <input class="content-input" name="vehicle" placeholder="请填写" />
+                </view>
+                
+                <view class="item-content">
+                    <view class="content-title">车辆购买时间</view>
+                    <picker class="content-input" mode="date" value="{{buyTime}}" start="2000-09-01" end="2040-01-01" bindchange="bindBuyTimeChange">
+                        <view class="content-input">
+                            {{buyTime ? buyTime : '请选择'}}
+                        </view>
+                    </picker>
+                </view>
+                <view class="item-content">
+                    <view class="content-title">车辆类型</view>
+                    <picker class="content-input" placeholder mode="selector" range-key="name" bindchange="bindCarTypeChange" range="{{carTypeOpt}}">
+                        <view class="content-input">
+                        {{carTypeOpt[carType].name}}
+                        </view>
+                    </picker>
+                </view>
+                <view class="item-content">
+                    <view class="content-title">保修起始日期</view>
+                    <picker class="content-input" mode="date" value="{{oldTime}}" start="2000-09-01" end="2040-01-01" bindchange="bindOldTimeChange">
+                        <view class="content-input">
+                            {{oldTime}}
+                        </view>
+                    </picker>
+                </view>
+                <!-- <view class="item-content">
+                    <view class="content-title">保修长度</view>
+                    <input class="content-input" name="input" placeholder="原厂保修起始长度" />
+                </view> -->
+                <view class="item-content">
+                    <view class="content-title">车架号(VIN)</view>
+                    <input class="content-input" name="vin" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">发动机号</view>
+                    <input class="content-input" name="engineNum" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">车辆号码</view>
+                    <input class="content-input" name="licensePlate" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">车辆售出价格</view>
+                    <input class="content-input" name="carPrice" placeholder="人民币元" />
+                </view>
+            </view>
+
+            <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">服务合同信息</view>
+                </view>
+                <view class="item-content">
+                    <view class="content-title">延保销售日期</view>
+                    <picker class="content-input" mode="date" value="{{createTime}}" start="2000-09-01" end="2040-01-01" bindchange="bindCreateTimeChange">
+                        <view class="content-input">
+                            {{createTime}}
+                        </view>
+                    </picker>
+                </view>
+                <view class="item-content">
+                    <view class="content-title">延保卡券</view>
+                    <picker class="content-input" placeholder mode="selector" range-key="name" bindchange="bindInsuranceChange" range="{{insuranceOpt}}">
+                        <view class="content-input">
+                        {{insuranceOpt[insuranceNo].name}}
+                        </view>
+                    </picker>
+                </view>
+                <!-- <view class="item-content">
+                    <view class="content-title">延保方案</view>
+                    <input class="content-input" name="input" placeholder="请填写" />
+                </view> -->
+                <view class="item-content">
+                    <view class="content-title">延保起期</view>
+                    <picker class="content-input" mode="date" value="{{startTime}}" start="2000-09-01" end="2040-01-01" bindchange="bindStartTimeChange">
+                        <view class="content-input">
+                            {{startTime}}
+                        </view>
+                    </picker>
+                </view>
+                <!-- <view class="item-content">
+                    <view class="content-title">保障范围</view>
+                    <input class="content-input" name="input" placeholder="原厂保修起始长度" />
+                </view> -->
+                <!-- <view class="item-content">
+                    <view class="content-title">延保止期</view>
+                    <input class="content-input" name="input" placeholder="请填写" value="延长原厂保修期至 6 年/ 15万公里（以先到者为准）"/>
+                </view> -->
+                <view class="item-content">
+                    <view class="content-title">行驶里程</view>
+                    <input class="content-input" name="mileage" placeholder="延保销售时行驶里程" />
+                </view>
+            </view>
+
+            <!-- <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">礼包金额</view>
+                </view>
+            </view> -->
+            <button class='custom-btn' type="primary" formType="submit">
+                提 交
+            </button>
+            <!-- <button style="margin: 30rpx 0" formType="reset">重填</button> -->
+        </form>
+    </view>
+</view>
+

@@ -1,7 +1,7 @@
 <!-- 授权界面 -->
 <view class="container">
     <navBar title="" back="{{true}}" home="{{false}}" bindback="onBack">
-        <view class="white barTitle" slot="center">玩野文化</view>
+        <view class="white barTitle" slot="center">授权请求</view>
     </navBar>
     <view class="auth-page" wx:if="{{canIUse}}" style="color:#fff;">
         <view class='header'>微信授权</view>
@@ -10,7 +10,7 @@
             <text>获得你的公开信息(昵称，头像，地区，性别等)</text>
         </view>
         <button class='custom-btn bottom' type='primary' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="bindGetUserInfo">
-            授权获取信息
+            请点击授权获取信息
         </button>
     </view>
     <view wx:else>请升级微信版本</view>

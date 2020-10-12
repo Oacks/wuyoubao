@@ -1,4 +1,9 @@
 /* pages/authorization/authorization.wxss */
+
+.container {
+    background-color: #fff;
+}
+
 .header {
     margin: 90rpx 0 90rpx 50rpx;
     text-align: center;
@@ -17,7 +22,6 @@
 }
 
 .content {
-    margin-left: 50rpx;
     margin-bottom: 90rpx;
 }
 

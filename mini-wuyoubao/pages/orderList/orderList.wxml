@@ -1,0 +1,12 @@
+<!--pages/orderList/orderList.wxml-->
+<view class="container">
+    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#393939'}}" bindback="onBack">
+        <view class="white ml20 barTitle" slot="center">订单</view>
+    </navBar>
+    <view class="order-list-container">
+        <view class="" hover-class="none" hover-stop-propagation="false">
+            
+        </view>
+    </view>
+</view>
+

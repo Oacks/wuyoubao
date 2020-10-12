@@ -10,12 +10,12 @@ Component({
     },
     background: {
       type: String,
-      value: '#191919',
+      value: '#393939',
       observer: '_showChange'
     },
     backgroundColorTop: {
       type: String,
-      value: '#191919',
+      value: '#393939',
       observer: '_showChangeBackgroundColorTop'
     },
     color: {
@@ -101,7 +101,11 @@ Component({
       let navBarLeft = [];
       if ((back && !home) || (!back && home)) {
         navBarLeft = [`width:${capsulePosition.width}px`, `height:${capsulePosition.height}px`].join(';');
-      } else if ((back && home) || title) {
+      } 
+      else if ((!back && !home)) {
+        navBarLeft = [`width:${capsulePosition.width}px`, `height:${capsulePosition.height}px`].join(';');
+      } 
+      else if ((back && home) || title) {
         navBarLeft = [
           `width:${capsulePosition.width}px`,
           `height:${capsulePosition.height}px`,

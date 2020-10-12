@@ -31,22 +31,26 @@
             >
             <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
 
-            <el-table-column prop="id" label="卡号" width="260">
+            <!-- <el-table-column prop="id" label="卡号" width="260">
+            </el-table-column> -->
+
+            <el-table-column prop="title" label="保险名称">
             </el-table-column>
 
             <el-table-column prop="price" label="价钱">
             </el-table-column>
-          
+<!--           
             <el-table-column prop="status" label="卡状态">
                 <template slot-scope="scope">
                     {{scope.row.status == 1  ? '已售' : '未售'}}
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop="description" label="描述">
             </el-table-column>
-            <el-table-column prop="status" label="操作" width="180">
+            <el-table-column label="操作" width="180">
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
+                    <el-button type="primary" @click="checkCard(scope.row)">查看卡券</el-button>
                     <el-button type="danger" @click="del(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
@@ -62,6 +66,7 @@
                 @current-change="handlePageChange"
             ></el-pagination>
         </div>
+
         <el-dialog
             class="user-dialog"
             :close-on-click-modal='false'
@@ -82,7 +87,7 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row :gutter="20">
+                    <!-- <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="状态" v-if="operate=='edit'">
                                 <el-select v-model="form.status" placeholder="请选择">
@@ -96,7 +101,7 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                    </el-row>
+                    </el-row> -->
 
                     <el-row :gutter="20">
                         <el-col :span="24">
@@ -111,6 +116,16 @@
                 <el-button type="primary" @click="save">确 定</el-button>
             </span>
         </el-dialog>
+        <el-dialog
+            class="user-dialog"
+            :close-on-click-modal='false'
+            :title="'查看卡券'"
+            :visible="detailDialogVisible"
+            :before-close="closeDetailDialog"
+            width="900px">
+            <card-detail-manage ref="cardDetail"></card-detail-manage>
+        </el-dialog>
+
         </div>
     </div>
 </template>
@@ -121,11 +136,13 @@ import {
     insuranceDelete,
     addInsurance,
  } from '../../../api/index';
+import CardDetailManage from './CardDetailManage'
 import {uniqBy, cloneDeep} from 'lodash';
 
 export default {
-    name: 'Contract',
+    name: 'CardManage',
     components: {
+        CardDetailManage
     },
     data() {
         return {
@@ -140,6 +157,7 @@ export default {
             form: {
             },
             dialogVisible: false,
+            detailDialogVisible: false,
             selectRow: [],
             statusOpt: [
                 {
@@ -163,7 +181,7 @@ export default {
                 description: '',
                 // insuranceNo: '',
                 price: '',
-                status: 0, // 0未售，1已售
+                // status: 0, // 0未售，1已售
                 title: '', // 保险名称
             }
             this.openDialog()
@@ -203,6 +221,13 @@ export default {
                 this.openDialog()
             })
         },
+        // 查看卡券
+        checkCard(row) {
+            this.detailDialogVisible = true
+            this.$nextTick(() => {
+                this.$refs.cardDetail.getData(row.id)
+            })
+        },
         del(row) {
             this.$confirm('确认删除当前卡？').then(_ => {
                     let id =  row.id
@@ -240,6 +265,9 @@ export default {
         closeDialog() {
             this.dialogVisible = false
         },
+        closeDetailDialog() {
+            this.detailDialogVisible = false
+        }
     }
 };
 </script>

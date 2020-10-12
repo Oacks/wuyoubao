@@ -1,15 +1,19 @@
 <!--pages/user/user.wxml-->
 <view class="container">
-    <navBar title="" back="{{false}}" home="{{false}}">
-        <view class="white ml20 barTitle" slot="left">我的</view>
-    </navBar>
+  <navBar title="" back="{{false}}" home="{{false}}" background="{{'#393939'}}">
+    <view class="white ml20 barTitle" slot="center">我的</view>
+  </navBar>
+  <view class="top-container user-bg">
+      <view class="avatar" catchtap="auth">
+          <image class="avatar-pic" src="{{avatar}}"></image>
+          <view class="name">{{username}}</view>
+          <button class='auth-btn bottom' type='primary' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="bindGetUserInfo">
+            点击授权获取头像
+        </button>
+      </view>
+  </view>
     <view class="user-container" hover-class="none" hover-stop-propagation="false">
-        <view class="avatar" catchtap="auth">
-            <image class="avatar-bg" src="/images/user-bg.png"></image>
-            <image class="avatar-pic" src="{{avatar}}"></image>
-            <view class="name">{{username}}</view>
-        </view>
-        <race-list raceList="{{raceList}}" bind:showDetail="showDetail"></race-list>
+     
     </view>
     <mp-actionsheet title="{{sheetTitle}}" show-cancel="{{false}}" bindactiontap="sheetSelect" show="{{showActionsheet}}" actions="{{groups}}">
     </mp-actionsheet>

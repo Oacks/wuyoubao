@@ -4,7 +4,7 @@
     "ignore": []
   },
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": true,
     "enhance": false,
     "postcss": true,
@@ -36,7 +36,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.13.1",
-  "appid": "wx231ecd8ca8d2416c",
+  "appid": "wx5d001abf03d4fd9e",
   "projectname": "mini-wuyoubao",
   "debugOptions": {
     "hidedInDevtools": []

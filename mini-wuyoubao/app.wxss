@@ -1,12 +1,45 @@
 /**app.wxss**/
 @import './WeUI/weui-wxss/dist/style/weui.wxss';
 Page {
-  background-color: #191919;
+  background-color: #eee;
 }
+
+.top-container {
+  position: relative;
+  height: 260rpx;
+  overflow: hidden;
+}
+
+.top-container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 20px;
+  width: 100%;
+  background-color: #eee;
+  border-radius: 20px 20px 0 0;
+}
+
+.center-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.base-color {
+  color: #5cbd41;
+}
+
+.word-color {
+  color: #555;
+}
+
 /* 公共样式 */
 .container {
   position: relative;
-  background-color: #191919;
+  background-color: #eee;
   min-height: 100vh;
   font-family:PingFangSC-Regular,PingFang SC;
 }
@@ -42,7 +75,7 @@ button {
   width: 482rpx !important;
   height: 90rpx;
   border-radius: 45rpx;
-  background: linear-gradient(to right, #5c3cde, #5489f5);
+  background: linear-gradient(to right, #5cbd41, #82cd6e);
   font-size: 36rpx;
   color: #fff;
   font-weight: normal;
@@ -61,26 +94,6 @@ button {
   color: #fff;
 }
 
-.tips.pink {
-  background-color: #ec3c8d;
-}
-
-.tips.blue {
-  background-color: #4D7AFF;
-}
-
 .ml40 {
   margin-left: 40rpx;
-}
-
-.bgpink {
-  background-color: #ec3c8d;
-}
-
-.bgblue {
-  background-color: #557FF1;
-}
-
-.bggrey {
-  background-color: #656565;
 }
