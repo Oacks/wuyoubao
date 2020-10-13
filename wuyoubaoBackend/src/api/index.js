@@ -121,6 +121,36 @@ export const exportContract = query => {
     return get('wyht/eportContract', query)
 }
 
+// 报障列表
+export const guaranteeList = query => {
+    return get('wyht/guaranteeList', query)
+}
+
+// 新增报障记录
+export const addGuaranteeLog = query => {
+    return post('wyht/addGuaranteeLog', query)
+} 
+
+// 查看报障详情
+export const guaranteeDetail = query => {
+    return get('wyht/guaranteeDetail', query)
+} 
+
+// 修改报障状态
+export const guaranteeStatus = query => {
+    return get('wyht/guaranteeStatus', query)
+} 
+
+// 删除报障记录
+export const delGuarantee = query => {
+    return get('wyht/delLog', query)
+}
+
+// 查看报障详情
+export const guaranteeFishList = query => {
+    return get('wyht/guaranteeFishList', query)
+} 
+
 /******************邮政后台 ****************/
 export const accessoriesList = query => {
     return get('wyht/accessoriesList', query)

@@ -1,0 +1,22 @@
+<!--pages/orderList/orderList.wxml-->
+<wxs module="format" src="./errorList.wxs"></wxs>
+
+<view class="container">
+    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#393939'}}" bindback="onBack">
+        <view class="white ml20 barTitle" slot="center">我的报障</view>
+    </navBar>
+    <view class="order-list-container">
+        <view class="order-box" wx:for="{{saleList}}" bindtap="showDetail" data-id="{{item.id}}">
+            <view class="order-pic" hover-class="none" hover-stop-propagation="false">
+                <image class="order-icon" src="/images/icon/icon-order-grey.png">
+                </image>
+            </view>
+            <view class="order-content word-color">
+                <view><text class="blocks">报障单号：</text>{{item.id}}</view>
+                <view><text class="blocks">客户名：</text>{{item.memberName}}</view>
+                <view><text class="blocks">报障原因：</text>{{item.reason}}</view>
+            </view>
+        </view>
+    </view>
+</view>
+

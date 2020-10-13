@@ -2,6 +2,43 @@
 @import "/app.wxss";
 /* @import "/pages/race/raceList/raceList.wxss"; */
 
+.index-bg {
+  background: linear-gradient(to right, #82cd6e, #5cbd41);
+}
+
+.btn-container {
+  height: 220rpx;
+  position: relative; 
+  line-height: 1;
+}
+
+.btns-box {
+  position: relative;
+  display: inline-block;
+  width: 33%;
+  height: 100%;
+  text-align: center;
+}
+
+.pic-box {
+  position: relative;
+  background-color: #fff;
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 50%;
+}
+
+.btns-pic {
+  width: 100rpx;
+  height: 100rpx;
+  margin: 0 auto;
+}
+
+.special-pic {
+  /* 图标问题特殊处理 */
+  left: 55% !important;
+}
+
 .swiper-container {
   height: 395rpx;
   position: relative; 

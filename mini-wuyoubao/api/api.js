@@ -76,7 +76,7 @@ const login = (fn) => {
 
 // 调用后台登录接口
 const backendLogin = (code, fn) => {
-    post('sale/login', {code: code}).then((res) => {
+    post('wx/sale/login', {code: code}).then((res) => {
       wx.setStorageSync('sessionKey', res.session_key);
       wx.setStorageSync('openid', res.openid);
       fn && fn()

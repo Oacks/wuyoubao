@@ -51,6 +51,9 @@
 
 <script>
 import bus from '../common/bus';
+import { 
+    menuList,
+ } from '../../api/index';
 export default {
     data() {
         return {
@@ -60,6 +63,11 @@ export default {
                     icon: 'el-icon-lx-file',
                     index: 'contract',
                     title: '合同管理'
+                },
+                {
+                    icon: 'el-icon-lx-recharge',
+                    index: 'error',
+                    title: '报障列表'
                 },
                 {
                     icon: 'el-icon-lx-recharge',
@@ -111,11 +119,11 @@ export default {
                 //         }
                 //     ]
                 // },
-                {
-                    icon: 'el-icon-lx-emoji',
-                    index: 'icon',
-                    title: '自定义图标'
-                },
+                // {
+                //     icon: 'el-icon-lx-emoji',
+                //     index: 'icon',
+                //     title: '自定义图标'
+                // },
                 // {
                 //     icon: 'el-icon-pie-chart',
                 //     index: 'charts',
@@ -168,6 +176,9 @@ export default {
         onRoutes() {
             return this.$route.path.replace('/', '');
         }
+    },
+    methods() {
+
     },
     created() {
         // 通过 Event Bus 进行组件间通信，来折叠侧边栏

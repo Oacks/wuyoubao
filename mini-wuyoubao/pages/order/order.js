@@ -140,6 +140,9 @@ Page({
         duration: 1500,
         mask: false,
       });
+      wx.switchTab({
+        url: '/pages/user/user',
+      });
     })
     console.log(form);
   },
@@ -167,12 +170,60 @@ Page({
       delta: 1
     })
   },
+  // 获取时候截取时间
+  formatGetTime(time) {
+    if (time) {
+      return time.slice(0, 10)
+    }
+    return ''
+  },
   // 获取合同详情
   getContractDetail(id){
     api.get('sale/contractDetail', {id: id}).then((res => {
       console.log(res);
+      let {
+        contractNo,
+        memberName,
+        mobile,
+        address,
+        vin,
+        engineNum,
+        licensePlate,
+        carPrice,
+        mileage,
+        vehicle,
+        insuranceId,
+        brand,
+        carType,
+        price,
+        carBuyTime,
+        oldStartTime,
+        oldEndTime,
+        createTime,
+        startTime,} = res
+      let form = {
+        contractNo: contractNo,
+        memberName: memberName,
+        mobile: mobile,
+        address: address,
+        vin: vin,
+        engineNum: engineNum,
+        licensePlate: licensePlate,
+        carPrice: carPrice,
+        mileage: mileage,
+        vehicle: vehicle,
+        insuranceId: insuranceId,
+        brand: carBrand,
+        carType: carType,
+        price: insurancePrice,
+        carBuyTime: this.formatGetTime(carBuyTime), // 购买时间
+        oldStartTime: this.formatGetTime(oldStartTime),
+        oldEndTime: this.formatGetTime(oldEndTime),
+        createTime: this.formatGetTime(createTime), // 延保销售日期
+        startTime: this.formatGetTime(startTime), // 延保起期
+      }
       this.setData({
-
+        form: form
       })
     }))
   },

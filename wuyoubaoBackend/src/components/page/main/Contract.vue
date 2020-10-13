@@ -261,7 +261,7 @@ export default {
         exportContract(row) {
             // exportContract({id: row.id}).then(res=> {})
             const link = document.createElement('a');  
-            link.href = 'http://2o6465101l.wicp.vip/wyht/eportContract?id=' + row.id;  
+            link.href = 'http://2o6465101l.wicp.vip/wyht/eportContract?id=' + row.id 
             link.setAttribute('download', name);  
             document.body.appendChild(link);  
             link.click();

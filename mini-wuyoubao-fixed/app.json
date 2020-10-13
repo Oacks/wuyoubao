@@ -2,6 +2,11 @@
   "pages": [
     "pages/index/index",
     "pages/user/user",
+    "pages/errorForm/errorForm",
+    "pages/order/order",
+    "pages/orderList/orderList",
+    "pages/errorList/errorList",
+    "pages/login/login",
     "pages/authorization/authorization",
     "pages/authorizationPhone/authorizationPhone",
     "pages/pay/pay",

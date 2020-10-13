@@ -19,7 +19,7 @@
             <el-table-column prop="memberName" label="销售名称">
             </el-table-column>
 
-            <el-table-column prop="memberNammobilee" label="电话">
+            <el-table-column prop="mobile" label="电话">
             </el-table-column>
           
             <!-- <el-table-column prop="status" label="会员状态">

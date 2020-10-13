@@ -1,0 +1,36 @@
+<!-- 登录界面 -->
+<view class="container">
+    <navBar title="" back="{{true}}" home="{{false}}" bindback="onBack">
+        <view class="white barTitle" slot="center">登录</view>
+    </navBar>
+    <view class="auth-page" style="color:#555;">
+        <view class="login-title">
+            <image class="logo-cn" src="/images/logo.png"></image>
+            <image class="logo-en" src="/images/logo-en.png"></image>
+        </view>
+            
+        <form class="login-form" catchsubmit="formSubmit" catchreset="formReset">
+            <view class="item-container">
+                <view class="item-content">
+                    <view class="content-title">
+                        <image class="content-icon" src="/images/icon/icon-mobile.png"></image>
+                    </view>
+                    <input class="content-input" name="contractNo" placeholder="请输入手机号" bindinput="mobileInput"/>
+                </view>
+            </view>
+             <view class="item-container">
+                <view class="item-content">
+                    <view class="content-title">
+                        <image class="content-icon" src="/images/icon/icon-checkcode.png"></image>
+                    </view>
+                    <input class="content-input" name="contractNo" placeholder="请填写验证码" bindinput="codeInput"/>
+                    <view class="content-code {{canSend ? '': 'disabled'}}" catchtap="getCode">{{ canSend ? '获取验证码' : '稍后重新获取'}}</view>
+                </view>
+            </view>
+            <view class="login-btn" bindtap="login">登 录</view>
+        </form>
+        <!-- <button class='custom-btn bottom' type='primary' open-type="getPhoneNumber" lang="zh_CN" bindgetphonenumber="getPhoneNumber">
+            授权获取手机号
+        </button> -->
+    </view>
+</view>

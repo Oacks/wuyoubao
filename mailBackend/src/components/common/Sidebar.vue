@@ -76,11 +76,11 @@ export default {
                     index: 'sold',
                     title: '销售记录'
                 },
-                {
-                    icon: 'el-icon-lx-people',
-                    index: 'user',
-                    title: '用户管理'
-                },
+                // {
+                //     icon: 'el-icon-lx-people',
+                //     index: 'user',
+                //     title: '用户管理'
+                // },
              
                 // {
                 //     icon: 'el-icon-lx-copy',

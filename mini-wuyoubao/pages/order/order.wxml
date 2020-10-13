@@ -69,6 +69,9 @@
                             {{oldStartTime}}
                         </view>
                     </picker>
+                </view>
+
+                <view class="item-content">
                     <view class="content-title">原厂保修结束日期</view>
                     <picker class="content-input" mode="date" value="{{oldEndTime}}" start="2000-09-01" end="2040-01-01" bindchange="bindOldEndTimeChange">
                         <view class="content-input">
@@ -152,7 +155,7 @@
             <button wx-if="{{!id}}" class='custom-btn' type="primary" formType="submit">
                 提 交
             </button>
-            <button wx-else class='custom-btn' type="primary" formType="submit">
+            <button wx-if="{{id}}" class='custom-btn' type="primary" formType="submit">
                 提交修改
             </button>
             <!-- <button style="margin: 30rpx 0" formType="reset">重填</button> -->

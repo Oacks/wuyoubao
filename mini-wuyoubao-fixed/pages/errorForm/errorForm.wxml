@@ -1,0 +1,46 @@
+<!--pages/order/order.wxml-->
+<view class="container">
+    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#393939'}}" bindback="onBack">
+        <view class="white ml20 barTitle" slot="center">订单</view>
+    </navBar>
+    <view class="order-container" hover-class="none" hover-stop-propagation="false">
+        <form catchsubmit="formSubmit" catchreset="formReset">
+            <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">保修服务</view>
+                </view>
+                <view class="item-content">
+                    <view class="content-title">保修合同号</view>
+                    <input class="content-input" value="{{form.contractNo}}" name="contractNo" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">车牌</view>
+                    <input class="content-input" value="{{form.licensePlate}}" name="licensePlate" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">客户名</view>
+                    <input class="content-input" value="{{form.memberName}}" name="memberName" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">联系电话</view>
+                    <input class="content-input" value="{{form.mobile}}" name="mobile" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">原因</view>
+                    <input class="content-input" value="{{form.reason}}" name="reason" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">图片</view>
+                    <input class="content-input" value="{{form.picList}}" name="picList" placeholder="请填写" />
+                </view>
+            </view>
+
+            <button wx:if="{{ctrl !== 'detail'}}" class='custom-btn' type="primary" formType="submit">
+                提 交
+            </button>
+            
+            <!-- <button style="margin: 30rpx 0" formType="reset">重填</button> -->
+        </form>
+    </view>
+</view>
+

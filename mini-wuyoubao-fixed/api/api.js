@@ -8,9 +8,13 @@ const request = (url, options) => {
            data: options.method === 'GET' ? options.data : JSON.stringify(options.data),
            header: {
                'Content-Type': 'application/json; charset=UTF-8',
-            //    'x-token': 'x-token'  // 看自己是否需要
+               'wx-token': wx.getStorageSync('wx-token')
            },
            success(request) {
+                if (request.header['wx-token']) {
+                  let token = request.header['wx-token']
+                  wx.setStorageSync('wx-token', token)
+                }
                if (request.data && request.data.code == 1) {
                    resolve(request.data.data)
                } else {
@@ -70,9 +74,9 @@ const login = (fn) => {
     })
 }
 
-  // 调用后台登录接口
+// 调用后台登录接口
 const backendLogin = (code, fn) => {
-    post('wx/login', {code: code}).then((res) => {
+    post('wx/member/login', {code: code}).then((res) => {
       wx.setStorageSync('sessionKey', res.session_key);
       wx.setStorageSync('openid', res.openid);
       fn && fn()

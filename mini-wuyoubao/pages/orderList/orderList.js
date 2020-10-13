@@ -14,7 +14,7 @@ Page({
     ]
   },
   getSaleList() {
-      api.get('sale/mySale', {page: this.data.pageNo, pageSize: this.data.pageSize}).then(res => {
+      api.get('sale/mySale', {page: this.data.pageNo, pageSize: this.data.pageSize, memberName: ''}).then(res => {
         console.log(res);
         this.setData({
           totalCount: res.total

@@ -13,9 +13,9 @@ Page({
   },
   // 返回
   onBack() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/user/user',
-    }); // 跳到用户页面
+    });// 跳到用户页面
     // wx.navigateBack({
     //   delta: 1
     // })
@@ -31,7 +31,7 @@ Page({
     })
   },
   login () {
-    api.post('loginByMobile', {
+    api.post('wx/loginByMobile', {
       mobile: this.data.mobile,
       code: this.data.code,
       type: '0' // 销售0 用户1
@@ -69,7 +69,7 @@ Page({
   },
   getCode() {
     if(!this.data.canSend) {return}
-    api.get('getSms', {
+    api.get('wx/getSms', {
       mobile: this.data.mobile
     }).then(res => {
       let that = this

@@ -8,8 +8,7 @@ App({
   },
   globalData: {
     userInfo: null,
-    // url: 'http://2o6465101l.wicp.vip/',
-    // url: 'http://2o6465101l.wicp.vip:28939/', // du
+    url: 'http://2o6465101l.wicp.vip/',
     sessionKey: '',
   }
 })

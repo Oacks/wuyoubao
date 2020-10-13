@@ -142,7 +142,8 @@ export default {
                 level: 1,
                 status: 1,
                 password: '',
-                memberName: ''
+                memberName: '',
+                mobile: ''
             },
             dialogVisible: false,
             selectRow: [],
@@ -167,8 +168,6 @@ export default {
             let obj = {
                 pageSize:  this.page.size,
                 page:  this.page.no,
-                level: this.level,
-                userName: this.userName,
             }
             userList(obj).then(res => {
                 console.log(res.records);

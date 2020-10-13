@@ -27,6 +27,12 @@ export default new Router({
                     meta: { title: '店铺管理' }
                 },
                 {
+                    path: '/error',
+                    name: 'error',
+                    component: () => import(/* webpackChunkName: "shop" */ '../components/page/main/ErrorManage.vue'),
+                    meta: { title: '报障管理' }
+                },
+                {
                     path: '/shop',
                     name: 'shop',
                     component: () => import(/* webpackChunkName: "shop" */ '../components/page/main/ShopManage.vue'),

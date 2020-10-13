@@ -1,0 +1,31 @@
+/* pages/orderList/orderList.wxss */
+.order-box {
+    /* height: 60px; */
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.order-pic {
+    display: inline-block;
+    height: 60px;
+    width: 40px;
+    vertical-align: top;
+    margin: 10px;
+}
+
+.order-icon {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+}
+
+.order-content {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.blocks {
+    display: inline-block;
+    width: 80px;
+}

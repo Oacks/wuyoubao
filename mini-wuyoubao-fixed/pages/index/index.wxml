@@ -1,9 +1,12 @@
 <!-- index.wxml -->
 <view class="container">
   <navBar title="" back="{{false}}" home="{{false}}" background="{{'#393939'}}">
-    <view class="white ml20 barTitle" slot="center">无忧宝</view>
+    <view class="white ml20 barTitle" slot="center">无忧宝客户端</view>
   </navBar>
-  <view class="swiper-container">
+  <view class="top-container index-bg">
+  </view>
+
+  <!-- <view class="swiper-container"> -->
     <!-- <swiper class="swiper" circular="{{true}}" autoplay="{{true}}" indicator-dots="{{indicatorDots}}" bindchange="swiperChange" previous-margin="{{previousmargin}}" next-margin="{{nextmargin}}">
       <block wx:for="{{imgsArr}}" wx:key="index">
         <swiper-item>
@@ -17,5 +20,21 @@
         <view class="dot{{index == currentSwiper ? ' active' : ''}}"></view>
       </block>
     </view> -->
+  <!-- </view> -->
+
+  <!-- 按钮 -->
+  <view class="btn-container">
+    <view class="btns-box">
+      <view class="center-box" bind:tap="order">
+        <view class="pic-box">
+          <image class="btns-pic center-box special-pic" src="/images/note.png">
+          </image>
+        </view>
+        <text class="btns-word word-color">
+          保修
+        </text>
+      </view>
+    </view>
   </view>
+
 </view>

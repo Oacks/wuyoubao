@@ -30,8 +30,8 @@ Page({
         wx.navigateTo({
           url: '/pages/login/login',
         });
-        if (!wx.getStorageSync('sessionKey') || that.data.mobile){return}
-        api.post('sale/getSalerInfo', {
+        if (!wx.getStorageSync('sessionKey') || !that.data.mobile){return}
+        api.post('wx/sale/getSalerInfo', {
           signature: signature,
           rawData: rawData,
           encryptedData: encryptedData,
@@ -100,7 +100,7 @@ Page({
   // 调用后台登录接口
   backendLogin(code) {
     let self = this
-    api.post('sale/login', {code: code}).then((res) => {
+    api.post('wx/sale/login', {code: code}).then((res) => {
       wx.setStorageSync('sessionKey', res.session_key);
       app.sessionKey = res.session_key
       wx.hideLoading();
@@ -133,7 +133,7 @@ Page({
                     let sessionKey = wx.getStorageSync('sessionKey')
                     console.log(sessionKey);
                     if (!sessionKey || !that.data.mobile) {return}
-                    api.post('sale/getSalerInfo', {
+                    api.post('wx/sale/getSalerInfo', {
                       signature: signature,
                       rawData: rawData,
                       encryptedData: encryptedData,

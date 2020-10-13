@@ -39,6 +39,26 @@ Page({
   },
   // 展示详情
   order(evt){
+      if (!wx.getStorageSync('wx-token')) {
+        wx.showToast({
+          title: '请先授权登录',
+          icon: 'none',
+          image: '',
+          duration: 1500,
+          mask: false,
+          success: (result)=>{
+            
+          },
+          fail: ()=>{},
+          complete: ()=>{
+            wx.switchTab({
+              url: '/pages/user/user',
+            })
+          }
+        });
+      
+        return
+      }
       wx.navigateTo({
         url: '/pages/order/order',
       })

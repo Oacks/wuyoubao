@@ -22,7 +22,7 @@ Page({
         var that = this;
         //插入登录的用户的相关信息到数据库
         let {signature, rawData, encryptedData, iv} = e.detail
-        api.post('sale/getSalerInfo', {
+        api.post('wx/sale/getSalerInfo', {
           signature: signature,
           rawData: rawData,
           encryptedData: encryptedData,
