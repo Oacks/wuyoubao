@@ -72,6 +72,11 @@ export default {
                     title: '邮品管理'
                 },
                 {
+                    icon: 'el-icon-lx-recharge',
+                    index: 'sold',
+                    title: '销售记录'
+                },
+                {
                     icon: 'el-icon-lx-people',
                     index: 'user',
                     title: '用户管理'

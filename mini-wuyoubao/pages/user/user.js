@@ -9,13 +9,13 @@ Page({
   data: {
     hasInfo: false,
     avatar: '/images/icon/icon-user.png',
-    username: '点击获取头像信息',
+    username: '',
     showActionsheet: false,
     returnIdentity: [], // 返回的身份列表
     page: 0,
     totalList: 0,
     timer: null,
-    mobile: '',
+    mobile: wx.getStorageSync('mobile'),
   },
 
   bindGetUserInfo: function (e) {
@@ -68,6 +68,13 @@ Page({
     // });
   },
 
+  // 查看订单
+  checkOrder() {
+    wx.navigateTo({
+      url: '/pages/orderList/orderList',
+    });
+  },
+
   // 登录
   login (callback) {
     let self = this
@@ -118,13 +125,13 @@ Page({
           if (res.authSetting['scope.userInfo']) {
               wx.getUserInfo({
                   success: function (res) {
-                    console.log(res);
                     that.setData({
                       avatar: res.userInfo.avatarUrl,
                       username: res.userInfo.nickName
                     })
                     let {signature, rawData, encryptedData, iv} = res
                     let sessionKey = wx.getStorageSync('sessionKey')
+                    console.log(sessionKey);
                     if (!sessionKey || !that.data.mobile) {return}
                     api.post('sale/getSalerInfo', {
                       signature: signature,

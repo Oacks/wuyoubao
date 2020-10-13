@@ -8,9 +8,13 @@ const request = (url, options) => {
            data: options.method === 'GET' ? options.data : JSON.stringify(options.data),
            header: {
                'Content-Type': 'application/json; charset=UTF-8',
-               'wx-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJXSjQ1Slc3NTM4R1hDVUNEMjA1MEc1Rlk5QV9vLXJJYjQ4Z01LSzNhNFRfY1Q3QXc3bkZHU0drIiwiaWF0IjoxNjAyNTE2NjIzLCJleHAiOjE2MDQ1OTAyMjN9.gJ7gxQKr3Gh2LT57S_n4WhBrWz6buZmaaRY8PDkR4rR8pRAIiHo7N-RQqDAqCaDkH6m-JkgWh2W7Dvy2t3bvYQ'
+               'wx-token': wx.getStorageSync('wx-token')
            },
            success(request) {
+                if (request.header['wx-token']) {
+                  let token = request.header['wx-token']
+                  wx.setStorageSync('wx-token', token)
+                }
                if (request.data && request.data.code == 1) {
                    resolve(request.data.data)
                } else {
@@ -70,7 +74,7 @@ const login = (fn) => {
     })
 }
 
-  // 调用后台登录接口
+// 调用后台登录接口
 const backendLogin = (code, fn) => {
     post('sale/login', {code: code}).then((res) => {
       wx.setStorageSync('sessionKey', res.session_key);

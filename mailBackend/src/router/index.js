@@ -33,6 +33,13 @@ export default new Router({
                     meta: { title: '邮品管理' }
                 },
                 {
+                    path: '/sold',
+                    name: 'sold',
+                    // component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/main/SoldManage.vue'),
+                    meta: { title: '销售记录' }
+                },
+                {
                     path: '/user',
                     name: 'user',
                     // component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),

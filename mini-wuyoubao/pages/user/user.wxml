@@ -6,15 +6,25 @@
   <view class="top-container user-bg">
       <view class="avatar" catchtap="auth">
           <image class="avatar-pic" src="{{avatar}}"></image>
-          <view class="name">{{username}}</view>
-          <button class='auth-btn bottom' type='primary' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="bindGetUserInfo">
-            点击授权获取头像
+          <view class="name" wx:if="{{mobile}}">{{username}}</view>
+          <button wx:else class='auth-btn bottom' type='primary' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="bindGetUserInfo">
+            点击以进行授权登录
         </button>
       </view>
   </view>
-    <view class="user-container" hover-class="none" hover-stop-propagation="false">
-     
+   
+  <view class="btn-container">
+    <view class="btns-box">
+      <view class="center-box" bind:tap="checkOrder">
+        <view class="pic-box">
+          <image class="btns-pic center-box special-pic" src="/images/order.png">
+          </image>
+        </view>
+        <text class="btns-word word-color">
+          我的订单
+        </text>
+      </view>
     </view>
-    <mp-actionsheet title="{{sheetTitle}}" show-cancel="{{false}}" bindactiontap="sheetSelect" show="{{showActionsheet}}" actions="{{groups}}">
-    </mp-actionsheet>
+  </view>
+   
 </view>

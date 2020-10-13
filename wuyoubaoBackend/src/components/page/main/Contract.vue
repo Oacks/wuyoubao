@@ -6,52 +6,58 @@
       
         <div style="margin: 10px 0;">
             <el-form :model="searchForm" class="demo-form-inline" label-width="120px">
-                <el-col :span="12">
-                    <el-form-item label="合同创建时间">
-                        <el-date-picker
-                        v-model="contractTime"
-                        type="datetimerange"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="11">
-                    <el-form-item label="合同有效时间">
-                        <el-date-picker
-                        v-model="contractValid"
-                        type="datetimerange"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                    <el-form-item label="合同状态">
-                        <el-select v-model="status" placeholder="请选择">
-                            <el-option
-                            v-for="item in statusOpt"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                    <el-form-item label="会员姓名">
-                        <el-input :value="name"></el-input>
-                    </el-form-item>
-                </el-col>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="合同创建时间">
+                            <el-date-picker
+                            style="width: 100%;"
+                            v-model="contractTime"
+                            type="datetimerange"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="11">
+                        <el-form-item label="合同有效时间">
+                            <el-date-picker
+                            v-model="contractValid"
+                            style="width: 100%;"
+                            type="datetimerange"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="合同状态">
+                            <el-select v-model="status" placeholder="请选择">
+                                <el-option
+                                v-for="item in statusOpt"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="会员姓名">
+                            <el-input :value="name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <div>
+                        <!-- <el-button type="primary" @click="">新建</el-button> -->
+                        <el-button style="margin-left:40px;" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+                    </div>
+                </el-row>
             </el-form>
-            <div>
-                <!-- <el-button type="primary" @click="">新建</el-button> -->
-                <el-button style="margin-left:40px;" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
-            </div>
         </div>
         <el-table
             :data="tableData"
@@ -66,21 +72,27 @@
             <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
             <!-- <el-table-column type="index" label="序号" width="55" align="center"></el-table-column> -->
 
-            <el-table-column prop="memberName" label="会员呢称">
+            <el-table-column prop="contractNo" label="合同号">
             </el-table-column>
           
-            <el-table-column prop="status" label="会员状态">
-                <template slot-scope="scope">
+            <el-table-column prop="memberName" label="客户名">
+                <!-- <template slot-scope="scope">
                     {{scope.row.status == 1  ? '激活' : '注销'}}
+                </template> -->
+            </el-table-column>
+            <el-table-column prop="status" label="合同状态">
+                 <template slot-scope="scope">
+                    {{getStatus(scope.row.status)}}
                 </template>
             </el-table-column>
-            <el-table-column prop="remarks" label="备注">
-            </el-table-column>
-            <el-table-column prop="status" label="操作" width="180">
+            <el-table-column prop="status" label="操作" width="280">
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
-                    <el-button type="primary" @click="detail(scope.row)">查看</el-button>
-                    <el-button type="danger" @click="approval(scope.row)">审批</el-button>
+                    <!-- <a style="margin-right:5px;" href="javascript:;" type="primary" @click="detail(scope.row)">查看</a> -->
+                    <el-button size="mini" type="primary" @click="detail(scope.row)">查看</el-button>
+                    <el-button size="mini" v-if="scope.row.status == '1'" type="primary" @click="exportContract(scope.row)">下载合同</el-button>
+                    <el-button size="mini" v-if="scope.row.status == '1'" type="success" @click="approvalReady(scope.row)">审批</el-button>
+                    <!-- <el-button size="mini" v-if="scope.row.status == '2'" type="success" @click="uploadContract(scope.row)">上传合同</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -123,6 +135,27 @@
                 <el-button type="primary" @click="save">确 定</el-button>
             </span>
         </el-dialog>
+        <el-dialog
+            class="user-dialog"
+            :close-on-click-modal='false'
+            :title="'审批资料'"
+            :visible="approvalDialogVisible"
+            :before-close="closeApprovalDialog"
+            width="700px">
+            <el-form :model="form" class="demo-form-inline" label-width="120px">
+                <el-row :gutter="20">
+                    <el-col :span="24">
+                        <el-form-item label="合同图片上传">
+                            <upload-pic ref="upload" @getUrl="getUrl"></upload-pic>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="approvalDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="approval">提交审批</el-button>
+            </span>
+        </el-dialog>
         </div>
     </div>
 </template>
@@ -132,6 +165,7 @@ import {
     contractDetail,
     contractList,
     approval,
+    exportContract
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
 import UploadPic from './UploadPic';
@@ -169,16 +203,19 @@ export default {
                 // userIds: '',
             },
             dialogVisible: false,
+            approvalDialogVisible: false,
             selectRow: [],
             contractValid: [], // 合同有效期
             contractTime: [], // 合同时间
             status: '', // 状态
             name: '', // 会员名字
+            approvalPic: '',
+            approvalId: '',
             statusOpt: [
-                {
-                    value: '0',
-                    label: '草稿'
-                },
+                // {
+                //     value: '0',
+                //     label: '草稿'
+                // },
                 {
                     value: '1',
                     label: '申请'
@@ -195,10 +232,10 @@ export default {
                     value: '4',
                     label: '发卡'
                 },
-                {
-                    value: '5',
-                    label: '生效'
-                },
+                // {
+                //     value: '5',
+                //     label: '生效'
+                // },
             ]
         };
     },
@@ -206,13 +243,50 @@ export default {
         this.getData();
     },
     methods: {
-        approval(row) {
+        getUrl(url) {
+            this.approvalPic = url
+        },
+        // 审批dialog
+        approvalReady(row) {
+            this.approvalId = row.id
+            this.approvalDialogVisible = true
+            this.$nextTick(() => {
+                this.$refs.upload.clearPic()
+            })
+        },
+        closeApprovalDialog() {
+            this.approvalDialogVisible = false
+        },
+        // 下载合同
+        exportContract(row) {
+            // exportContract({id: row.id}).then(res=> {})
+            const link = document.createElement('a');  
+            link.href = 'http://2o6465101l.wicp.vip/wyht/eportContract?id=' + row.id;  
+            link.setAttribute('download', name);  
+            document.body.appendChild(link);  
+            link.click();
+        },
+        getStatus(status) {
+            for (let i = 0; i < this.statusOpt.length; i++) {
+                const element = this.statusOpt[i];
+                if (status == element.value) {
+                    return element.label
+                }
+            }
+        },
+        approval() {
+            if (this.approvalPic == '') {
+                this.$message.warning({message: '请先上传合同图片',});
+                return
+            }
             let param = {
-                id: row.id,
-                status: '2'
+                id: this.approvalId,
+                status: '2',
+                pic: this.approvalPic
             }
             approval(param).then(res => {
-                console.log(res);
+                this.$message.success({message: '提交审批成功'});
+                this.closeApprovalDialog()
                 this.getData()
             })
         },
@@ -252,7 +326,7 @@ export default {
         },
         // 详情
         detail(row) {
-            contractDetail(row.id).then(res => {
+            contractDetail({id:row.id}).then(res => {
                 console.log(res);
                 this.operate = 'detail'
                 this.form = res

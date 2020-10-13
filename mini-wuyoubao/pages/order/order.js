@@ -7,15 +7,36 @@ Page({
    * 页面的初始数据
    */
   data: {
-    carType: '', // 车类型
-    buyTime: '', // 购买时间
-    oldTime: '',
-    createTime: '', // 延保销售日期
-    startTime: '', // 延保起期
-    carBrand: '',
+    id: '',
+
+
+    // 详情返回的字段
+
     insuranceId: '', // 所选卡券
-    insuranceNo: '',
     insurancePrice: '',
+    carType: '', // 车类型
+    insuranceNo: '',
+    startTime: '', // 延保起期
+    createTime: '', // 延保销售日期
+    oldStartTime: '',
+    oldEndTime: '',
+    carBuyTime: '', // 购买时间
+    carBrand: '',
+    form: {
+      contractNo: '',
+      memberName: '',
+      mobile: '',
+      address: '',
+      vehicle: '',
+      carType: '',
+      vin: '',
+      engineNum: '',
+      licensePlate: '',
+      carPrice: '',
+      insuranceNo: '',
+      mileage: '',
+    },
+
     carTypeOpt: [
       {
         id: 0,
@@ -46,10 +67,13 @@ Page({
     this.bindTimeChange('startTime', e.detail.value)
   },
   bindBuyTimeChange: function(e) {
-    this.bindTimeChange('buyTime', e.detail.value)
+    this.bindTimeChange('carBuyTime', e.detail.value)
   },
-  bindOldTimeChange: function(e) {
-    this.bindTimeChange('oldTime', e.detail.value)
+  bindOldStartTimeChange: function(e) {
+    this.bindTimeChange('oldStartTime', e.detail.value)
+  },
+  bindOldEndTimeChange: function(e) {
+    this.bindTimeChange('oldEndTime', e.detail.value)
   },
   //
   bindCarTypeChange(e) {
@@ -102,8 +126,9 @@ Page({
       brand: this.data.carBrand,
       carType: this.data.carType,
       price: this.data.insurancePrice,
-      buyTime: this.formatTime(this.data.buyTime), // 购买时间
-      oldTime: this.formatTime(this.data.oldTime),
+      carBuyTime: this.formatTime(this.data.carBuyTime), // 购买时间
+      oldStartTime: this.formatTime(this.data.oldStartTime),
+      oldEndTime: this.formatTime(this.data.oldEndTime),
       createTime: this.formatTime(this.data.createTime), // 延保销售日期
       startTime: this.formatTime(this.data.startTime), // 延保起期
     }
@@ -142,10 +167,26 @@ Page({
       delta: 1
     })
   },
+  // 获取合同详情
+  getContractDetail(id){
+    api.get('sale/contractDetail', {id: id}).then((res => {
+      console.log(res);
+      this.setData({
+
+      })
+    }))
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let id = options.id
+    if (id) {
+      this.setData({
+        id: id
+      })
+      this.getContractDetail(id)
+    }
   },
 
  

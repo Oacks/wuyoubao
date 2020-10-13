@@ -4,8 +4,8 @@
         <view class="white barTitle" slot="center">品牌列表</view>
     </navBar>
     <view style="color:#555;">
-       <view wx:for="{{brandList}}" >
-            <view data-brand="{{item.brand}}" bindtap="chooseBrand">{{item.brand}}</view>
+       <view wx:for="{{brandList}}" class="brand-list">
+            <view class="brand-item" data-brand="{{item.brand}}" bindtap="chooseBrand">{{item.brand}}</view>
        </view>
     </view>
 </view>

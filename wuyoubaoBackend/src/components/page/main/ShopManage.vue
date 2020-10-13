@@ -3,7 +3,7 @@
         <h2>4S店铺管理</h2>
         <hr style="margin-bottom:10px;"/>
         <div class="table-area">
-        <div>
+        <div style="margin-bottom:10px;">
             <el-button type="primary" @click="create">新建</el-button>
             <!-- <el-button type="primary" @click="edit">编辑</el-button> -->
     
@@ -32,17 +32,29 @@
             <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
             <!-- <el-table-column type="index" label="序号" width="55" align="center"></el-table-column> -->
 
-            <el-table-column prop="memberName" label="会员呢称">
+            <el-table-column prop="shopName" label="店铺名称">
+            </el-table-column>
+            <el-table-column prop="brand" label="品牌">
+            </el-table-column>
+            <el-table-column label="品牌图片">
+                <template slot-scope="scope">
+                    <el-image
+                        v-show="scope.row.brandPic"
+                        style="width: 100px; height: 100px"
+                        :src="scope.row.brandPic" 
+                        :preview-src-list="[scope.row.brandPic]">
+                    </el-image>
+                </template>
             </el-table-column>
           
-            <el-table-column prop="status" label="会员状态">
+            <!-- <el-table-column prop="status" label="会员状态">
                 <template slot-scope="scope">
                     {{scope.row.status == 1  ? '激活' : '注销'}}
                 </template>
+            </el-table-column> -->
+            <el-table-column prop="address" label="地址">
             </el-table-column>
-            <el-table-column prop="remarks" label="备注">
-            </el-table-column>
-            <el-table-column prop="status" label="操作" width="180">
+            <el-table-column prop="status" label="操作" width="220">
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
                     <el-button type="primary" @click="detail(scope.row)">查看</el-button>
@@ -93,7 +105,7 @@
                     <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="品牌图片">
-                                <upload-pic></upload-pic>
+                                <upload-pic ref="upload" @getUrl="getUrl"></upload-pic>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -117,45 +129,14 @@
         <el-dialog
             class="user-dialog"
             :close-on-click-modal='false'
-            :title="'销售详情'"
+            :title="'销售人员详情'"
             :visible="salerDialogVisible"
-            :before-close="closeDialog"
+            :before-close="closeSalerDialog"
             width="800px">
-            <el-table
-            :data="salerTableData"
-            border
-            class="table"
-            ref="multipleTable"
-            row-key="id"
-            header-cell-class-name="table-header"
-            @selection-change="handleSelectionChange"
-            >
-            <el-table-column type="selection" width="55" align="center"></el-table-column>
-            <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
-            <!-- <el-table-column type="index" label="序号" width="55" align="center"></el-table-column> -->
-
-            <el-table-column prop="memberName" label="会员呢称">
-            </el-table-column>
-          
-            <el-table-column prop="status" label="会员状态">
-                <template slot-scope="scope">
-                    {{scope.row.status == 1  ? '激活' : '注销'}}
-                </template>
-            </el-table-column>
-            <el-table-column prop="remarks" label="备注">
-            </el-table-column>
-            <el-table-column prop="status" label="操作" width="180">
-                <template slot-scope="scope">
-                    <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
-                    <el-button type="primary" @click="detail(scope.row)">查看</el-button>
-                    <el-button type="primary" @click="saleDetail(scope.row)">查看销售列表</el-button>
-                    <!-- <el-button type="danger" @click="del(scope.row)">注销</el-button> -->
-                </template>
-            </el-table-column>
-        </el-table>
+            <saler-list ref="salerList"></saler-list>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="save">确 定</el-button>
+                <el-button @click="salerDialogVisible = false">确 定</el-button>
+                <!-- <el-button type="primary" @click="save">确 定</el-button> -->
             </span>
         </el-dialog>
         </div>
@@ -175,12 +156,14 @@ import {
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
 import UploadPic from './UploadPic';
+import SalerList from './SalerList';
 // import RSA from '../../../utils/rsa'
 
 export default {
     name: 'userForm',
     components: {
-        UploadPic
+        UploadPic,
+        SalerList
     },
     data() {
         return {
@@ -222,7 +205,8 @@ export default {
             salerDialogVisible: false,
             selectRow: [],
             brand: '',
-            shopName: ''
+            shopName: '',
+            brandPic: '',
         };
     },
     created() {
@@ -254,7 +238,11 @@ export default {
         search() {
             this.getData()
         },
-        handlePageChange() {
+        getUrl(url) {
+            this.brandPic = url
+        },
+        handlePageChange(page) {
+            this.page.no = page
             this.getData()
         },
         getData() {
@@ -291,6 +279,9 @@ export default {
                 status: '',
             },
             this.openDialog()
+            this.$nextTick(() => {
+                this.$refs.upload.clearPic()
+            })
         },
         edit(row) {
             this.operate = 'edit'
@@ -307,10 +298,9 @@ export default {
             })
         },
         saleDetail(row) {
-            salerList({id: row.id, page: 1, pageSize: 20}).then(res => {
-                console.log(res);
-                this.salerTableData = res.records
-                this.salerDialogVisible = true
+            this.salerDialogVisible = true
+            this.$nextTick(() => {
+                this.$refs.salerList.getData(row)
             })
         },
         del(row) {
@@ -325,6 +315,7 @@ export default {
             let params = cloneDeep(this.form)
             params.lng = this.mapCenter[0]
             params.lat = this.mapCenter[1]
+            params.brandPic = this.brandPic
             if (this.operate == 'create') {
                 let obj = params
                 createShop(obj).then(res => {
@@ -352,6 +343,9 @@ export default {
         closeDialog() {
             this.dialogVisible = false
         },
+        closeSalerDialog() {
+            this.salerDialogVisible = false
+        }
     }
 };
 </script>

@@ -68,21 +68,25 @@
             <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
             <!-- <el-table-column type="index" label="序号" width="55" align="center"></el-table-column> -->
 
-            <el-table-column prop="memberName" label="会员呢称">
+            <el-table-column prop="contractNo" label="合同号">
             </el-table-column>
           
-            <el-table-column prop="status" label="会员状态">
-                <template slot-scope="scope">
+            <el-table-column prop="memberName" label="客户名">
+                <!-- <template slot-scope="scope">
                     {{scope.row.status == 1  ? '激活' : '注销'}}
-                </template>
+                </template> -->
             </el-table-column>
-            <el-table-column prop="remarks" label="备注">
+            <el-table-column prop="status" label="合同状态">
+                 <template slot-scope="scope">
+                    {{getStatus(scope.row.status)}}
+                </template>
             </el-table-column>
             <el-table-column prop="status" label="操作" width="180">
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
                     <el-button type="primary" @click="detail(scope.row)">查看</el-button>
-                    <el-button type="danger" @click="approval(scope.row)">审批</el-button>
+                    <el-button v-if="scope.row.status == '2'" type="success" @click="approvalReady(scope.row)">审批</el-button>
+                    <el-button v-if="scope.row.status == '3'" type="success" @click="sendCard(scope.row)">发卡</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -125,6 +129,27 @@
                 <el-button type="primary" @click="save">确 定</el-button>
             </span>
         </el-dialog>
+        <el-dialog
+            class="user-dialog"
+            :close-on-click-modal='false'
+            :title="'审批资料'"
+            :visible="approvalDialogVisible"
+            :before-close="closeApprovalDialog"
+            width="700px">
+            <el-form :model="form" class="demo-form-inline" label-width="130px">
+                <el-row :gutter="20">
+                    <el-col :span="24">
+                        <el-form-item label="盖章合同图片上传">
+                            <upload-pic ref="upload" @getUrl="getUrl"></upload-pic>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="approvalDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="approval">提交审批</el-button>
+            </span>
+        </el-dialog>
         </div>
     </div>
 </template>
@@ -133,12 +158,15 @@
 import { 
     contractList,
     approval,
+    sendCard
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
+import UploadPic from './UploadPic';
 
 export default {
     name: 'Contract',
     components: {
+        UploadPic
     },
     data() {
         return {
@@ -155,7 +183,7 @@ export default {
                 // endTime: '',
                 // memberName: '',
                 // startTime: '',
-                status: '',
+                status: '2',
             },
             form: {
                 address: '',
@@ -167,20 +195,21 @@ export default {
                 // userIds: '',
             },
             dialogVisible: false,
+            approvalDialogVisible: false,
             selectRow: [],
             contractValid: [], // 合同有效期
             contractTime: [], // 合同时间
-            status: '', // 状态
+            status: '2', // 状态
             name: '', // 会员名字
             statusOpt: [
-                {
-                    value: '0',
-                    label: '草稿'
-                },
-                {
-                    value: '1',
-                    label: '申请'
-                },
+                // {
+                //     value: '0',
+                //     label: '草稿'
+                // },
+                // {
+                //     value: '1',
+                //     label: '申请'
+                // },
                 {
                     value: '2',
                     label: '审批盖章'
@@ -193,10 +222,10 @@ export default {
                     value: '4',
                     label: '发卡'
                 },
-                {
-                    value: '5',
-                    label: '生效'
-                },
+                // {
+                //     value: '5',
+                //     label: '生效'
+                // },
             ]
         };
     },
@@ -204,13 +233,56 @@ export default {
         this.getData();
     },
     methods: {
-        approval(row) {
+        // 发卡
+        sendCard(row) {
             let param = {
-                id: row.id,
-                status: '2'
+                contractId: row.id,
+                insuranceId: row.insuranceId,
+                // pic: '',
+                status: '4'
+            }
+            sendCard(param).then(res => {
+                this.$message.success('发卡成功')
+                this.getData()
+                console.log(res);
+            })
+        },
+        getUrl(url) {
+            this.approvalPic = url
+        },
+        // 审批dialog
+        approvalReady(row) {
+            this.approvalId = row.id
+            this.approvalDialogVisible = true
+            this.$nextTick(() => {
+                this.$refs.upload.clearPic()
+            })
+        },
+        closeApprovalDialog() {
+            this.approvalDialogVisible = false
+        },
+        getStatus(status) {
+            for (let i = 0; i < this.statusOpt.length; i++) {
+                const element = this.statusOpt[i];
+                if (status == element.value) {
+                    return element.label
+                }
+            }
+        },
+        approval(row) {
+            if (this.approvalPic == '') {
+                this.$message.warning({message: '请先上传合同图片',});
+                return
+            }
+            let param = {
+                id: this.approvalId,
+                status: '3',
+                pic: this.approvalPic
+
             }
             approval(param).then(res => {
-                console.log(res);
+                this.$message.success({message: '审批成功'});
+                this.closeApprovalDialog()
                 this.getData()
             })
         },
@@ -232,7 +304,10 @@ export default {
                 status: this.status,
             }
             contractList(obj).then(res => {
-                this.tableData = res.records
+                let arr = res.records.filter(element => {
+                    return (element.status != '0' && element.status != '1')
+                });
+                this.tableData = arr
                 this.page.total = res.total
                 this.page.no = res.current
             })

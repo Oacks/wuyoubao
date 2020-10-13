@@ -23,6 +23,7 @@
     transform: translateX(-50%);
     width: 80rpx;
     height: 80rpx;
+    border-radius: 50%;
 }
 
 .name {
@@ -36,4 +37,36 @@
 
 .auth-btn {
     background-color: transparent !important;
+    font-size: 13px;
+    height: 230rpx;
+    line-height: 360rpx;
+    overflow: hidden;
 }
+
+.btn-container {
+    height: 220rpx;
+    position: relative; 
+    line-height: 1;
+  }
+  
+  .btns-box {
+    position: relative;
+    display: inline-block;
+    width: 33%;
+    height: 100%;
+    text-align: center;
+  }
+  
+  .pic-box {
+    position: relative;
+    background-color: #fff;
+    width: 150rpx;
+    height: 150rpx;
+    border-radius: 50%;
+  }
+  
+  .btns-pic {
+    width: 100rpx;
+    height: 100rpx;
+    margin: 0 auto;
+  }

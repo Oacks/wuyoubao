@@ -57,7 +57,7 @@ export const userList = query => {
     return get('user/userList', query)
 }
 
-/********************** 无忧宝后台********************/
+/********************** 无忧保后台********************/
 // 获取合同详情
 export const contractDetail = query => {
     return get('wyht/contractDetail', query)
@@ -103,17 +103,22 @@ export const updateShop = query => {
 export const contractPriceList = query => {
     return get('wyht/contractPriceList', query)
 }
-// 无忧宝定价
+// 无忧保定价
 export const fixedPrice = query => {
     return post('wyht/fixedPrice', query)
 }
-// 无忧宝定价删除
+// 无忧保定价删除
 export const priceDetele = query => {
     return get('wyht/priceDetele', query)
 }
-// 无忧宝定价修改
+// 无忧保定价修改
 export const priceUpdate = query => {
     return post('wyht/priceUpdate', query)
+}
+
+// 导出合同
+export const exportContract = query => {
+    return get('wyht/eportContract', query)
 }
 
 /******************邮政后台 ****************/
@@ -126,7 +131,7 @@ export const uploadToken = query => {
     return get('file/uploadQniuToken', query)
 }
 
-// 无忧宝卡列表
+// 无忧保卡列表
 export const insuranceList = query => {
     return get('wyht/carInsuranceList', query)
 }

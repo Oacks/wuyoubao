@@ -8,13 +8,17 @@ Page({
    */
   data: {
     mobile: '',
-    code: ''
+    code: '',
+    canSend: true,
   },
   // 返回
   onBack() {
-    wx.navigateBack({
-      delta: 1
-    })
+    wx.navigateTo({
+      url: '/pages/user/user',
+    }); // 跳到用户页面
+    // wx.navigateBack({
+    //   delta: 1
+    // })
   },
   mobileInput(e) {
     this.setData({
@@ -32,19 +36,53 @@ Page({
       code: this.data.code,
       type: '0' // 销售0 用户1
     }).then(res => {
+      let that = this
       let pages = getCurrentPages(); //获取当前页面js里面的pages里的所有信息。
       let prevPage = pages[ pages.length - 2 ];  
       prevPage.setData({  // 将我们想要传递的参数在这里直接setData。上个页面就会执行这里的操作。
         mobile : this.data.mobile
       })
       wx.setStorageSync('mobile', this.data.mobile);
-      this.onBack()
+      wx.showToast({
+        title: '登录成功',
+        icon: 'none',
+        duration: 1500,
+        mask: false,
+      });
+      
+      setTimeout(() => {
+        that.onBack()
+      }, 1000)
       console.log(res);
     })
   },
+  sendCodeLater() {
+    let that = this
+    this.setData({
+      canSend: false
+    })
+    setTimeout(() => {
+      that.setData({
+        canSend: true
+      })
+    }, 60000)
+  },
   getCode() {
+    if(!this.data.canSend) {return}
     api.get('getSms', {
       mobile: this.data.mobile
+    }).then(res => {
+      let that = this
+      wx.showToast({
+        title: '发送成功，请查看手机',
+        icon: 'none',
+        duration: 1500,
+        mask: false,
+        success: (result)=>{
+          that.sendCodeLater()
+        },
+       
+      });
     })
   },
   getPhoneNumber(e) {

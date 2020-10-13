@@ -60,6 +60,11 @@ export const accessoriesList = query => {
     return get('yzht/accessoriesList', query)
 }
 
+// 邮品销售记录
+export const accessoriesSales = query => {
+    return get('yzht/accessoriesSales', query)
+}
+
 // 创建邮品
 export const addAccessories = query => {
     return post('yzht/addAccessories', query)
@@ -92,7 +97,7 @@ export const contractList = query => {
 
 // 邮政发卡
 export const sendCard = query => {
-    return get('yzht/hairpin', query)
+    return post('yzht/hairpin', query)
 }
 
 // 删除无忧宝卡
@@ -117,4 +122,9 @@ export const addCard = query => {
 // 无忧宝卡详细列表
 export const delCard = query => {
     return get('yzht/delCard', query)
+}
+
+// 七牛云上传
+export const uploadToken = query => {
+    return get('file/uploadQniuToken', query)
 }

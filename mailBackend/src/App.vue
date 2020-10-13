@@ -12,6 +12,7 @@
 import axios from 'axios';
 import {Message} from 'element-ui'
 import Router from 'vue-router';
+// this.$message.success({message: '删除成功',});
 
 export default {
     data(){
