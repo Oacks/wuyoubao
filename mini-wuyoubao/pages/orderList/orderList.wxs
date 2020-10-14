@@ -7,11 +7,11 @@ var getStatus = function(val) {
         case 2:
         return '审批盖章'
         case 3:
-        return '申请'
+        return '合同审核'
         case 4:
-        return '申请'
+        return '发卡'
         case 5:
-        return '申请'
+        return '生效'
     }
 }
 

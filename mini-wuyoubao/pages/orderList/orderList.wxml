@@ -12,8 +12,8 @@
                 </image>
             </view>
             <view class="order-content word-color">
-                <view><text class="blocks">订单号：</text>{{item.no}}</view>
-                <view><text class="blocks">客户名：</text>{{item.name}}</view>
+                <view><text class="blocks">订单号：</text>{{item.id}}</view>
+                <view><text class="blocks">客户名：</text>{{item.memberName}}</view>
                 <view><text class="blocks">订单状态：</text>{{format.getStatus(item.status)}}</view>
             </view>
         </view>

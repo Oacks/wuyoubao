@@ -1,9 +1,14 @@
 <!-- index.wxml -->
 <view class="container">
   <navBar title="" back="{{false}}" home="{{false}}" background="{{'#393939'}}">
-    <view class="white ml20 barTitle" slot="center">无忧宝</view>
+    <view class="white ml20 barTitle" slot="center">无忧保</view>
   </navBar>
   <view class="top-container index-bg">
+        <!-- <view class="login-title">
+          无忧保
+        </view> -->
+    <view class="svg-left"></view>
+    <view class="svg-right"></view>
   </view>
 
   <!-- <view class="swiper-container"> -->

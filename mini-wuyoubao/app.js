@@ -4,7 +4,13 @@ App({
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    wx.setStorageSync('logs', logs);
+    wx.loadFontFace({
+      global: true,
+      family: 'AAYuan',
+      source: 'url("/images/AaYuanShiWuYu-2.ttf")',
+      success: console.log
+    })
   },
   globalData: {
     userInfo: null,

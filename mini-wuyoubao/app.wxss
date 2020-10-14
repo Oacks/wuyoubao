@@ -6,7 +6,8 @@ Page {
 
 .top-container {
   position: relative;
-  height: 260rpx;
+  height: 400rpx;
+  width: 100%;
   overflow: hidden;
 }
 

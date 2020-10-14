@@ -146,7 +146,7 @@ Page({
     })
     console.log(form);
   },
-  // 获取无忧宝邮品方案
+  // 获取无忧保邮品方案
   getProject() {
     api.get('sale/getProject').then(res => {
       console.log(res);
