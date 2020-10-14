@@ -65,7 +65,7 @@ export default {
                     title: '合同管理'
                 },
                 {
-                    icon: 'el-icon-lx-recharge',
+                    icon: 'el-icon-lx-info',
                     index: 'error',
                     title: '报障列表'
                 },
@@ -177,7 +177,7 @@ export default {
             return this.$route.path.replace('/', '');
         }
     },
-    methods() {
+    methods: {
 
     },
     created() {

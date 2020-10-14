@@ -58,3 +58,41 @@
     margin-top: 30px;
     margin-bottom: 30px;
 }
+
+.pic-upload {
+    width: 100%;
+    line-height: 40px;
+    background-color: #fff;
+    overflow: hidden;
+    text-align: center;
+}
+
+.pic-box {
+    display: inline-block;
+    width: 330px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.pic-item {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    margin: 5px;
+}
+
+.pic-img {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+}
+
+.add-pic {
+    width: 90%;
+    height: 40px;
+    line-height: 40px;
+    margin: 10px auto;
+    background-color: #fff;
+    text-align: center;
+    border: 1px dashed #ddd;
+}

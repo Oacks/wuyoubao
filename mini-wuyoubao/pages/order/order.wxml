@@ -11,7 +11,7 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">保修合同号</view>
-                    <input class="content-input" value="{{form.contractNo}}" name="contractNo" placeholder="请填写" />
+                    <input class="content-input" disabled="{{true}}" value="{{form.contractNo}}" name="contractNo" placeholder="请填写" />
                 </view>
             </view>
 
@@ -92,7 +92,7 @@
                     <input class="content-input" name="engineNum" value="{{form.engineNum}}" placeholder="请填写" />
                 </view>
                 <view class="item-content">
-                    <view class="content-title">车辆号码</view>
+                    <view class="content-title">车牌号码</view>
                     <input class="content-input" name="licensePlate" value="{{form.licensePlate}}" placeholder="请填写" />
                 </view>
                 <view class="item-content">
@@ -116,8 +116,8 @@
                 <view class="item-content">
                     <view class="content-title">延保卡券</view>
                     <picker class="content-input" placeholder mode="selector" value="{{insuranceNo}}"  range-key="name" bindchange="bindInsuranceChange" range="{{insuranceOpt}}">
-                        <view class="content-input">
-                        {{insuranceOpt[insuranceNo].name}}
+                        <view class="content-input" wx:if="{{insuranceOpt && insuranceOpt[insuranceNo]}}">
+                        车价：{{insuranceOpt[insuranceNo].priceCarStart}}-{{insuranceOpt[insuranceNo].priceCarEnd}}({{insuranceOpt[insuranceNo].name}})
                         </view>
                     </picker>
                 </view>
@@ -152,12 +152,15 @@
                     <view class="item-title-word word-color">礼包金额</view>
                 </view>
             </view> -->
-            <button wx-if="{{!id}}" class='custom-btn' type="primary" formType="submit">
+            <button wx-if="{{!id}}" class='custom-btn' type="primary" formType="submit" data-operate="create">
                 提 交
             </button>
-            <button wx-if="{{id}}" class='custom-btn' type="primary" formType="submit">
+            <button wx-if="{{id}}" class='custom-btn' type="primary" formType="submit" data-operate="update">
                 提交修改
             </button>
+            <mp-dialog title="提示" show="{{dialogVisible}}" bindbuttontap="tapDialogButton" buttons="{{[{text: '取消'}, {text: '确认'}]}}">
+                <view>确认信息无误并提交表单？</view>
+            </mp-dialog>
             <!-- <button style="margin: 30rpx 0" formType="reset">重填</button> -->
         </form>
     </view>

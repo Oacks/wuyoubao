@@ -1,0 +1,23 @@
+{
+  "name": "mini-wuyoubao",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "weui-miniprogram": "^1.0.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waka992/oneyep.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/waka992/oneyep/issues"
+  },
+  "homepage": "https://github.com/waka992/oneyep#readme"
+}

@@ -95,6 +95,11 @@ export const contractList = query => {
     return get('yzht/contractList', query)
 }
 
+// 获取合同详情
+export const contractDetail = query => {
+    return get('yzht/contractDetail', query)
+}
+
 // 邮政发卡
 export const sendCard = query => {
     return post('yzht/hairpin', query)

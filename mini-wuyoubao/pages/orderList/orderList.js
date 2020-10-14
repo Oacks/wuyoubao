@@ -25,7 +25,7 @@ Page({
   showDetail(e) {
     let id = e.currentTarget.dataset.id
     wx.navigateTo({
-      url: '/pages/order/order?id=' + id,
+      url: '/pages/order/order?id=' + id +'&ctrl=detail',
     });
   },
   // 返回

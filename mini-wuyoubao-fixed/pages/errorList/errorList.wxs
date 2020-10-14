@@ -1,17 +1,19 @@
 var getStatus = function(val) {
     var num = parseInt(val);
-    console.log(num);
     switch(num) {
+        // 1已受理，2处理中，0申请，3完成,4取消
+        // 取消系客户系小程序点噶,我比左修改接口你修改下status比我就行
+        // 1,3就你控制比我
+        case 0:
+            return '申请'
         case 1:
-        return '申请'
+            return '已受理'
         case 2:
-        return '审批盖章'
+            return '处理中'
         case 3:
-        return '申请'
+            return '完成'
         case 4:
-        return '申请'
-        case 5:
-        return '申请'
+            return '取消'
     }
 }
 

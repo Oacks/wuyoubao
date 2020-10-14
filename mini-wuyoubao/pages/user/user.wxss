@@ -43,6 +43,10 @@
     overflow: hidden;
 }
 
+.auth-btn::after{
+  border: none !important;
+}
+
 .btn-container {
     height: 220rpx;
     position: relative; 

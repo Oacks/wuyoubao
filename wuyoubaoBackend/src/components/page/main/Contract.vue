@@ -6,7 +6,7 @@
       
         <div style="margin: 10px 0;">
             <el-form :model="searchForm" class="demo-form-inline" label-width="120px">
-                <el-row :gutter="20">
+                <!-- <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="合同创建时间">
                             <el-date-picker
@@ -33,7 +33,7 @@
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
-                </el-row>
+                </el-row> -->
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="合同状态">
@@ -49,7 +49,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="会员姓名">
-                            <el-input :value="name"></el-input>
+                            <el-input v-model="name"></el-input>
                         </el-form-item>
                     </el-col>
                     <div>
@@ -85,14 +85,16 @@
                     {{getStatus(scope.row.status)}}
                 </template>
             </el-table-column>
-            <el-table-column prop="status" label="操作" width="280">
+            <el-table-column prop="status" label="操作">
                 <template slot-scope="scope">
-                    <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
-                    <!-- <a style="margin-right:5px;" href="javascript:;" type="primary" @click="detail(scope.row)">查看</a> -->
-                    <el-button size="mini" type="primary" @click="detail(scope.row)">查看</el-button>
-                    <el-button size="mini" v-if="scope.row.status == '1'" type="primary" @click="exportContract(scope.row)">下载合同</el-button>
-                    <el-button size="mini" v-if="scope.row.status == '1'" type="success" @click="approvalReady(scope.row)">审批</el-button>
-                    <!-- <el-button size="mini" v-if="scope.row.status == '2'" type="success" @click="uploadContract(scope.row)">上传合同</el-button> -->
+                    <div style="white-space: nowrap;">
+                        <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
+                        <!-- <a style="margin-right:5px;" href="javascript:;" type="primary" @click="detail(scope.row)">查看</a> -->
+                        <el-button size="mini" type="primary" @click="detail(scope.row)">查看</el-button>
+                        <el-button size="mini" v-if="scope.row.status == '1'" type="primary" @click="exportContract(scope.row)">下载合同</el-button>
+                        <el-button size="mini" v-if="scope.row.status == '1'" type="success" @click="approvalReady(scope.row)">审批</el-button>
+                        <!-- <el-button size="mini" v-if="scope.row.status == '2'" type="success" @click="uploadContract(scope.row)">上传合同</el-button> -->
+                    </div>
                 </template>
             </el-table-column>
         </el-table>
@@ -113,19 +115,148 @@
             :title=" operate === 'detail' ? '查看合同' : ''"
             :visible="dialogVisible"
             :before-close="closeDialog"
-            width="700px">
-                <el-form :model="form" class="demo-form-inline" label-width="80px">
+            width="900px">
+                <el-form :model="detailInfo" class="demo-form-inline" label-width="140px">
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="地址">
-                                <el-input v-model="form.address"></el-input>
+                            <el-form-item label="合同号：">
+                                {{detailInfo.contractNo}}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="车主姓名：">
+                                {{detailInfo.memberName}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="联系电话：">
+                                {{detailInfo.mobile}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="联系地址：">
+                                {{detailInfo.address}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="车辆品牌：">
+                                {{detailInfo.brand}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="车辆型号：">
+                                {{detailInfo.vehicle}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="车辆购买时间：">
+                                {{detailInfo.carBuyTime}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="车辆类型：">
+                                {{detailInfo.carType == '0' ? '新车' : detailInfo.carType == '1' ? '旧车' : ''}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="原厂保修起始日期：">
+                                {{detailInfo.oldStartTime}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="原厂保修结束日期：">
+                                {{detailInfo.oldEndTime}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="车架号（VIN）：">
+                                {{(detailInfo.vin)}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="发动机号：">
+                                {{(detailInfo.engineNum)}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="车牌号码：">
+                                {{(detailInfo.licensePlate)}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="车辆售出价格：">
+                                {{(detailInfo.carPrice)}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                    
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="延保销售日期">
+                                {{(detailInfo.createTime)}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="延保卡券：">
+                                {{(detailInfo.projectId)}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                  
+
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="延保起期：">
+                                {{(detailInfo.startTime)}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="行驶里程：">
+                                {{(detailInfo.mileage)}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                      <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item :label="detailInfo.status != 4 ? '邮品：' : '邮品卡号：'">
+                                <div v-if="detailInfo.status != 4">
+                                    <div  v-for="(post,i) in detailInfo.accessoriesList" :key="i">{{post.title}}</div>
+                                </div>
+                                <div v-if="detailInfo.status == 4">
+                                    <div v-for="(post,i) in detailInfo.saleList" v-if="post.saleType == 1" :key="i">{{post.title}}</div>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="品牌图片">
-                                <upload-pic></upload-pic>
+                            <el-form-item label="合同图片：">
+                                <div class="pic-list">
+                                    <el-image 
+                                        class="pic-list-item-img"
+                                        :src="detailInfo.pic" 
+                                        :preview-src-list="[detailInfo.pic]">
+                                    </el-image>
+                                </div>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -180,6 +311,8 @@ export default {
         return {
             operate: 'detail',
             tableData: [],
+            name: '',
+            detailInfo: {},
             page: {
                 no: 1,
                 total: 0,
@@ -261,7 +394,7 @@ export default {
         exportContract(row) {
             // exportContract({id: row.id}).then(res=> {})
             const link = document.createElement('a');  
-            link.href = 'http://2o6465101l.wicp.vip/wyht/eportContract?id=' + row.id 
+            link.href = 'https://wuyoubao.sankinetwork.com/api/wyht/eportContract?id=' + row.id 
             link.setAttribute('download', name);  
             document.body.appendChild(link);  
             link.click();
@@ -327,7 +460,7 @@ export default {
         // 详情
         detail(row) {
             contractDetail({id:row.id}).then(res => {
-                console.log(res);
+                this.detailInfo = res
                 this.operate = 'detail'
                 this.form = res
                 this.openDialog()

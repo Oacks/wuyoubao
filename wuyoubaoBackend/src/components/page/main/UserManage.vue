@@ -2,7 +2,7 @@
     <div class="goods-form">
         <div class="table-area">
         <div>
-            <el-button type="primary" @click="create">新建</el-button>
+            <!-- <el-button type="primary" @click="create">新建</el-button> -->
             <!-- <el-button type="primary" @click="edit">编辑</el-button> -->
     
         </div>
@@ -24,22 +24,23 @@
             <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
             <!-- <el-table-column type="index" label="序号" width="55" align="center"></el-table-column> -->
 
-            <el-table-column prop="memberName" label="会员呢称">
+            <el-table-column prop="userName" label="会员呢称">
             </el-table-column>
           
-            <el-table-column prop="status" label="会员状态">
+            <el-table-column prop="mobile" label="手机号">
+            </el-table-column>
+          
+            <!-- <el-table-column prop="status" label="会员状态">
                 <template slot-scope="scope">
                     {{scope.row.status == 1  ? '激活' : '注销'}}
                 </template>
-            </el-table-column>
-            <el-table-column prop="remarks" label="备注">
-            </el-table-column>
-            <el-table-column prop="status" label="操作" width="180">
+            </el-table-column> -->
+            <!-- <el-table-column prop="status" label="操作" width="180">
                 <template slot-scope="scope">
                     <el-button type="primary" @click="edit(scope.row)">编辑</el-button>
                     <el-button type="danger" @click="del(scope.row)">注销</el-button>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
         </el-table>
         <div class="pagination">
             <el-pagination

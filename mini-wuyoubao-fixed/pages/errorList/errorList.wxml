@@ -6,17 +6,26 @@
         <view class="white ml20 barTitle" slot="center">我的报障</view>
     </navBar>
     <view class="order-list-container">
-        <view class="order-box" wx:for="{{saleList}}" bindtap="showDetail" data-id="{{item.id}}">
+        <view class="order-box" wx:for="{{saleList}}" data-id="{{item.id}}">
             <view class="order-pic" hover-class="none" hover-stop-propagation="false">
                 <image class="order-icon" src="/images/icon/icon-order-grey.png">
                 </image>
+
+                <view class="btns">
+                    <view class="btn word-color" bindtap="showDetail"  data-id="{{item.id}}">查看</view>
+                    <view class="btn del-btn" wx:if="{{item.status != 4 && item.status != 3}}" bindtap="reback"  data-id="{{item.id}}">撤销</view>
+                </view>
             </view>
             <view class="order-content word-color">
-                <view><text class="blocks">报障单号：</text>{{item.id}}</view>
-                <view><text class="blocks">客户名：</text>{{item.memberName}}</view>
-                <view><text class="blocks">报障原因：</text>{{item.reason}}</view>
+                <view><text class="blocks">报障单号:</text>{{item.id}}</view>
+                <view><text class="blocks">客户名:</text>{{item.memberName}}</view>
+                <view><text class="blocks">订单状态:</text>{{format.getStatus(item.status)}}</view>
+                <view><text class="blocks">报障原因:</text>{{item.reason}}</view>
             </view>
         </view>
     </view>
+    <mp-dialog title="提示" show="{{dialogVisible}}" bindbuttontap="tapDialogButton" buttons="{{[{text: '取消'}, {text: '确认'}]}}">
+        <view>确认撤销该报障单？</view>
+    </mp-dialog>
 </view>
 

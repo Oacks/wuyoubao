@@ -7,7 +7,7 @@
         <form catchsubmit="formSubmit" catchreset="formReset">
             <view class="item-container">
                 <view class="item-title">
-                    <view class="item-title-word word-color">保修服务</view>
+                    <view class="item-title-word word-color">报障内容</view>
                 </view>
                 <view class="item-content">
                     <view class="content-title">保修合同号</view>
@@ -31,16 +31,31 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">图片</view>
-                    <input class="content-input" value="{{form.picList}}" name="picList" placeholder="请填写" />
+                </view>
+                <view class="pic-upload word-color">
+                    <view class="pic-box">
+                        <view class="pic-item" wx:for="{{form.picList}}" bindtap="previewPic" data-url="{{item}}" data-urlList="{{picList}}">
+                            <image class="pic-img" src="{{item}}">
+                            </image>
+                        </view>
+                        <view class="add-pic" wx:if="{{ctrl !== 'detail'}}" bindtap="uploadPic">+</view>
+                    </view>
+                </view>
+                <view class="item-title" wx:if="{{ctrl == 'detail'}}">
+                    <view class="item-title-word word-color">当前进度</view>
+                </view>
+                <view class="item-content" wx:if="{{ctrl == 'detail'}}">
                 </view>
             </view>
 
-            <button wx:if="{{ctrl !== 'detail'}}" class='custom-btn' type="primary" formType="submit">
+            <button wx:if="{{ctrl !== 'detail'}}" class='custom-btn' type="primary" formType="submit"  data-operate="create">
                 提 交
             </button>
-            
             <!-- <button style="margin: 30rpx 0" formType="reset">重填</button> -->
         </form>
+        <mp-dialog title="提示" show="{{dialogVisible}}" bindbuttontap="tapDialogButton" buttons="{{[{text: '取消'}, {text: '确认'}]}}">
+            <view>确认信息无误并提交表单？</view>
+        </mp-dialog>
     </view>
 </view>
 

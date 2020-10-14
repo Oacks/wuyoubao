@@ -8,7 +8,8 @@ App({
   },
   globalData: {
     userInfo: null,
-    url: 'http://2o6465101l.wicp.vip/',
+    // url: 'http://2o6465101l.wicp.vip/',
+    url: 'https://wuyoubao.sankinetwork.com/api/',
     sessionKey: '',
   }
 })

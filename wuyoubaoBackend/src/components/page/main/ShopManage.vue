@@ -292,6 +292,7 @@ export default {
         // 详情
         detail(row) {
             shopDetail({id: row.id}).then(res => {
+                console.log(res);
                 this.operate = 'detail'
                 this.form = res
                 this.openDialog()

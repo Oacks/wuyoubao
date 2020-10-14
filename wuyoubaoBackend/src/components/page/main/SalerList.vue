@@ -2,7 +2,7 @@
     <div class="goods-form">
         <div class="table-area">
         <div style="margin-bottom:10px;">
-            <el-button type="primary" @click="create">新建</el-button>
+            <el-button type="primary" @click="create">新增</el-button>
         </div>
         <el-table
             :data="salerTableData"
@@ -27,10 +27,12 @@
                     {{scope.row.status == 1  ? '激活' : '注销'}}
                 </template>
             </el-table-column> -->
-            <el-table-column prop="status" label="操作" width="100">
+            <el-table-column prop="status" label="操作">
                 <template slot-scope="scope">
-                    <el-button type="primary" @click="detail(scope.row)">查看</el-button>
+                    <div style="white-space:nowrap;">
+                    <!-- <el-button type="primary" @click="detail(scope.row)">查看</el-button> -->
                     <el-button type="danger" @click="del(scope.row)">删除</el-button>
+                    </div>
                 </template>
             </el-table-column>
         </el-table>
@@ -163,7 +165,8 @@ export default {
                 let obj = {id: id}
                 delSaler(obj).then(res => {
                     this.$message.success({message: '删除成功',});
-                    this.getData()
+                    this.getData({id: this.shopId})
+
                 })
             })
             .catch(_ => {});
@@ -175,9 +178,9 @@ export default {
                 let obj = params
                 addSaler(obj).then(res => {
                     if (res) {
-                        this.$message.success({message: '创建成功',});
+                        this.$message.success({message: '新增成功',});
                         this.dialogVisible = false
-                        this.getData()
+                        this.getData({id: this.shopId})
                     }
                 })
             }

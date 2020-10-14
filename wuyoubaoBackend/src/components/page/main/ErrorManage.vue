@@ -3,7 +3,7 @@
         <h2>报障管理</h2>
         <hr style="margin-bottom:10px;"/>
         <div class="table-area">
-           <div>
+           <div style="margin: 10px;">
                <el-select v-model="showTableStatus" placeholder="请选择" @change="changeTable">
                     <el-option
                     label="查看待办"
@@ -25,9 +25,9 @@
             header-cell-class-name="table-header"
             @selection-change="handleSelectionChange"
         >
-            <el-table-column type="selection" width="55" align="center"></el-table-column>
+            <!-- <el-table-column type="selection" width="55" align="center"></el-table-column> -->
 
-            <el-table-column prop="contractNo" label="保修合同号">
+            <el-table-column prop="contractNo" label="报修合同号" width="260">
             </el-table-column>
 
             <el-table-column prop="licensePlate" label="车牌">
@@ -36,7 +36,7 @@
             <el-table-column prop="memberName" label="客户名">
             </el-table-column>
 
-            <el-table-column prop="mobile" label="联系电话">
+            <el-table-column prop="mobile" label="联系电话" width="130">
             </el-table-column>
           
             <el-table-column prop="reason" label="原因">
@@ -48,16 +48,16 @@
                 </template>
             </el-table-column>
 
-            <el-table-column prop="picList" label="图片">
-            </el-table-column>
+            <!-- <el-table-column prop="picList" label="图片">
+            </el-table-column> -->
           
-            <el-table-column prop="status" label="操作" width="280">
+            <el-table-column prop="status" label="操作" width="auto">
                 <template slot-scope="scope">
-                    <el-button size="mini" type="primary" @click="edit(scope.row)">添加记录</el-button>
-                    <el-button size="mini" type="primary" @click="detail(scope.row, 'detail')">详情</el-button>
-                    <el-button size="mini" type="primary" @click="detail(scope.row, 'logs')">查看记录</el-button>
-                    <el-button size="mini" type="primary" @click="changeStatus(scope.row, 1)">受理</el-button>
-                    <el-button size="mini" type="success" @click="changeStatus(scope.row, 3)">完成</el-button>
+                        <el-button v-if="scope.row.status !== '0' && scope.row.status != '3' && scope.row.status != '4'" size="mini" type="primary" @click="edit(scope.row)">添加记录</el-button>
+                        <el-button size="mini" type="primary" @click="detail(scope.row, 'detail')">详情</el-button>
+                        <el-button  v-if="scope.row.status != '0' && scope.row.status != '3' && scope.row.status != '4'" size="mini" type="primary" @click="detail(scope.row, 'logs')">查看记录</el-button>
+                        <el-button v-if="scope.row.status == '0'"  size="mini" type="primary" @click="changeStatus(scope.row, 1)">受理</el-button>
+                        <el-button v-if="scope.row.status != '0' && scope.row.status != '3' && scope.row.status != '4'" size="mini" type="success" @click="changeStatus(scope.row, 3)">完成</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -83,7 +83,7 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="图片">
-                                <!-- <upload-pic></upload-pic> -->
+                                <upload-pic ref="upload" @getUrl="getUrl"></upload-pic>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -91,7 +91,7 @@
                     <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="记录">
-                                <el-input v-model="form.remark" placeholder="用户名" class="handle-input mr10"></el-input>
+                                <el-input type="textarea" v-model="form.remark" placeholder="用户名" class="handle-input mr10"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -111,49 +111,49 @@
                 <el-form :model="detailInfo" class="demo-form-inline" label-width="140px">
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="合同号">
+                            <el-form-item label="合同号：">
                                 {{detailInfo.detail.contractNo}}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="受理时间">
+                            <el-form-item label="受理时间：">
                                 {{detailInfo.detail.createTime}}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="车牌">
+                            <el-form-item label="车牌：">
                                 {{detailInfo.detail.licensePlate}}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="用户名称">
+                            <el-form-item label="用户名称：">
                                 {{detailInfo.detail.memberName}}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="手机号">
+                            <el-form-item label="手机号：">
                                 {{detailInfo.detail.mobile}}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="原因">
+                            <el-form-item label="原因：">
                                 {{detailInfo.detail.reason}}
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="状态">
+                            <el-form-item label="状态：">
                                 {{getStatus(detailInfo.detail.status)}}
                             </el-form-item>
                         </el-col>
@@ -161,9 +161,17 @@
                     
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="用户上传报障图片">
-                                <span class="pics"></span>
-                                <el-image class="pics" :src="[detailInfo.file]"></el-image>
+                            <el-form-item label="用户上传报障图片：">
+                                <div class="pic-list">
+                                        <div class="pic-list-item" v-for="(pic, i) in detailInfo.file" :key="i">
+                                            <!-- <span class="del-icon" @click.stop="delPic(pic, i)">X</span> -->
+                                            <el-image 
+                                                class="pic-list-item-img"
+                                                :src="pic.picUrl" 
+                                                :preview-src-list="[pic.picUrl]">
+                                            </el-image>
+                                        </div>
+                                </div>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -228,10 +236,12 @@ import {
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
 // import RSA from '../../../utils/rsa'
+import UploadPic from './UploadPic';
 
 export default {
     name: 'ErrorManage',
     components: {
+        UploadPic
     },
     data() {
         return {
@@ -239,6 +249,7 @@ export default {
             operate: 'detail',
             tableData: [],
             logList: [],
+            approvalPic: '',
             page: {
                 no: 1,
                 total: 0,
@@ -268,6 +279,9 @@ export default {
         this.getData();
     },
     methods: {
+        getUrl(url) {
+            this.approvalPic = url
+        },
         // 修改table
         changeTable(status) {
             this.showTableStatus = status
@@ -354,6 +368,9 @@ export default {
                 picList: [],
                 remark: ''
             }
+            this.$nextTick(() => {
+                this.$refs.upload.clearPic()
+            })
             this.detailForm = row
             this.openDialog()
         },
@@ -389,6 +406,7 @@ export default {
             if (this.detailForm.id) {
                 params.guaranteeId = this.detailForm.id
             }
+            params.picList = [this.approvalPic]
             if (this.operate == 'edit') {
                 addGuaranteeLog(params).then(res => {
                     if (res) {
@@ -465,4 +483,21 @@ export default {
         margin-right: 10px;
         margin-top: 10px;
     }
+    .pic-list {
+        width: 330px;
+        margin: 0 auto;
+    }
+    .pic-list .wrapper {
+        overflow: visible;
+    }
+    .pic-list-item {
+        position: relative;
+        display: inline-block;
+        width: 100px;
+        height: 100px;  
+        margin-right: 10px;
+        overflow: visible;
+    }
+
+  
 </style>

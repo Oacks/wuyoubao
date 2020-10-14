@@ -1,31 +1,6 @@
 // pages/order/order.js
 let app = getApp().globalData;
 import api from '../../api/api'
-const qiniuUploader = require("../../utils/qiniuUploader");
-function initQiniu() {
-  var options = {
-      region: 'SCN',
-      // 获取uptoken方法三选一即可，执行优先级为：uptoken > uptokenURL > uptokenFunc。三选一，剩下两个置空。推荐使用uptokenURL，详情请见 README.md
-      // 由其他程序生成七牛云uptoken，然后直接写入uptoken
-      uptoken: '',
-      // 从指定 url 通过 HTTP GET 获取 uptoken，返回的格式必须是 json 且包含 uptoken 字段，例如： {"uptoken": "0MLvWPnyy..."}
-      uptokenURL: 'https://[yourserver.com]/api/uptoken',
-      // uptokenFunc 这个属性的值可以是一个用来生成uptoken的函数，详情请见 README.md
-      uptokenFunc: function () { 
-          return qiniuUploadToken;
-      },
-      // bucket 外链域名，下载资源时用到。如果设置，会在 success callback 的 res 参数加上可以直接使用的 fileURL 字段。否则需要自己拼接
-      domain: 'http://[yourBucketId].bkt.clouddn.com',
-      // qiniuShouldUseQiniuFileName 如果是 true，则文件的 key 由 qiniu 服务器分配（全局去重）。如果是 false，则文件的 key 使用微信自动生成的 filename。出于初代sdk用户升级后兼容问题的考虑，默认是 false。
-      // 微信自动生成的 filename较长，导致fileURL较长。推荐使用{qiniuShouldUseQiniuFileName: true} + "通过fileURL下载文件时，自定义下载名" 的组合方式。
-      // 自定义上传key 需要两个条件：1. 此处shouldUseQiniuFileName值为false。 2. 通过修改qiniuUploader.upload方法传入的options参数，可以进行自定义key。（请不要直接在sdk中修改options参数，修改方法请见demo的index.js）
-      // 通过fileURL下载文件时，文件自定义下载名，请参考：七牛云“对象存储 > 产品手册 > 下载资源 > 下载设置 > 自定义资源下载名”（https://developer.qiniu.com/kodo/manual/1659/download-setting）。本sdk在README.md的"常见问题"板块中，有"通过fileURL下载文件时，自定义下载名"使用样例。
-      shouldUseQiniuFileName: false
-  };
-  // 将七牛云相关配置初始化进本sdk
-  qiniuUploader.init(options);
-}
-
 Page({
 
   /**
@@ -33,16 +8,47 @@ Page({
    */
   data: {
     id: '',
-    ctrl: '', //查看还是删除
+    formDataCopy: {},
+    uploadOperate: '',
     // 详情返回的字段
+
+    insuranceId: '', // 所选卡券
+    insurancePrice: '',
+    carType: '', // 车类型
+    insuranceNo: '',
+    startTime: '', // 延保起期
+    createTime: '', // 延保销售日期
+    oldStartTime: '',
+    oldEndTime: '',
+    carBuyTime: '', // 购买时间
+    carBrand: '',
     form: {
       contractNo: '',
-      licensePlate: '',
       memberName: '',
       mobile: '',
-      reason: '',
-      picList: [],
+      address: '',
+      vehicle: '',
+      carType: '',
+      vin: '',
+      engineNum: '',
+      licensePlate: '',
+      carPrice: '',
+      insuranceNo: '',
+      mileage: '',
     },
+    dialogVisible: false,
+    carTypeOpt: [
+      {
+        id: 0,
+        name: '新车'
+      },
+      {
+        id: 1,
+        name: '旧车'
+      },
+    ],
+    insuranceOpt: [],
+
   },
   toSelectBrand() {
     wx.navigateTo({
@@ -54,8 +60,56 @@ Page({
       [target]: val
     })
   },
+  bindCreateTimeChange: function(e) {
+    this.bindTimeChange('createTime', e.detail.value)
+  },
+  bindStartTimeChange: function(e) {
+    this.bindTimeChange('startTime', e.detail.value)
+  },
+  bindBuyTimeChange: function(e) {
+    this.bindTimeChange('carBuyTime', e.detail.value)
+  },
+  bindOldStartTimeChange: function(e) {
+    this.bindTimeChange('oldStartTime', e.detail.value)
+  },
+  bindOldEndTimeChange: function(e) {
+    this.bindTimeChange('oldEndTime', e.detail.value)
+  },
+  //
+  bindCarTypeChange(e) {
+    this.setData({
+      carType: e.detail.value
+    })
+  },
+  bindInsuranceChange(e) {
+    let id = this.data.insuranceOpt[e.detail.value].id
+    let price = this.data.insuranceOpt[e.detail.value].price
+    this.setData({
+      insuranceNo: e.detail.value, // 展示用,不传后台
+      insuranceId: id,
+      insurancePrice: price,
+    })
+  },
   formSubmit(e) {
-    this.order(e.detail.value)
+    this.setData({
+      dialogVisible: true,
+      uploadOperate: e.detail.target.dataset.operate, // cerate, update
+      formDataCopy: e.detail.value
+    })
+  },
+  tapDialogButton(e) {
+    let text = e.detail.item.text
+    if (text == '确认') {
+      if (this.data.uploadOperate == 'create') {
+        this.order(this.data.formDataCopy)
+      }
+      if (this.data.uploadOperate == 'update') {
+        this.updateOrder(this.data.formDataCopy)
+      }
+    }
+    this.setData({
+      dialogVisible: false
+    })
   },
   formatTime(str) {
     return str + ' 00:00:00'
@@ -63,51 +117,120 @@ Page({
   // 下单
   order(form) {
     let {
-      contractNo,
-      licensePlate,
+      contractNo, 
       memberName,
       mobile,
-      reason,
-      picList,
-      } = form
+      address,
+      vin,
+      engineNum,
+      licensePlate,
+      carPrice,
+      mileage,
+      vehicle} = form
     let params = {
-      contractNo:contractNo,
-      licensePlate:licensePlate,
-      memberName:memberName,
-      mobile:mobile,
-      reason:reason,
-      picList:picList || [],
+      contractNo: contractNo,
+      memberName: memberName,
+      mobile: mobile,
+      address: address,
+      vin: vin,
+      engineNum: engineNum,
+      licensePlate: licensePlate,
+      carPrice: carPrice,
+      mileage: mileage,
+      vehicle: vehicle,
+      projectId: this.data.insuranceId,
+      brand: this.data.carBrand,
+      carType: this.data.carType,
+      price: this.data.insurancePrice,
+      carBuyTime: this.formatTime(this.data.carBuyTime), // 购买时间
+      oldStartTime: this.formatTime(this.data.oldStartTime),
+      oldEndTime: this.formatTime(this.data.oldEndTime),
+      createTime: this.formatTime(this.data.createTime), // 延保销售日期
+      startTime: this.formatTime(this.data.startTime), // 延保起期
     }
-    api.post('member/createGuarantee', params).then(res => {
+    api.post('sale/createContract', params).then(res => {
       // 打开重选列表
       wx.showToast({
-        title: '报障结果提交成功',
+        title: '创建成功',
         icon: 'none',
         duration: 1500,
         mask: false,
       });
+      setTimeout(() => {
+        wx.switchTab({
+          url: '/pages/user/user',
+        });
+      }, 1000)
     })
-    wx.switchTab({
-      url: '/pages/user/user',
-    });
-    console.log(form);
   },
-  // 获取无忧宝邮品方案
-  getProject() {
+  // 更新订单
+  updateOrder(form) {
+    let {
+      contractNo, 
+      memberName,
+      mobile,
+      address,
+      vin,
+      engineNum,
+      licensePlate,
+      carPrice,
+      mileage,
+      vehicle} = form
+    let params = {
+      id: this.data.id,
+      contractNo: contractNo,
+      memberName: memberName,
+      mobile: mobile,
+      address: address,
+      vin: vin,
+      engineNum: engineNum,
+      licensePlate: licensePlate,
+      carPrice: carPrice,
+      mileage: mileage,
+      vehicle: vehicle,
+      projectId: this.data.insuranceId,
+      brand: this.data.carBrand,
+      carType: this.data.carType,
+      price: this.data.insurancePrice,
+      carBuyTime: this.formatTime(this.data.carBuyTime), // 购买时间
+      oldStartTime: this.formatTime(this.data.oldStartTime),
+      oldEndTime: this.formatTime(this.data.oldEndTime),
+      createTime: this.formatTime(this.data.createTime), // 延保销售日期
+      startTime: this.formatTime(this.data.startTime), // 延保起期
+    }
+    api.post('sale/updateContract', params).then(res => {
+      // 打开重选列表
+      wx.showToast({
+        title: '修改成功',
+        icon: 'none',
+        duration: 1500,
+        mask: false,
+      });
+      setTimeout(() => {
+        wx.switchTab({
+          url: '/pages/user/user',
+        });
+      }, 1000)
+    })
+  },
+  // 获取无忧保邮品方案
+  getProject(fn) {
     api.get('sale/getProject').then(res => {
-      console.log(res);
       let list = []
       for (let i = 0; i < res.length; i++) {
         const element = res[i];
         list.push({
           id:element.id,
           name:element.insuranceName,
-          price: element.priceContract
+          price: element.priceContract,
+          priceCarStart: element.priceCarStart,
+          priceCarEnd: element.priceCarEnd,
         })
       }
       this.setData({
         insuranceOpt: list
       })
+      fn && fn()
     })
   },
   // 返回
@@ -116,20 +239,69 @@ Page({
       delta: 1
     })
   },
+  // 获取时候截取时间
+  formatGetTime(time) {
+    if (time) {
+      return time.slice(0, 10)
+    }
+    return ''
+  },
   // 获取合同详情
   getContractDetail(id){
-    api.get('member/contractDetail', {id: id}).then((res => {
-      console.log(res);
+    api.get('sale/contractDetail', {id: id ? id : this.data.id}).then((res => {
+      let {
+        contractNo,
+        memberName,
+        mobile,
+        address,
+        vin,
+        engineNum,
+        licensePlate,
+        carPrice,
+        mileage,
+        vehicle,
+        insuranceId,
+        brand,
+        carType,
+        price,
+        carBuyTime,
+        oldStartTime,
+        oldEndTime,
+        createTime,
+        projectId,
+        startTime,} = res
       let form = {
-        contractNo:id,
-        licensePlate:res.licensePlate,
-        memberName:res.memberName,
-        mobile:res.mobile,
-        reason: '',
-        picList: [],
+        contractNo: contractNo,
+        memberName: memberName,
+        mobile: mobile,
+        address: address,
+        vin: vin,
+        engineNum: engineNum,
+        licensePlate: licensePlate,
+        carPrice: carPrice,
+        mileage: mileage,
+        vehicle: vehicle,
+      }
+      let insuranceNo = 0
+      for (let i = 0; i < this.data.insuranceOpt.length; i++) {
+        const element = this.data.insuranceOpt[i];
+        if(element.id == projectId) {
+          insuranceNo = i
+          break
+        }
       }
       this.setData({
-        form: form
+        form: form,
+        insuranceId: insuranceId, // 所选卡券
+        insurancePrice: price,
+        carType: carType, // 车类型
+        insuranceNo: insuranceNo,
+        startTime: this.formatGetTime(startTime), // 延保起期
+        createTime: this.formatGetTime(createTime), // 延保销售日期
+        oldStartTime: this.formatGetTime(oldStartTime),
+        oldEndTime: this.formatGetTime(oldEndTime) ,
+        carBuyTime: this.formatGetTime(carBuyTime), // 购买时间
+        carBrand: brand,
       })
     }))
   },
@@ -138,19 +310,19 @@ Page({
    */
   onLoad: function (options) {
     let id = options.id
-    let ctrl = options.ctrl
     if (id) {
       this.setData({
-        ctrl: ctrl,
         id: id
       })
-      this.getContractDetail(id)
+      this.getProject(this.getContractDetail)
+    }
+    else {
+      this.getProject()
     }
   },
 
  
   onShow: function () {
-    // this.getProject()
   },
 
 })

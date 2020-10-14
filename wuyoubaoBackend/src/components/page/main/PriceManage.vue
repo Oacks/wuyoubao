@@ -128,7 +128,7 @@
                         <el-col :span="24">
                             <el-form-item label="邮品">
                                 <el-checkbox-group v-model="form.accessoriesList">
-                                    <el-checkbox v-for="(post, i) in postProd" :key="i" :label="post.id">{{post.title}}</el-checkbox>
+                                    <el-checkbox v-for="(post, i) in postProd" :key="i" :label="post.id" >{{post.title}}</el-checkbox>
                                 </el-checkbox-group>
                             </el-form-item>
                         </el-col>
@@ -269,8 +269,13 @@ export default {
         },
         edit(row) {
             this.operate = 'edit'
-            row.status = Number(row.status)
+            let accessoriesList = []
+            for (let index = 0; index < row.accessoriesList.length; index++) {
+                const element = row.accessoriesList[index];
+                accessoriesList.push(element.id)
+            }
             this.form = row
+            this.form.accessoriesList = accessoriesList
             this.openDialog()
         },
         // 详情

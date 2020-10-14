@@ -35,6 +35,11 @@ Page({
     id: '',
     ctrl: '', //查看还是删除
     tempFilePaths: '',
+    dialogVisible: false,
+    uploadOperate: '',
+    formDataCopy: {},
+    uploadToken: '',
+    logFile: [],
     // 详情返回的字段
     form: {
       contractNo: '',
@@ -57,7 +62,25 @@ Page({
     })
   },
   formSubmit(e) {
-    this.order(e.detail.value)
+    this.setData({
+      dialogVisible: true,
+      uploadOperate: e.detail.target.dataset.operate, // cerate, update
+      formDataCopy: e.detail.value
+    })
+  },
+  tapDialogButton(e) {
+    let text = e.detail.item.text
+    if (text == '确认') {
+      if (this.data.uploadOperate == 'create') {
+        this.order(this.data.formDataCopy)
+      }
+      if (this.data.uploadOperate == 'update') {
+        this.updateOrder(this.data.formDataCopy)
+      }
+    }
+    this.setData({
+      dialogVisible: false
+    })
   },
   formatTime(str) {
     return str + ' 00:00:00'
@@ -70,7 +93,6 @@ Page({
       memberName,
       mobile,
       reason,
-      picList,
       } = form
     let params = {
       contractNo:contractNo,
@@ -78,20 +100,23 @@ Page({
       memberName:memberName,
       mobile:mobile,
       reason:reason,
-      picList:picList || [],
+      picList:this.data.form.picList || [],
     }
     api.post('member/createGuarantee', params).then(res => {
       // 打开重选列表
       wx.showToast({
-        title: '报障结果提交成功',
+        title: '报障结果提交成功,可到”我的报障“处查看',
         icon: 'none',
         duration: 1500,
         mask: false,
       });
+      setTimeout(() => {
+        wx.switchTab({
+          url: '/pages/user/user',
+        });
+      }, 1000)
     })
-    wx.switchTab({
-      url: '/pages/user/user',
-    });
+   
     console.log(form);
   },
   // 获取无忧宝邮品方案
@@ -121,20 +146,32 @@ Page({
   // 获取合同详情
   getErrorDetail(id){
     api.get('member/guaranteeDetail', {id: id}).then((result => {
-      console.log(res);
       let res = result.detail
       let logFile = result.logFile
-      console.log(logFile);
+      let file = result.file
+      let picList = []
+      for (let i = 0; i < file.length; i++) {
+        const element = file[i];
+        picList.push(element.picUrl)
+      }
       let form = {
         contractNo:id,
         licensePlate:res.licensePlate,
         memberName:res.memberName,
         mobile:res.mobile,
         reason: res.reason,
-        picList: result.file,
+        picList: picList,
       }
       this.setData({
-        form: form
+        form: form,
+        logFile: logFile
+      })
+    }))
+  },
+  getToken() {
+    api.get('file/uploadQniuToken', {}).then((res => {
+      this.setData({
+        uploadToken: res
       })
     }))
   },
@@ -146,28 +183,33 @@ Page({
         sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
         sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有  
         success: function(res) {
-          console.log(qiniuUploader)
-          console.log(qiniuUploader.unload)
           const filepath = res.tempFilePaths[0]
-          console.log(filepath)
           // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片  
           qiniuUploader.upload(filepath, res => {
             console.log(res)
+            let list = _this.data.form.picList
+            list.push('http://storage.sankinetwork.com' + res.imageURL)
             _this.setData({
-            //注意这中间有个"/"在这上面耽误了半个小时
-              tempFilePaths:app.globalData.urlst +"/"+ res.key
+              'form.picList': list
             })
-            console.log(_this.data.tempFilePaths)
           }, (error) => {
             console.log('error' + error)
           }, {
-          //这里是你所在大区的地址
-            uploadURL: 'https://up-z2.qiniup.com',
-            domain: 'bzkdlkaf.bkt.clouddn.com',
-            //这里的uptoken是后端返回来的
+            bucket: 'sanki',
+            region: 'SCN',
             uptoken: _this.data.uploadToken,
           })
         }
+      })
+    },
+    // 预览图片
+    previewPic(e) {
+      console.log(e);
+      let url = e.currentTarget.dataset.url
+      let list = e.currentTarget.dataset.urllist
+      wx.previewImage({
+        current: url, // 当前显示图片的http链接
+        urls: list || []// 需要预览的图片http链接列表
       })
     },
   /**
@@ -176,6 +218,7 @@ Page({
   onLoad: function (options) {
     let id = options.id
     let ctrl = options.ctrl
+    this.getToken()
     if (id) {
       this.setData({
         ctrl: ctrl,

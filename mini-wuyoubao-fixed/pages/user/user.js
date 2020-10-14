@@ -132,8 +132,10 @@ Page({
   backendLogin(code) {
     let self = this
     api.post('wx/member/login', {code: code}).then((res) => {
-      wx.setStorageSync('sessionKey', res.session_key);
-      wx.setStorageSync('openId', res.openid);
+      if (res.session_key) {
+        wx.setStorageSync('sessionKey', res.session_key);
+      }
+      wx.setStorageSync('openid', res.openId);
       app.sessionKey = res.session_key
       wx.hideLoading();
 

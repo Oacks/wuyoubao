@@ -1,11 +1,10 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/user/user",
     "pages/errorForm/errorForm",
-    "pages/order/order",
-    "pages/orderList/orderList",
     "pages/errorList/errorList",
+    "pages/index/index",
+    "pages/orderList/orderList",
     "pages/login/login",
     "pages/authorization/authorization",
     "pages/authorizationPhone/authorizationPhone",

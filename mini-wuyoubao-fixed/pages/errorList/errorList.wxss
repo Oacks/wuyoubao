@@ -1,9 +1,33 @@
 /* pages/orderList/orderList.wxss */
 .order-box {
-    /* height: 60px; */
-    width: 100%;
+    width: 98%;
+    margin: 10px auto;
+    border-radius: 6px;
     border-bottom: 1px solid #ddd;
-    background-color: #fff;
+    background: linear-gradient(to right, #fff, #ffe);
+    box-shadow: 1px 1px 2px #ddd;
+    position: relative;
+}
+
+.btns {
+    position: absolute;
+    right: 0;
+    top: 10px;
+}
+
+.btn {
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+    padding: 3px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.del-btn {
+    color: rgb(228, 85, 85);
+    /* border: 1px solid rgb(228, 85, 85); */
 }
 
 .order-pic {
@@ -27,5 +51,5 @@
 
 .blocks {
     display: inline-block;
-    width: 80px;
+    width: 76px;
 }
