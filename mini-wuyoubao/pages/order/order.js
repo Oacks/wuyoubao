@@ -22,6 +22,7 @@ Page({
     oldEndTime: '',
     carBuyTime: '', // 购买时间
     carBrand: '',
+    canSend: true,
     form: {
       contractNo: '',
       memberName: '',
@@ -35,6 +36,7 @@ Page({
       carPrice: '',
       insuranceNo: '',
       mileage: '',
+      code: '',
     },
     dialogVisible: false,
     carTypeOpt: [
@@ -49,6 +51,41 @@ Page({
     ],
     insuranceOpt: [],
 
+  },
+  mobileInput(e) {
+    this.setData({
+      'form.mobile': e.detail.value
+    })
+  },
+  // 获取验证码
+  getCode() {
+    if(!this.data.canSend) {return}
+    api.get('wx/getSms', {
+      mobile: this.data.form.mobile
+    }).then(res => {
+      let that = this
+      wx.showToast({
+        title: '发送成功，请查看手机',
+        icon: 'none',
+        duration: 1500,
+        mask: false,
+        success: (result)=>{
+          that.sendCodeLater()
+        },
+       
+      });
+    })
+  },
+  sendCodeLater() {
+    let that = this
+    this.setData({
+      canSend: false
+    })
+    setTimeout(() => {
+      that.setData({
+        canSend: true
+      })
+    }, 60000)
   },
   toSelectBrand() {
     wx.navigateTo({
@@ -126,8 +163,10 @@ Page({
       licensePlate,
       carPrice,
       mileage,
+      code,
       vehicle} = form
     let params = {
+      code: code,
       contractNo: contractNo,
       memberName: memberName,
       mobile: mobile,
@@ -227,6 +266,7 @@ Page({
           priceCarEnd: element.priceCarEnd,
         })
       }
+      console.log(list);
       this.setData({
         insuranceOpt: list
       })

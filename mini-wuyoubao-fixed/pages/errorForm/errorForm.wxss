@@ -96,3 +96,7 @@
     text-align: center;
     border: 1px dashed #ddd;
 }
+
+.process-box {
+    background-color: #fff;
+}

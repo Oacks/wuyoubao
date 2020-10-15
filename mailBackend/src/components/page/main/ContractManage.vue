@@ -52,8 +52,6 @@
                     </el-col> -->
                 </el-row>
             </el-form>
-            <div>
-            </div>
         </div>
         <el-table
             :data="tableData"
@@ -81,10 +79,11 @@
                     {{getStatus(scope.row.status)}}
                 </template>
             </el-table-column>
-            <el-table-column prop="status" label="操作" width="180">
+            <el-table-column prop="status" label="操作">
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
                     <el-button type="primary" @click="detail(scope.row)">查看</el-button>
+                    <el-button v-if="scope.row.status == '2'" type="success" @click="showStamp(scope.row)">生成盖章合同</el-button>
                     <el-button v-if="scope.row.status == '2'" type="success" @click="approvalReady(scope.row)">审批</el-button>
                     <el-button v-if="scope.row.status == '3'" type="success" @click="sendCard(scope.row)">发卡</el-button>
                 </template>
@@ -268,6 +267,13 @@
             <el-form :model="form" class="demo-form-inline" label-width="130px">
                 <el-row :gutter="20">
                     <el-col :span="24">
+                        <el-form-item label="审批意见">
+                            <el-input v-model="approvalRemark"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="24">
                         <el-form-item label="盖章合同图片上传">
                             <upload-pic ref="upload" @getUrl="getUrl"></upload-pic>
                         </el-form-item>
@@ -277,6 +283,19 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="approvalDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="approval">提交审批</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            class="user-dialog"
+            :close-on-click-modal='false'
+            :title="'盖章图片'"
+            :visible="stampDialogVisible"
+            :before-close="closeStampDialog"
+            append-to-body
+            width="700px">
+                <el-image class="stamp-pic" :src="b64"></el-image>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="stampDialogVisible = false">确 定</el-button>
             </span>
         </el-dialog>
         </div>
@@ -292,7 +311,7 @@ import {
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
 import UploadPic from './UploadPic';
-
+import { MCanvas } from 'mcanvas'
 export default {
     name: 'Contract',
     components: {
@@ -300,9 +319,13 @@ export default {
     },
     data() {
         return {
+            b64: '',
             operate: 'detail',
             detailInfo: {},
             tableData: [],
+            approvalRemark: '',
+            approvalId: '',
+            approvalPic: '',
             page: {
                 no: 1,
                 total: 0,
@@ -327,6 +350,7 @@ export default {
             },
             dialogVisible: false,
             approvalDialogVisible: false,
+            stampDialogVisible: false,
             selectRow: [],
             contractValid: [], // 合同有效期
             contractTime: [], // 合同时间
@@ -364,6 +388,11 @@ export default {
         this.getData();
     },
     methods: {
+        // 展示合同
+        showStamp(row) {
+            this.stampDialogVisible = true
+            this.stamp(row.pic)
+        },
         // 发卡
         sendCard(row) {
             let param = {
@@ -384,6 +413,8 @@ export default {
         // 审批dialog
         approvalReady(row) {
             this.approvalId = row.id
+            this.approvalRemark = '',
+            this.approvalPic = '',
             this.approvalDialogVisible = true
             this.$nextTick(() => {
                 this.$refs.upload.clearPic()
@@ -391,6 +422,9 @@ export default {
         },
         closeApprovalDialog() {
             this.approvalDialogVisible = false
+        },
+        closeStampDialog() {
+            this.stampDialogVisible = false
         },
         getStatus(status) {
             for (let i = 0; i < this.statusOpt.length; i++) {
@@ -407,6 +441,7 @@ export default {
             }
             let param = {
                 id: this.approvalId,
+                remark: this.approvalRemark,
                 status: '3',
                 pic: this.approvalPic
 
@@ -493,6 +528,35 @@ export default {
         closeDialog() {
             this.dialogVisible = false
         },
+        async stamp(url) {
+            const mc = new MCanvas({
+                width: 500,
+                height: 1000,
+                backgroundColor: 'white',
+            });
+
+            // background : 准备底图；提供多种模式
+            mc.background(url,{
+                left: 0,
+                top: 0,
+                color: '#fff',
+                type: 'crop',
+            })
+          
+            // add 添加图片素材基础函数；
+            mc.add('http://storage.sankinetwork.com/wuyoubao-mail-post.png',{
+                width: 200,
+                height: 30,
+                pos: {
+                    x: 20,
+                    y: 900,
+                    scale: 1,
+                    rotate: 1,
+                },
+            })
+            const b64 = await mc.draw({});
+            this.b64 = b64
+        }
     }
 };
 </script>
@@ -537,5 +601,16 @@ export default {
     }
     .user-dialog .el-select {
         width: 100% !important;
+    }
+    .stamp-pic {
+        width: 500px;
+        height: 1000px;
+    }
+    .el-button {
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
+    .el-button + .el-button {
+        margin-left: 0;
     }
 </style>

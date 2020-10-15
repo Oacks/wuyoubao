@@ -53,8 +53,8 @@
           
             <el-table-column prop="status" label="操作" width="auto">
                 <template slot-scope="scope">
-                        <el-button v-if="scope.row.status !== '0' && scope.row.status != '3' && scope.row.status != '4'" size="mini" type="primary" @click="edit(scope.row)">添加记录</el-button>
                         <el-button size="mini" type="primary" @click="detail(scope.row, 'detail')">详情</el-button>
+                        <el-button v-if="scope.row.status !== '0' && scope.row.status != '3' && scope.row.status != '4'" size="mini" type="primary" @click="edit(scope.row)">添加记录</el-button>
                         <el-button  v-if="scope.row.status != '0' && scope.row.status != '3' && scope.row.status != '4'" size="mini" type="primary" @click="detail(scope.row, 'logs')">查看记录</el-button>
                         <el-button v-if="scope.row.status == '0'"  size="mini" type="primary" @click="changeStatus(scope.row, 1)">受理</el-button>
                         <el-button v-if="scope.row.status != '0' && scope.row.status != '3' && scope.row.status != '4'" size="mini" type="success" @click="changeStatus(scope.row, 3)">完成</el-button>
@@ -82,6 +82,19 @@
                 <el-form :model="form" class="demo-form-inline" label-width="80px">
                     <el-row :gutter="20">
                         <el-col :span="12">
+                            <el-form-item label="时间记录">
+                                <el-date-picker
+                                    v-model="form.processingTime"
+                                    value-format="yyyy-MM-dd HH:mm:ss"
+                                    type="datetime"
+                                    placeholder="选择日期时间">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="12">
                             <el-form-item label="图片">
                                 <upload-pic ref="upload" @getUrl="getUrl"></upload-pic>
                             </el-form-item>
@@ -91,7 +104,7 @@
                     <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="记录">
-                                <el-input type="textarea" v-model="form.remark" placeholder="用户名" class="handle-input mr10"></el-input>
+                                <el-input type="textarea" v-model="form.remark"  class="handle-input mr10"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -175,6 +188,19 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
+
+                    <!-- <el-row :gutter="20">
+                        <el-col :span="24">
+                            <el-timeline :reverse="false">
+                                <el-timeline-item
+                                v-for="(activity, index) in detailInfo.logFile"
+                                :key="index"
+                                :timestamp="activity.timestamp">
+                                {{activity.content}}
+                                </el-timeline-item>
+                            </el-timeline>
+                        </el-col>
+                    </el-row> -->
                 </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogDetailVisible = false">确 定</el-button>
@@ -207,7 +233,15 @@
 
                     <el-table-column prop="picList" label="图片">
                         <template slot-scope="scope">
-                            {{scope.row.files}}
+                            <div class="pic-list-item" v-for="(pic, i) in scope.row.files" :key="i">
+                                <!-- <span class="del-icon" @click.stop="delPic(pic, i)">X</span> -->
+                                <el-image 
+                                    v-if="pic.picUrl"
+                                    class="pic-list-item-img"
+                                    :src="pic.picUrl" 
+                                    :preview-src-list="[pic.picUrl]">
+                                </el-image>
+                            </div>
                         </template>
                     </el-table-column>
 
@@ -258,6 +292,7 @@ export default {
           
             form: {
                 remark:'',
+                processingTime: '',
                 picList: []
             },
             detailForm: {},
@@ -366,7 +401,8 @@ export default {
             row.status = Number(row.status)
             this.form = {
                 picList: [],
-                remark: ''
+                remark: '',
+                processingTime: ''
             }
             this.$nextTick(() => {
                 this.$refs.upload.clearPic()
@@ -424,7 +460,7 @@ export default {
             this.dialogVisible = false
         },
         closeLogDialog() {
-            this.closeLogDialog = false
+            this.dialogLogVisible = false
         },
         closeDetailDialog() {
             this.dialogDetailVisible = false

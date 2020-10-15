@@ -11,7 +11,7 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">保修合同号</view>
-                    <input class="content-input" disabled="{{true}}" value="{{form.contractNo}}" name="contractNo" placeholder="请填写" />
+                    <input class="content-input" disabled="{{true}}" value="{{form.contractNo}}" name="contractNo" />
                 </view>
             </view>
 
@@ -25,7 +25,12 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">联系电话</view>
-                    <input class="content-input" value="{{form.mobile}}" name="mobile" placeholder="请填写" />
+                    <input class="content-input" value="{{form.mobile}}" name="mobile" placeholder="请填写"  bindinput="mobileInput"/>
+                    <view class="content-code {{canSend ? '': 'disabled'}}" catchtap="getCode">{{ canSend ? '获取验证码' : '稍后重新获取'}}</view>
+                </view>
+                <view class="item-content">
+                    <view class="content-title">验证码</view>
+                    <input class="content-input" value="{{form.code}}" name="mobile" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">联系地址</view>
@@ -56,7 +61,7 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">车辆类型</view>
-                    <picker class="content-input" placeholder value="{{carType}}"  mode="selector" range-key="name" bindchange="bindCarTypeChange" range="{{carTypeOpt}}">
+                    <picker class="content-input" value="{{carType}}"  mode="selector" range-key="name" bindchange="bindCarTypeChange" range="{{carTypeOpt}}">
                         <view class="content-input">
                         {{carTypeOpt[carType].name}}
                         </view>
@@ -115,9 +120,12 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">延保卡券</view>
-                    <picker class="content-input" placeholder mode="selector" value="{{insuranceNo}}"  range-key="name" bindchange="bindInsuranceChange" range="{{insuranceOpt}}">
+                    <picker class="content-input" mode="selector" value="{{insuranceNo}}"  range-key="name" bindchange="bindInsuranceChange" range="{{insuranceOpt}}">
                         <view class="content-input" wx:if="{{insuranceOpt && insuranceOpt[insuranceNo]}}">
                         车价：{{insuranceOpt[insuranceNo].priceCarStart}}-{{insuranceOpt[insuranceNo].priceCarEnd}}({{insuranceOpt[insuranceNo].name}})
+                        </view>
+                        <view wx:else class="content-input">
+                            
                         </view>
                     </picker>
                 </view>

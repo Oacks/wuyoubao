@@ -93,6 +93,7 @@
                         <el-button size="mini" type="primary" @click="detail(scope.row)">查看</el-button>
                         <el-button size="mini" v-if="scope.row.status == '1'" type="primary" @click="exportContract(scope.row)">下载合同</el-button>
                         <el-button size="mini" v-if="scope.row.status == '1'" type="success" @click="approvalReady(scope.row)">审批</el-button>
+                        <el-button size="mini" v-if="scope.row.status == '3' || scope.row.status == '4'" type="success" @click="showContract(scope.row)">查看合同</el-button>
                         <!-- <el-button size="mini" v-if="scope.row.status == '2'" type="success" @click="uploadContract(scope.row)">上传合同</el-button> -->
                     </div>
                 </template>
@@ -287,6 +288,19 @@
                 <el-button type="primary" @click="approval">提交审批</el-button>
             </span>
         </el-dialog>
+        <el-dialog
+            class="user-dialog"
+            :close-on-click-modal='false'
+            :title="'合同图片'"
+            :visible="contractDialogVisible"
+            :before-close="closeContractDialog"
+            append-to-body
+            width="700px">
+                <el-image class="stamp-pic" :src="contractPic"></el-image>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="contractDialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
         </div>
     </div>
 </template>
@@ -309,6 +323,8 @@ export default {
     },
     data() {
         return {
+            contractDialogVisible: false,
+            contractPic:'',
             operate: 'detail',
             tableData: [],
             name: '',
@@ -395,6 +411,7 @@ export default {
             // exportContract({id: row.id}).then(res=> {})
             const link = document.createElement('a');  
             link.href = 'https://wuyoubao.sankinetwork.com/api/wyht/eportContract?id=' + row.id 
+            // link.href = 'http://2o6465101l.wicp.vip/wyht/eportContract?id=' + row.id 
             link.setAttribute('download', name);  
             document.body.appendChild(link);  
             link.click();
@@ -487,6 +504,13 @@ export default {
                     }
                 })
             }
+        },
+        showContract(row) {
+            this.contractDialogVisible = true
+            this.contractPic = row.pic
+        },
+        closeContractDialog() {
+            this.contractDialogVisible = false
         },
         openDialog() {
             this.dialogVisible = true

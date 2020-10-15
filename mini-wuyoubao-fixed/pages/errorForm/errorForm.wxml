@@ -30,7 +30,7 @@
                     <input class="content-input" value="{{form.reason}}" name="reason" placeholder="请填写" />
                 </view>
                 <view class="item-content">
-                    <view class="content-title">图片</view>
+                    <view class="content-title">报障图片</view>
                 </view>
                 <view class="pic-upload word-color">
                     <view class="pic-box">
@@ -41,10 +41,12 @@
                         <view class="add-pic" wx:if="{{ctrl !== 'detail'}}" bindtap="uploadPic">+</view>
                     </view>
                 </view>
-                <view class="item-title" wx:if="{{ctrl == 'detail'}}">
+                <!-- wx:if="{{ctrl == 'detail'}}" -->
+                <view class="item-title">
                     <view class="item-title-word word-color">当前进度</view>
                 </view>
-                <view class="item-content" wx:if="{{ctrl == 'detail'}}">
+                <view class="process-box">
+                    <time-line list="{{logFile}}"></time-line>
                 </view>
             </view>
 

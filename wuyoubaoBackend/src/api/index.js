@@ -37,6 +37,11 @@ export const createUser = query => {
     return post('user/createUser', query)
 }
 
+// 修改后台用户
+export const updateUser = query => {
+    return post('user/updateUser', query)
+}
+
 // 登录
 export const login = query => {
     return post('user/login', query)

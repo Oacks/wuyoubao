@@ -23,7 +23,7 @@
                     <view class="content-title">
                         <image class="content-icon" src="/images/icon/icon-checkcode.png"></image>
                     </view>
-                    <input class="content-input" name="contractNo" placeholder="请填写验证码" bindinput="codeInput"/>
+                    <input class="content-input" name="code" placeholder="请填写验证码" bindinput="codeInput"/>
                     <view class="content-code {{canSend ? '': 'disabled'}}" catchtap="getCode">{{ canSend ? '获取验证码' : '稍后重新获取'}}</view>
                 </view>
             </view>

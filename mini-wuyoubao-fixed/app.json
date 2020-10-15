@@ -1,9 +1,9 @@
 {
   "pages": [
-    "pages/user/user",
-    "pages/errorForm/errorForm",
-    "pages/errorList/errorList",
     "pages/index/index",
+    "pages/errorList/errorList",
+    "pages/errorForm/errorForm",
+    "pages/user/user",
     "pages/orderList/orderList",
     "pages/login/login",
     "pages/authorization/authorization",

@@ -57,7 +57,7 @@
             <el-table-column prop="status" label="操作" width="220">
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
-                    <el-button type="primary" @click="detail(scope.row)">查看</el-button>
+                    <el-button type="primary" @click="detail(scope.row)">编辑查看</el-button>
                     <el-button type="primary" @click="saleDetail(scope.row)">查看销售列表</el-button>
                     <!-- <el-button type="danger" @click="del(scope.row)">注销</el-button> -->
                 </template>
@@ -105,6 +105,12 @@
                     <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="品牌图片">
+                                <el-image 
+                                    v-if="!brandPic"
+                                    class="pic-list-item-img"
+                                    :src="form.brandPic"    
+                                    :preview-src-list="[form.brandPic]">
+                                </el-image>
                                 <upload-pic ref="upload" @getUrl="getUrl"></upload-pic>
                             </el-form-item>
                         </el-col>
@@ -123,7 +129,7 @@
                 </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="save">确 定</el-button>
+                <el-button type="primary" @click="save">编 辑</el-button>
             </span>
         </el-dialog>
         <el-dialog
@@ -136,7 +142,6 @@
             <saler-list ref="salerList"></saler-list>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="salerDialogVisible = false">确 定</el-button>
-                <!-- <el-button type="primary" @click="save">确 定</el-button> -->
             </span>
         </el-dialog>
         </div>
@@ -240,6 +245,7 @@ export default {
         },
         getUrl(url) {
             this.brandPic = url
+            this.form.brandPic = url
         },
         handlePageChange(page) {
             this.page.no = page
@@ -289,13 +295,17 @@ export default {
             this.form = row
             this.openDialog()
         },
-        // 详情
+        // 查看
         detail(row) {
             shopDetail({id: row.id}).then(res => {
                 console.log(res);
                 this.operate = 'detail'
+                this.mapCenter = [res.lng, res.lat]
                 this.form = res
                 this.openDialog()
+                this.$nextTick(() => {
+                    this.$refs.upload.clearPic()
+                })
             })
         },
         saleDetail(row) {
@@ -327,9 +337,9 @@ export default {
                     }
                 })
             }
-            if (this.operate == 'edit') {
+            if (this.operate == 'detail') {
                 delete params.password
-                userUpdate(params).then(res => {
+                updateShop(params).then(res => {
                     if (res) {
                         this.$message.success({message: '修改成功',});
                         this.dialogVisible = false
@@ -391,5 +401,10 @@ export default {
     }
     .user-dialog .el-select {
         width: 100% !important;
+    }
+    .pic-list-item-img {
+        display: inline-block;
+        width: 150px;
+        height: 150px;
     }
 </style>
