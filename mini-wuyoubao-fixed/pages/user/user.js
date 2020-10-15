@@ -83,9 +83,12 @@ Page({
       });
       return
     }
+    // wx.navigateTo({
+    //   url: '/pages/orderList/orderList',
+    // });
     wx.navigateTo({
-      url: '/pages/orderList/orderList',
-    });
+      url: '/pages/order/order'
+    })
   },
 
   // 查看故障单

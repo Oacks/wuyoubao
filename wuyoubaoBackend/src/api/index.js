@@ -57,16 +57,49 @@ export const userDetail = query => {
     return get('user/userDetail', query)
 }
 
+// 删除用户详情
+export const delUser = query => {
+    return get('user/delUser', query)
+}
+
 // 后台用户列表
 export const userList = query => {
     return get('user/userList', query)
 }
 
 /********************** 无忧保后台********************/
+// 发卡申请表
+export const rzLine = query => {
+    return get('wyht/rzLine', query)
+} 
+
+// 获取发卡申请合同详情
+export const getLineContract = query => {
+    return get('wyht/getLineContract', query)
+} 
+
+// 发卡申请
+export const addLine = query => {
+    return post('wyht/addLine', query)
+} 
+
+// 发卡申请
+export const updateLine = query => {
+    return post('wyht/updateLine', query)
+} 
+
+// 发卡申请
+export const delLine = query => {
+    return get('wyht/delLine', query)
+} 
+
+
 // 获取合同详情
 export const contractDetail = query => {
     return get('wyht/contractDetail', query)
 } 
+
+
 
 // 获取合同列表
 export const contractList = query => {
@@ -86,6 +119,11 @@ export const approval = query => {
 // 创建4s店
 export const createShop = query => {
     return post('wyht/createShop', query)
+}
+
+// 删除4s店
+export const delShop = query => {
+    return get('wyht/delShop', query)
 }
 
 

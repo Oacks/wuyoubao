@@ -43,6 +43,12 @@
     vertical-align: middle;
 }
 
+.heightAuto {
+    height: auto;
+    line-height: 0 !important;
+}
+
+
 .content-input {
     display: inline-block;
     width: 60%;

@@ -1,0 +1,13 @@
+<!--pages/brand/brand.wxml-->
+<view class="container">
+    <navBar title="" back="{{true}}" home="{{false}}" bindback="onBack">
+        <view class="white barTitle" slot="center">品牌列表</view>
+    </navBar>
+    <view style="color:#555;">
+       <view wx:for="{{brandList}}" class="brand-list" data-shopname="{{item.shop_name}}" bindtap="chooseBrand">
+            <view class="brand-item" data-brand="{{item.brand}}" >{{item.brand}}</view>
+            <view class="address-item" data-brand="{{item.shop_name}}">{{item.shop_name}}</view>
+            <!-- <view class="address-item" data-brand="{{item.address}}" bindtap="chooseBrand">{{item.brand}}</view> -->
+       </view>
+    </view>
+</view>

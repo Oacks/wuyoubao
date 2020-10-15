@@ -10,11 +10,12 @@ Page({
     id: '',
     formDataCopy: {},
     uploadOperate: '',
+    orderStatus: '', // 订单状态
     // 详情返回的字段
 
     insuranceId: '', // 所选卡券
     insurancePrice: '',
-    carType: '', // 车类型
+    carType: 0, // 车类型
     insuranceNo: '',
     startTime: '', // 延保起期
     createTime: '', // 延保销售日期
@@ -29,7 +30,7 @@ Page({
       mobile: '',
       address: '',
       vehicle: '',
-      carType: '',
+      carType: 0,
       vin: '',
       engineNum: '',
       licensePlate: '',
@@ -57,10 +58,20 @@ Page({
       'form.mobile': e.detail.value
     })
   },
+  // 修改车价
+  carPriceChange(e) {
+    console.log(e.detail.value);
+    let price = e.detail.value 
+    if (price) {
+      // this.debounceGetPrice(price)
+      this.getProjectFromPrice(price)
+    }
+  },
   // 获取验证码
   getCode() {
     if(!this.data.canSend) {return}
     api.get('wx/getSms', {
+      type: 1, // 客户端
       mobile: this.data.form.mobile
     }).then(res => {
       let that = this
@@ -152,9 +163,8 @@ Page({
     return str + ' 00:00:00'
   },
   // 下单
-  order(form) {
+  async order(form) {
     let {
-      contractNo, 
       memberName,
       mobile,
       address,
@@ -167,7 +177,6 @@ Page({
       vehicle} = form
     let params = {
       code: code,
-      contractNo: contractNo,
       memberName: memberName,
       mobile: mobile,
       address: address,
@@ -185,8 +194,10 @@ Page({
       oldStartTime: this.formatTime(this.data.oldStartTime),
       oldEndTime: this.formatTime(this.data.oldEndTime),
       createTime: this.formatTime(this.data.createTime), // 延保销售日期
-      startTime: this.formatTime(this.data.startTime), // 延保起期
+      // startTime: this.formatTime(this.data.startTime), // 延保起期
     }
+    let valid = await this.validate(params)
+    if (!valid) {return}
     api.post('sale/createContract', params).then(res => {
       // 打开重选列表
       wx.showToast({
@@ -202,8 +213,26 @@ Page({
       }, 1000)
     })
   },
+  validate(obj) {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const element = obj[key];
+        if (element === null || element === undefined || element === '') {
+          wx.showToast({
+            title: '请完成各项表单项的填写',
+            icon: 'none',
+            image: '',
+            duration: 1500,
+            mask: false,
+          });
+          return false
+        }
+      }
+    }
+    return true
+  },
   // 更新订单
-  updateOrder(form) {
+  async updateOrder(form) {
     let {
       contractNo, 
       memberName,
@@ -235,8 +264,10 @@ Page({
       oldStartTime: this.formatTime(this.data.oldStartTime),
       oldEndTime: this.formatTime(this.data.oldEndTime),
       createTime: this.formatTime(this.data.createTime), // 延保销售日期
-      startTime: this.formatTime(this.data.startTime), // 延保起期
+      // startTime: this.formatTime(this.data.startTime), // 延保起期
     }
+    let valid = await this.validate(params)
+    if (!valid) {return}
     api.post('sale/updateContract', params).then(res => {
       // 打开重选列表
       wx.showToast({
@@ -260,7 +291,8 @@ Page({
         const element = res[i];
         list.push({
           id:element.id,
-          name:element.insuranceName,
+          name: `车价：${element.priceCarStart}-${element.priceCarEnd}(${element.insuranceName})`,
+          cardName: element.insuranceName,
           price: element.priceContract,
           priceCarStart: element.priceCarStart,
           priceCarEnd: element.priceCarEnd,
@@ -273,6 +305,29 @@ Page({
       fn && fn()
     })
   },
+  // 车价获取方案
+  getProjectFromPrice(val) {
+    console.log(val);
+    api.get('sale/getProject', {money: val}).then(res => {
+      this.setData({
+        insuranceId: res.id || '',
+        insurancePrice: res.priceContract || '',
+      })
+    })
+  },
+  debounce(fn, delay) {
+    let timer
+    return () => {
+      let context = this
+      let args = arguments
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        fn.apply(context, args)
+      }, delay)
+    }
+  },
+
+
   // 返回
   onBack() {
     wx.navigateBack({
@@ -309,6 +364,7 @@ Page({
         oldEndTime,
         createTime,
         projectId,
+        status,
         startTime,} = res
       let form = {
         contractNo: contractNo,
@@ -321,6 +377,7 @@ Page({
         carPrice: carPrice,
         mileage: mileage,
         vehicle: vehicle,
+
       }
       let insuranceNo = 0
       for (let i = 0; i < this.data.insuranceOpt.length; i++) {
@@ -332,11 +389,12 @@ Page({
       }
       this.setData({
         form: form,
+        orderStatus: status,
         insuranceId: insuranceId, // 所选卡券
         insurancePrice: price,
         carType: carType, // 车类型
         insuranceNo: insuranceNo,
-        startTime: this.formatGetTime(startTime), // 延保起期
+        // startTime: this.formatGetTime(startTime), // 延保起期
         createTime: this.formatGetTime(createTime), // 延保销售日期
         oldStartTime: this.formatGetTime(oldStartTime),
         oldEndTime: this.formatGetTime(oldEndTime) ,
@@ -349,15 +407,17 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    // this.debounceGetPrice = this.debounce(this.getProjectFromPrice, 500) // 初始化debounce方法
     let id = options.id
     if (id) {
       this.setData({
         id: id
       })
-      this.getProject(this.getContractDetail)
+      // this.getProject(this.getContractDetail)
+      this.getContractDetail()
     }
     else {
-      this.getProject()
+      // this.getProject()
     }
   },
 

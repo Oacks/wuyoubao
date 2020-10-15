@@ -173,7 +173,7 @@ export default {
         edit(row) {
             this.operate = 'edit'
             row.status = Number(row.status)
-            this.form = row
+            this.form = cloneDeep(row)
             this.openDialog()
         },
         // 详情

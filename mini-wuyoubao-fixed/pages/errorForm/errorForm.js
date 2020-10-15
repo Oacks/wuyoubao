@@ -40,6 +40,7 @@ Page({
     formDataCopy: {},
     uploadToken: '',
     logFile: [],
+    shopName: '',
     // 详情返回的字段
     form: {
       contractNo: '',
@@ -53,7 +54,7 @@ Page({
   
   toSelectBrand() {
     wx.navigateTo({
-      url: '/pages/brand/brand',
+      url: '/pages/shopList/shopList',
     })
   },
   bindTimeChange(target, val) {
@@ -86,7 +87,7 @@ Page({
     return str + ' 00:00:00'
   },
   // 下单
-  order(form) {
+  async order(form) {
     let {
       contractNo,
       licensePlate,
@@ -100,8 +101,11 @@ Page({
       memberName:memberName,
       mobile:mobile,
       reason:reason,
+      shop_name:this.data.shopName,
       picList:this.data.form.picList || [],
     }
+    let valid = await this.validate(params)
+    if (!valid) {return}
     api.post('member/createGuarantee', params).then(res => {
       // 打开重选列表
       wx.showToast({
@@ -119,23 +123,23 @@ Page({
    
     console.log(form);
   },
-  // 获取无忧宝邮品方案
-  getProject() {
-    api.get('sale/getProject').then(res => {
-      console.log(res);
-      let list = []
-      for (let i = 0; i < res.length; i++) {
-        const element = res[i];
-        list.push({
-          id:element.id,
-          name:element.insuranceName,
-          price: element.priceContract
-        })
+  validate(obj) {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const element = obj[key];
+        if (element === null || element === undefined || element === '') {
+          wx.showToast({
+            title: '请完成各项表单项的填写',
+            icon: 'none',
+            image: '',
+            duration: 1500,
+            mask: false,
+          });
+          return false
+        }
       }
-      this.setData({
-        insuranceOpt: list
-      })
-    })
+    }
+    return true
   },
   // 返回
   onBack() {

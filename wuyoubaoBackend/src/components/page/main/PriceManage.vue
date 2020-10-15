@@ -254,7 +254,7 @@ export default {
         },
 
         handleSelectionChange(row){
-            this.selectRow = row
+            this.selectRow = cloneDeep(row)
         },
         create() {
             this.operate = 'create'
@@ -274,8 +274,8 @@ export default {
                 const element = row.accessoriesList[index];
                 accessoriesList.push(element.id)
             }
-            this.form = row
-            this.form.accessoriesList = accessoriesList
+            this.form = cloneDeep(row)
+            this.form.accessoriesList = cloneDeep(accessoriesList)
             this.openDialog()
         },
         // 详情

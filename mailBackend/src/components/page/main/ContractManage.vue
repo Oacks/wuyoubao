@@ -65,10 +65,10 @@
             <el-table-column type="selection" width="55" align="center"></el-table-column>
             <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
             <!-- <el-table-column type="index" label="序号" width="55" align="center"></el-table-column> -->
-
+<!-- 
             <el-table-column prop="contractNo" label="合同号">
             </el-table-column>
-          
+           -->
             <el-table-column prop="memberName" label="客户名">
                 <!-- <template slot-scope="scope">
                     {{scope.row.status == 1  ? '激活' : '注销'}}
@@ -354,9 +354,13 @@ export default {
             selectRow: [],
             contractValid: [], // 合同有效期
             contractTime: [], // 合同时间
-            status: '2', // 状态
+            status: '', // 状态
             name: '', // 会员名字
             statusOpt: [
+                {
+                    value: '',
+                    label: '全部'
+                },
                 // {
                 //     value: '0',
                 //     label: '草稿'
@@ -367,15 +371,15 @@ export default {
                 // },
                 {
                     value: '2',
-                    label: '审批盖章'
+                    label: '受理中'
                 },
                 {
                     value: '3',
-                    label: '合同审核'
+                    label: '保单确认，未启保'
                 },
                 {
                     value: '4',
-                    label: '发卡'
+                    label: '保单启保中'
                 },
                 // {
                 //     value: '5',
@@ -486,7 +490,7 @@ export default {
         edit(row) {
             this.operate = 'edit'
             row.status = Number(row.status)
-            this.form = row
+            this.form = cloneDeep(row)
             this.openDialog()
         },
         // 详情
@@ -503,7 +507,7 @@ export default {
         del(row) {
             this.operate = 'edit'
             row.status = Number(row.status)
-            this.form = row
+            this.form = cloneDeep(row)
             this.form.status = 0
             this.save()
         },

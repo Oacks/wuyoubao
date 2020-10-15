@@ -30,7 +30,7 @@
             <el-table-column prop="status" label="操作">
                 <template slot-scope="scope">
                     <div style="white-space:nowrap;">
-                    <!-- <el-button type="primary" @click="detail(scope.row)">查看</el-button> -->
+                    <el-button type="primary" @click="edit(scope.row)">编辑</el-button>
                     <el-button type="danger" @click="del(scope.row)">删除</el-button>
                     </div>
                 </template>
@@ -50,14 +50,13 @@
         <el-dialog
             class="user-dialog"
             :close-on-click-modal='false'
-            :title="'添加销售人员'"
+            :title="operate == 'create' ? '添加销售人员' : operate == 'edit' ? '编辑销售人员' : ''"
             :visible="dialogVisible"
             :before-close="closeDialog"
             append-to-body
             width="800px">
                 <el-form :model="form" class="demo-form-inline" label-width="80px">
                     <el-row :gutter="20">
-                     
                         <el-col :span="12">
                             <el-form-item label="销售名称">
                                 <el-input v-model="form.memberName"></el-input>
@@ -66,6 +65,20 @@
                         <el-col :span="12">
                             <el-form-item label="电话">
                                 <el-input v-model="form.mobile"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20" v-if="operate == 'edit'">
+                        <el-col :span="12">
+                            <el-form-item label="所属店铺">
+                                <el-select v-model="form.shopId" placeholder="请选择">
+                                    <el-option
+                                        v-for="(shop,i) in shopData"
+                                        :key="i"
+                                        :label="shop.shopName"
+                                        :value="shop.id">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -85,6 +98,7 @@ import {
     addSaler,
     delSaler,
     updateSaler,
+    shopList
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
 // import RSA from '../../../utils/rsa'
@@ -110,13 +124,14 @@ export default {
                 size: 20
             },
             selectRow: [],
-            shopId: ''
+            shopId: '',
+            shopData: ''
         };
     },
     created() {
     },
     mounted() {
-   
+        this.getShopData()
     },
     methods: {
         handlePageChange(page) {
@@ -130,8 +145,19 @@ export default {
                 this.salerDialogVisible = true
             })
         },
+        getShopData() {
+            let obj = {
+                pageSize:  99999,
+                page:  1,
+                shopName: '',
+                brand: '',
+            }
+            shopList(obj).then(res => {
+                this.shopData = res.records
+            })
+        },
         handleSelectionChange(row){
-            this.selectRow = row
+            this.selectRow = cloneDeep(row)
         },
         create() {
             this.operate = 'create'
@@ -146,7 +172,7 @@ export default {
         edit(row) {
             this.operate = 'edit'
             row.status = Number(row.status)
-            this.form = row
+            this.form = cloneDeep(row)
             this.form.shopId = this.shopId
             this.openDialog()
         },
@@ -189,7 +215,7 @@ export default {
                     if (res) {
                         this.$message.success({message: '修改成功',});
                         this.dialogVisible = false
-                        this.getData()
+                        this.getData({id: this.shopId})
                     }
                 })
             }

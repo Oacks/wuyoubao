@@ -137,19 +137,19 @@ export default {
                 },
                 {
                     value: '1',
-                    label: '申请'
+                    label: '受理中'
                 },
                 {
                     value: '2',
-                    label: '审批盖章'
+                    label: '受理中'
                 },
                 {
                     value: '3',
-                    label: '合同审核'
+                    label: '保单确认，未启保'
                 },
                 {
                     value: '4',
-                    label: '发卡'
+                    label: '保单启保中'
                 },
                 {
                     value: '5',
@@ -197,7 +197,7 @@ export default {
         edit(row) {
             this.operate = 'edit'
             row.status = Number(row.status)
-            this.form = row
+            this.form = cloneDeep(row)
             this.openDialog()
         },
         // 详情

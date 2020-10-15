@@ -41,9 +41,24 @@ Page({
     
       return
     }
-      wx.navigateTo({
-        url: '/pages/errorForm/errorForm',
-      })
+    api.get('member/contractDetail', {mobile: wx.getStorageSync('mobile')}).then((res => {
+      console.log(res);
+      if (res.status == 4) {
+        wx.navigateTo({
+          url: '/pages/errorForm/errorForm',
+        })
+        return 
+      }
+      wx.showToast({
+        title: '当前用户未有生效保单',
+        icon: 'none',
+        image: '',
+        duration: 1500,
+        mask: false,
+      });
+      return
+    
+    }))
   },
   
 

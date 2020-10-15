@@ -58,7 +58,7 @@ export default {
     data() {
         return {
             collapse: false,
-            items: [
+            copyItem: [
                 {
                     icon: 'el-icon-lx-file',
                     index: 'contract',
@@ -70,6 +70,11 @@ export default {
                     title: '报障列表'
                 },
                 {
+                    icon: 'el-icon-lx-vipcard',
+                    index: 'sendcard',
+                    title: '发卡管理'
+                },
+                {
                     icon: 'el-icon-lx-recharge',
                     index: 'price',
                     title: '定价管理'
@@ -77,7 +82,7 @@ export default {
                 {
                     icon: 'el-icon-lx-home',
                     index: 'shop',
-                    title: '店铺管理'
+                    title: '营业点管理'
                 },
                 {
                     icon: 'el-icon-lx-people',
@@ -169,6 +174,8 @@ export default {
                 //     index: '/donate',
                 //     title: '支持作者'
                 // }
+            ],
+            items: [
             ]
         };
     },
@@ -181,6 +188,21 @@ export default {
 
     },
     created() {
+        menuList().then(res => {
+            this.items = this.copyItem
+            return // 测试开启
+            let list = []
+            for (let i = 0; i < res.length; i++) {
+                const name = res[i].name;
+                for (let j = 0; j < this.copyItem.length; j++) {
+                    const title = this.copyItem[j].title;
+                    if (title === name) {
+                        list.push(this.copyItem[j])
+                    }
+                }
+            }
+            this.items = list
+        })
         // 通过 Event Bus 进行组件间通信，来折叠侧边栏
         bus.$on('collapse', msg => {
             this.collapse = msg;

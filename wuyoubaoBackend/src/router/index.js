@@ -33,6 +33,12 @@ export default new Router({
                     meta: { title: '报障管理' }
                 },
                 {
+                    path: '/sendcard',
+                    name: 'sendcard',
+                    component: () => import(/* webpackChunkName: "shop" */ '../components/page/main/SendCard.vue'),
+                    meta: { title: '发卡管理' }
+                },
+                {
                     path: '/shop',
                     name: 'shop',
                     component: () => import(/* webpackChunkName: "shop" */ '../components/page/main/ShopManage.vue'),

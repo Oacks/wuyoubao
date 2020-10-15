@@ -6,9 +6,8 @@ axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     // easy-mock服务挂了，暂时不使用了
-    // baseURL: 'http://2o6465101l.wicp.vip/',
-    baseURL: 'https://wuyoubao.sankinetwork.com/api/',
-    // baseURL: 'http://www.bruceyao.cn:8085/',
+    baseURL: 'http://2o6465101l.wicp.vip/',
+    // baseURL: 'https://wuyoubao.sankinetwork.com/api/',
 
     timeout: 10000,
 });
@@ -52,11 +51,10 @@ service.interceptors.response.use(
                     message: response.data.desc,
                     type: 'error'
                 })
-                return
-                // Promise.reject();
+                return Promise.reject();
             }
         } else {
-            Promise.reject();
+            return Promise.reject();
         }
     },
     error => {

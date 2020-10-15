@@ -71,7 +71,8 @@ Page({
   getCode() {
     if(!this.data.canSend) {return}
     api.get('wx/getSms', {
-      mobile: this.data.mobile
+      mobile: this.data.mobile,
+      type: 1, // 客户端
     }).then(res => {
       let that = this
       wx.showToast({

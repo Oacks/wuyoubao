@@ -54,12 +54,13 @@
             </el-table-column> -->
             <el-table-column prop="address" label="地址">
             </el-table-column>
-            <el-table-column prop="status" label="操作" width="220">
+            <el-table-column prop="status" label="操作"
+            >
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
                     <el-button type="primary" @click="detail(scope.row)">编辑查看</el-button>
                     <el-button type="primary" @click="saleDetail(scope.row)">查看销售列表</el-button>
-                    <!-- <el-button type="danger" @click="del(scope.row)">注销</el-button> -->
+                    <el-button type="danger" @click="del(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -106,7 +107,7 @@
                         <el-col :span="24">
                             <el-form-item label="品牌图片">
                                 <el-image 
-                                    v-if="!brandPic"
+                                    v-if="!brandPic && form.brandPic"
                                     class="pic-list-item-img"
                                     :src="form.brandPic"    
                                     :preview-src-list="[form.brandPic]">
@@ -118,7 +119,7 @@
 
                     <el-row>
                         <el-col style="text-align:center; position:relative;" :span="24">
-                            <el-form-item label="地图位置">
+                            <el-form-item label="地图位置" style="text-align: left;">
                                 <el-amap-search-box style="position: absolute;top: 25px;left: 40px;" class="search-box" :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
                                 <el-amap style="display: inline-block; width:600px; height: 318px;" vid="amapDemo" :zoom="12" :center="mapCenter" :events="mapEvents">
                                     <el-amap-marker v-for="(marker,index) in markers" :key="index" :position="marker" ></el-amap-marker>
@@ -129,7 +130,8 @@
                 </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="save">编 辑</el-button>
+                <el-button v-if="operate == 'create'" type="primary" @click="save">新 建</el-button>
+                <el-button v-if="operate == 'edit'" type="primary" @click="save">编 辑</el-button>
             </span>
         </el-dialog>
         <el-dialog
@@ -151,6 +153,7 @@
 <script>
 import { 
     createShop,
+    delShop,
     salerList,
     addSaler,
     delSaler,
@@ -174,7 +177,7 @@ export default {
         return {
             // 地图
             markers: [],
-            mapCenter: [90,112],
+            mapCenter: [113.122717,23.028762],
             searchOption: {
                 city: '全国',
                 citylimit: false
@@ -292,7 +295,7 @@ export default {
         edit(row) {
             this.operate = 'edit'
             row.status = Number(row.status)
-            this.form = row
+            this.form = cloneDeep(row)
             this.openDialog()
         },
         // 查看
@@ -315,11 +318,15 @@ export default {
             })
         },
         del(row) {
-            this.operate = 'edit'
-            row.status = Number(row.status)
-            this.form = row
-            this.form.status = 0
-            this.save()
+            this.$confirm('确认删除当前店铺？').then(_ => {
+                let id =  row.id
+                let obj = {id: id}
+                delShop(obj).then(res => {
+                    this.$message.success({message: '删除成功',});
+                    this.getData()
+                })
+            })
+            .catch(_ => {});
         },
         // 保存
         save() {
@@ -406,5 +413,11 @@ export default {
         display: inline-block;
         width: 150px;
         height: 150px;
+    }
+
+    .el-button:first-child,.el-button + .el-button {
+        margin-bottom: 10px;
+        margin-left: 0;
+        margin-right: 10px;
     }
 </style>

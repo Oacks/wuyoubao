@@ -3,13 +3,13 @@ var getStatus = function(val) {
     console.log(num);
     switch(num) {
         case 1:
-        return '申请'
+        return '受理中'
         case 2:
-        return '审批盖章'
+        return '受理中'
         case 3:
-        return '合同审核'
+        return '保单确认，未启保'
         case 4:
-        return '发卡'
+        return '保单启保中'
         case 5:
         return '生效'
     }

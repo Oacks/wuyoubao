@@ -4,6 +4,8 @@
     "pages/errorList/errorList",
     "pages/errorForm/errorForm",
     "pages/user/user",
+    "pages/shopList/shopList",
+    "pages/brand/brand",
     "pages/orderList/orderList",
     "pages/login/login",
     "pages/authorization/authorization",

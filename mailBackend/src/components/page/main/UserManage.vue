@@ -1,9 +1,8 @@
 <template>
     <div class="goods-form">
         <div class="table-area">
-        <div>
+        <div style="margin-bottom: 10px;">
             <el-button type="primary" @click="create">新建</el-button>
-    
         </div>
         <!-- <div style="margin: 10px 0;">
             用户搜索：
@@ -40,7 +39,7 @@
             <el-table-column prop="status" label="操作" width="180">
                 <template slot-scope="scope">
                     <el-button type="primary" @click="edit(scope.row)">编辑</el-button>
-                    <!-- <el-button type="danger" @click="del(scope.row)">注销</el-button> -->
+                    <el-button type="danger" @click="del(scope.row)">注销</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -57,7 +56,7 @@
         <el-dialog
             class="user-dialog"
             :close-on-click-modal='false'
-            :title="operate === 'create' ? '创建会员' : '编辑会员'"
+            :title="operate === 'create' ? '创建用户' : '编辑用户'"
             :visible.sync="dialogVisible"
             width="700px">
                 <el-form :model="form" class="demo-form-inline" label-width="80px">
@@ -80,7 +79,15 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-
+                    <el-row :gutter="20">
+                        <el-col :span="24">
+                            <el-form-item label="分配菜单" v-if="operate == 'edit'">
+                                  <el-checkbox-group v-model="selectedMenu">
+                                    <el-checkbox :label="menu.id" v-for="(menu,i) in menuList" :key="i">{{menu.name}}</el-checkbox>
+                                </el-checkbox-group>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -99,6 +106,7 @@ import {
     menuList,
     userDetail,
     userList,
+    delUser
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash'
 // import RSA from '../../../utils/rsa'
@@ -115,6 +123,7 @@ export default {
         return {
             operate: 'create',
             tableData: [],
+            selectedMenu: [],
             page: {
                 no: 1,
                 total: 0,
@@ -131,11 +140,13 @@ export default {
             selectRow: [],
 
             level: '',
-            userName: ''
+            userName: '',
+            menuList: []
         };
     },
     created() {
         this.getData();
+        this.getMenuList()
     },
     methods: {
         search() {
@@ -145,6 +156,11 @@ export default {
         },
         handlePageChange() {
             this.getData()
+        },
+        getMenuList() {
+            menuList().then(res => {
+                this.menuList = res || []
+            })
         },
         getData() {
             let obj = {
@@ -186,17 +202,29 @@ export default {
             //     this.$message.warning({message: '只能同时编辑一条',});
             //     return
             // }
-            this.operate = 'edit'
-            row.status = Number(row.status)
-            this.form = row
-            this.openDialog()
+            userDetail({id: row.id}).then(res => {
+                let list = []
+                for (let i = 0; i < res.menuList.length; i++) {
+                    const element = res.menuList[i];
+                    list.push(res.menuList[i].id)
+                }
+                this.selectedMenu = list
+                this.operate = 'edit'
+                row.status = Number(row.status)
+                this.form = cloneDeep(row)
+                this.openDialog()
+            })
         },
         del(row) {
-            this.operate = 'edit'
-            row.status = Number(row.status)
-            this.form = row
-            this.form.status = 0
-            this.save()
+            this.$confirm('确认删除当前用户？').then(_ => {
+                let id =  row.id
+                let obj = {id: id}
+                delUser(obj).then(res => {
+                    this.$message.success({message: '删除成功',});
+                    this.getData()
+                })
+            })
+            .catch(_ => {});
         },
         // 保存
         save() {
@@ -214,6 +242,11 @@ export default {
                 })
             }
             if (this.operate == 'edit') {
+                console.log(this.selectedMenu);
+                addMenu({
+                    userId: params.id,
+                    menuList: this.selectedMenu
+                })
                 // delete params.password
                 updateUser(params).then(res => {
                     if (res) {

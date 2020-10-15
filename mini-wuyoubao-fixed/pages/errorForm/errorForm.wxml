@@ -11,11 +11,11 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">保修合同号</view>
-                    <input class="content-input" value="{{form.contractNo}}" name="contractNo" placeholder="请填写" />
+                    <input disabled="{{true}}" class="content-input" value="{{form.contractNo}}" name="contractNo" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">车牌</view>
-                    <input class="content-input" value="{{form.licensePlate}}" name="licensePlate" placeholder="请填写" />
+                    <input disabled="{{true}}" class="content-input" value="{{form.licensePlate}}" name="licensePlate" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">客户名</view>
@@ -23,11 +23,15 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">联系电话</view>
-                    <input class="content-input" value="{{form.mobile}}" name="mobile" placeholder="请填写" />
+                    <input type="number" class="content-input" value="{{form.mobile}}" name="mobile" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">4S店</view>
+                    <input class="content-input" bindtap="toSelectBrand" value="{{shopName}}" placeholder="请选择" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">原因</view>
-                    <input class="content-input" value="{{form.reason}}" name="reason" placeholder="请填写" />
+                    <textarea class="content-input heightAuto" value="{{form.reason}}" name="reason" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">报障图片</view>

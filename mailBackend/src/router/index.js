@@ -27,6 +27,12 @@ export default new Router({
                     meta: { title: '无忧宝卡管理' }
                 },
                 {
+                    path: '/sendcard',
+                    name: 'sendcard',
+                    component: () => import(/* webpackChunkName: "shop" */ '../components/page/main/SendCard.vue'),
+                    meta: { title: '发卡管理' }
+                },
+                {
                     path: '/postprodt',
                     name: 'postprodt',
                     component: () => import(/* webpackChunkName: "postprodt" */ '../components/page/main/PostProductManage.vue'),

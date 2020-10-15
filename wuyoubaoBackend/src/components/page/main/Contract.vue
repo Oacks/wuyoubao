@@ -71,9 +71,9 @@
             <el-table-column type="selection" width="55" align="center"></el-table-column>
             <!-- <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column> -->
             <!-- <el-table-column type="index" label="序号" width="55" align="center"></el-table-column> -->
-
+<!-- 
             <el-table-column prop="contractNo" label="合同号">
-            </el-table-column>
+            </el-table-column> -->
           
             <el-table-column prop="memberName" label="客户名">
                 <!-- <template slot-scope="scope">
@@ -90,9 +90,10 @@
                     <div style="white-space: nowrap;">
                         <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
                         <!-- <a style="margin-right:5px;" href="javascript:;" type="primary" @click="detail(scope.row)">查看</a> -->
-                        <el-button size="mini" type="primary" @click="detail(scope.row)">查看</el-button>
+                        <el-button size="mini" type="primary" @click="detail(scope.row)">查看详情</el-button>
                         <el-button size="mini" v-if="scope.row.status == '1'" type="primary" @click="exportContract(scope.row)">下载合同</el-button>
                         <el-button size="mini" v-if="scope.row.status == '1'" type="success" @click="approvalReady(scope.row)">审批</el-button>
+                        <el-button size="mini" v-if="scope.row.status == '1'" type="danger" @click="reback(scope.row)">不同意</el-button>
                         <el-button size="mini" v-if="scope.row.status == '3' || scope.row.status == '4'" type="success" @click="showContract(scope.row)">查看合同</el-button>
                         <!-- <el-button size="mini" v-if="scope.row.status == '2'" type="success" @click="uploadContract(scope.row)">上传合同</el-button> -->
                     </div>
@@ -361,25 +362,28 @@ export default {
             approvalPic: '',
             approvalId: '',
             statusOpt: [
+                // 0受理中,4起保
+                // 12保单确认
+                // 3未启保
                 // {
                 //     value: '0',
                 //     label: '草稿'
                 // },
                 {
                     value: '1',
-                    label: '申请'
+                    label: '受理中'
                 },
                 {
                     value: '2',
-                    label: '审批盖章'
+                    label: '受理中'
                 },
                 {
                     value: '3',
-                    label: '合同审核'
+                    label: '保单确认，未启保'
                 },
                 {
                     value: '4',
-                    label: '发卡'
+                    label: '保单启保中'
                 },
                 // {
                 //     value: '5',
@@ -402,6 +406,17 @@ export default {
             this.$nextTick(() => {
                 this.$refs.upload.clearPic()
             })
+        },
+        reback() {
+            this.$confirm('确认不同意当前合同？').then(_ => {
+                let id =  row.id
+                let obj = {id: id}
+                priceDetele(obj).then(res => {
+                    this.$message.success({message: '操作成功',});
+                    this.getData()
+                })
+            })
+            .catch(_ => {});
         },
         closeApprovalDialog() {
             this.approvalDialogVisible = false
@@ -465,13 +480,13 @@ export default {
         },
 
         handleSelectionChange(row){
-            this.selectRow = row
+            this.selectRow = cloneDeep(row)
         },
      
         edit(row) {
             this.operate = 'edit'
             row.status = Number(row.status)
-            this.form = row
+            this.form = cloneDeep(row)
             this.openDialog()
         },
         // 详情
@@ -486,7 +501,7 @@ export default {
         del(row) {
             this.operate = 'edit'
             row.status = Number(row.status)
-            this.form = row
+            this.form = cloneDeep(row)
             this.form.status = 0
             this.save()
         },

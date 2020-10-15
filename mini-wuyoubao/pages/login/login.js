@@ -70,6 +70,7 @@ Page({
   getCode() {
     if(!this.data.canSend) {return}
     api.get('wx/getSms', {
+      type: 0, // 销售端
       mobile: this.data.mobile
     }).then(res => {
       let that = this

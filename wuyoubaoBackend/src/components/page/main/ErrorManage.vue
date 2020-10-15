@@ -231,6 +231,9 @@
                     <el-table-column prop="processingTime" label="跟进时间">
                     </el-table-column>
 
+                    <el-table-column prop="userName" label="操作人">
+                    </el-table-column>
+
                     <el-table-column prop="picList" label="图片">
                         <template slot-scope="scope">
                             <div class="pic-list-item" v-for="(pic, i) in scope.row.files" :key="i">
@@ -393,7 +396,7 @@ export default {
         },
 
         handleSelectionChange(row){
-            this.selectRow = row
+            this.selectRow = cloneDeep(row)
         },
        
         edit(row) {
@@ -407,7 +410,7 @@ export default {
             this.$nextTick(() => {
                 this.$refs.upload.clearPic()
             })
-            this.detailForm = row
+            this.detailForm = cloneDeep(row)
             this.openDialog()
         },
         // 详情

@@ -221,7 +221,8 @@ Page({
         const element = res[i];
         list.push({
           id:element.id,
-          name:element.insuranceName,
+          name: `车价：${element.priceCarStart}-${element.priceCarEnd}(${element.insuranceName})`,
+          cardName: element.insuranceName,
           price: element.priceContract,
           priceCarStart: element.priceCarStart,
           priceCarEnd: element.priceCarEnd,
@@ -247,8 +248,8 @@ Page({
     return ''
   },
   // 获取合同详情
-  getContractDetail(id){
-    api.get('sale/contractDetail', {id: id ? id : this.data.id}).then((res => {
+  getContractDetail(){
+    api.get('sale/contractDetail', {mobile: wx.getStorageSync('mobile')}).then((res => {
       let {
         contractNo,
         memberName,
@@ -314,10 +315,11 @@ Page({
       this.setData({
         id: id
       })
-      this.getProject(this.getContractDetail)
+      // this.getProject(this.getContractDetail)
+      this.getContractDetail()
     }
     else {
-      this.getProject()
+      // this.getProject()
     }
   },
 
