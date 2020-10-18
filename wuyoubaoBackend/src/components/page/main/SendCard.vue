@@ -31,7 +31,7 @@
             <!-- <el-table-column prop="contractNo" label="发卡合同数量" width="260">
             </el-table-column> -->
 
-            <el-table-column prop="inStock" label="保险卡金额">
+            <el-table-column prop="insurancePrice" label="保险卡金额">
             </el-table-column>
 
             <el-table-column prop="accessoriesPrice" label="邮品金额">

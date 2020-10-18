@@ -113,18 +113,18 @@
                         </view>
                     </picker>
                 </view>
-                <view class="item-content">
+                <!-- <view class="item-content">
                     <view class="content-title">延保卡券</view>
                     <picker disabled="{{true}}" class="content-input" placeholder mode="selector" value="{{insuranceNo}}"  range-key="name" bindchange="bindInsuranceChange" range="{{insuranceOpt}}">
                         <view class="content-input" wx:if="{{insuranceOpt && insuranceOpt[insuranceNo]}}">
                         车价：{{insuranceOpt[insuranceNo].priceCarStart}}-{{insuranceOpt[insuranceNo].priceCarEnd}}({{insuranceOpt[insuranceNo].cardName}})
                         </view>
                     </picker>
-                </view>
+                </view> -->
                 <view class="item-content">
                     <view class="content-title">卡券价格</view>
-                    <view class="content-input" wx:if="{{insuranceOpt && insuranceOpt[insuranceNo]}}">
-                        {{insuranceOpt[insuranceNo].price}}
+                    <view class="content-input">
+                        {{insurancePrice}}
                     </view>
                 </view>
 

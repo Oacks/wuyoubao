@@ -70,7 +70,7 @@ Page({
   // 获取验证码
   getCode() {
     if(!this.data.canSend) {return}
-    api.get('wx/getSms', {
+    api.get('wx/getSms2', {
       type: 1, // 客户端
       mobile: this.data.form.mobile
     }).then(res => {
@@ -214,6 +214,8 @@ Page({
     })
   },
   validate(obj) {
+    console.log(obj);
+
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         const element = obj[key];
@@ -264,8 +266,10 @@ Page({
       oldStartTime: this.formatTime(this.data.oldStartTime),
       oldEndTime: this.formatTime(this.data.oldEndTime),
       createTime: this.formatTime(this.data.createTime), // 延保销售日期
+      status: '0',
       // startTime: this.formatTime(this.data.startTime), // 延保起期
     }
+    console.log(params);
     let valid = await this.validate(params)
     if (!valid) {return}
     api.post('sale/updateContract', params).then(res => {
@@ -309,6 +313,20 @@ Page({
   getProjectFromPrice(val) {
     console.log(val);
     api.get('sale/getProject', {money: val}).then(res => {
+      if (!res) {
+        // wx.showToast({
+        //   title: '当前车价没有对应产品价钱',
+        //   icon: 'none',
+        //   image: '',
+        //   duration: 1500,
+        //   mask: false,
+        // });
+        this.setData({
+          insuranceId: '',
+          insurancePrice: '',
+        })
+        return
+      }
       this.setData({
         insuranceId: res.id || '',
         insurancePrice: res.priceContract || '',
@@ -390,7 +408,7 @@ Page({
       this.setData({
         form: form,
         orderStatus: status,
-        insuranceId: insuranceId, // 所选卡券
+        insuranceId: projectId, // 所选卡券
         insurancePrice: price,
         carType: carType, // 车类型
         insuranceNo: insuranceNo,

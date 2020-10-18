@@ -14,6 +14,7 @@
                     :value="'done'">
                     </el-option>
                 </el-select>
+                <el-button @click="getData">刷新</el-button>
            </div>
 
         <el-table

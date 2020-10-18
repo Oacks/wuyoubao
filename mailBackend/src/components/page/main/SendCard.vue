@@ -31,7 +31,7 @@
             <!-- <el-table-column prop="contractNo" label="发卡合同数量" width="260">
             </el-table-column> -->
 
-            <el-table-column prop="inStock" label="保险卡金额">
+            <el-table-column prop="insurancePrice" label="保险卡金额">
             </el-table-column>
 
             <el-table-column prop="accessoriesPrice" label="邮品金额">
@@ -68,7 +68,7 @@
                     <el-button size="mini" type="primary" @click="detail(scope.row, 'detail')">明细</el-button>
                     <!-- <el-button size="mini" type="success" @click="edit(scope.row)">修改</el-button> -->
                     <!-- <el-button size="mini" type="danger" @click="del(scope.row)">删除</el-button> -->
-                    <el-button size="mini" type="success" @click="access(scope.row)">发卡</el-button>
+                    <el-button v-if="scope.row.status != 1" size="mini" type="success" @click="access(scope.row)">发卡</el-button>
                 </template>
             </el-table-column>
         </el-table>

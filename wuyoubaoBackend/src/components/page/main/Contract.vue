@@ -91,9 +91,9 @@
                         <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
                         <!-- <a style="margin-right:5px;" href="javascript:;" type="primary" @click="detail(scope.row)">查看</a> -->
                         <el-button size="mini" type="primary" @click="detail(scope.row)">查看详情</el-button>
-                        <el-button size="mini" v-if="scope.row.status == '1'" type="primary" @click="exportContract(scope.row)">下载合同</el-button>
-                        <el-button size="mini" v-if="scope.row.status == '1'" type="success" @click="approvalReady(scope.row)">审批</el-button>
-                        <el-button size="mini" v-if="scope.row.status == '1'" type="danger" @click="reback(scope.row)">不同意</el-button>
+                        <el-button size="mini" v-if="scope.row.status == '0'" type="primary" @click="exportContract(scope.row)">下载合同</el-button>
+                        <el-button size="mini" v-if="scope.row.status == '0'" type="success" @click="approvalReady(scope.row)">审批</el-button>
+                        <el-button size="mini" v-if="scope.row.status == '0'" type="danger" @click="reback(scope.row)">不同意</el-button>
                         <el-button size="mini" v-if="scope.row.status == '3' || scope.row.status == '4'" type="success" @click="showContract(scope.row)">查看合同</el-button>
                         <!-- <el-button size="mini" v-if="scope.row.status == '2'" type="success" @click="uploadContract(scope.row)">上传合同</el-button> -->
                     </div>
@@ -254,6 +254,7 @@
                             <el-form-item label="合同图片：">
                                 <div class="pic-list">
                                     <el-image 
+                                        v-if="detailInfo.pic"
                                         class="pic-list-item-img"
                                         :src="detailInfo.pic" 
                                         :preview-src-list="[detailInfo.pic]">
@@ -265,7 +266,7 @@
                 </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="save">确 定</el-button>
+                <!-- <el-button type="primary" @click="save">确 定</el-button> -->
             </span>
         </el-dialog>
         <el-dialog
@@ -365,10 +366,10 @@ export default {
                 // 0受理中,4起保
                 // 12保单确认
                 // 3未启保
-                // {
-                //     value: '0',
-                //     label: '草稿'
-                // },
+                {
+                    value: '0',
+                    label: '申请'
+                },
                 {
                     value: '1',
                     label: '受理中'
@@ -384,6 +385,10 @@ export default {
                 {
                     value: '4',
                     label: '保单启保中'
+                },
+                {
+                    value: '7',
+                    label: '锁定'
                 },
                 // {
                 //     value: '5',
@@ -407,11 +412,15 @@ export default {
                 this.$refs.upload.clearPic()
             })
         },
-        reback() {
+        reback(row) {
             this.$confirm('确认不同意当前合同？').then(_ => {
                 let id =  row.id
-                let obj = {id: id}
-                priceDetele(obj).then(res => {
+                let param = {
+                    id: row.id,
+                    status: '1',
+                    pic: ''
+                }
+                approval(param).then(res => {
                     this.$message.success({message: '操作成功',});
                     this.getData()
                 })

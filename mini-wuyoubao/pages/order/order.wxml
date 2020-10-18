@@ -31,7 +31,7 @@
                 </view>
                 <view class="item-content" wx:if="{{id && orderStatus == '1' || !id}}">
                     <view class="content-title">验证码</view>
-                    <input class="content-input" value="{{form.code}}" name="mobile" placeholder="请填写" />
+                    <input class="content-input" value="{{form.code}}" name="code" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">联系地址</view>

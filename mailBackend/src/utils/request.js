@@ -6,15 +6,15 @@ axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     // easy-mock服务挂了，暂时不使用了
-    baseURL: 'http://2o6465101l.wicp.vip/',
-    // baseURL: 'https://wuyoubao.sankinetwork.com/api/',
+    // baseURL: 'http://2o6465101l.wicp.vip/',
+    baseURL: 'https://wuyoubao.sankinetwork.com/api/',
 
     timeout: 10000,
 });
 
 service.interceptors.request.use(
     config => {
-        let token = localStorage.getItem('xc-token');
+        let token = localStorage.getItem('xc-token2');
         if (token) {
             config.headers['xc-token'] = token
         }
@@ -32,7 +32,7 @@ service.interceptors.response.use(
             if (response.data.code == 1) {
                 // token
                 if (response.headers['xc-token']) {
-                    localStorage.setItem('xc-token', response.headers['xc-token']) // 获取header的token
+                    localStorage.setItem('xc-token2', response.headers['xc-token']) // 获取header的token
                 }
                 // 正常data
                 if (response.data.data) {

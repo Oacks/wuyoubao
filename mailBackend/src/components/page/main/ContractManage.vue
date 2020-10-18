@@ -85,7 +85,7 @@
                     <el-button type="primary" @click="detail(scope.row)">查看</el-button>
                     <el-button v-if="scope.row.status == '2'" type="success" @click="showStamp(scope.row)">生成盖章合同</el-button>
                     <el-button v-if="scope.row.status == '2'" type="success" @click="approvalReady(scope.row)">审批</el-button>
-                    <el-button v-if="scope.row.status == '3'" type="success" @click="sendCard(scope.row)">发卡</el-button>
+                    <!-- <el-button v-if="scope.row.status == '3'" type="success" @click="sendCard(scope.row)">发卡</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -254,7 +254,7 @@
                 </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="save">确 定</el-button>
+                <!-- <el-button type="primary" @click="save">确 定</el-button> -->
             </span>
         </el-dialog>
         <el-dialog

@@ -101,7 +101,7 @@ Page({
       memberName:memberName,
       mobile:mobile,
       reason:reason,
-      shop_name:this.data.shopName,
+      shopName:this.data.shopName,
       picList:this.data.form.picList || [],
     }
     let valid = await this.validate(params)
@@ -168,6 +168,7 @@ Page({
       }
       this.setData({
         form: form,
+        shopName: res.shopName,
         logFile: logFile
       })
     }))
@@ -210,7 +211,7 @@ Page({
     previewPic(e) {
       console.log(e);
       let url = e.currentTarget.dataset.url
-      let list = e.currentTarget.dataset.urllist
+      let list = e.currentTarget.dataset.urllist || []
       wx.previewImage({
         current: url, // 当前显示图片的http链接
         urls: list || []// 需要预览的图片http链接列表
@@ -222,13 +223,29 @@ Page({
   onLoad: function (options) {
     let id = options.id
     let ctrl = options.ctrl
+    console.log(options);
     this.getToken()
+    // console.log(id);
     if (id) {
       this.setData({
         ctrl: ctrl,
         id: id
       })
       this.getErrorDetail(id)
+      return
+    }
+    try {
+      let form = JSON.parse(options.form)
+      this.setData({
+        'form.contractNo': form.contractNo,
+        'form.licensePlate': form.licensePlate,
+        'form.memberName': form.memberName,
+        'form.mobile': form.mobile,
+      })
+
+    }
+    catch (err) {
+
     }
   },
 

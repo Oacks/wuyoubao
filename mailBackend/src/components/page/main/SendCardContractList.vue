@@ -44,13 +44,13 @@
                         </el-form-item> -->
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="会员姓名">
+                        <!-- <el-form-item label="会员姓名">
                             <el-input v-model="name"></el-input>
-                        </el-form-item>
+                        </el-form-item> -->
                     </el-col>
                     <div>
                         <!-- <el-button type="primary" @click="">新建</el-button> -->
-                        <el-button style="margin-left:40px;" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+                        <!-- <el-button style="margin-left:40px;" type="primary" icon="el-icon-search" @click="search">搜索</el-button> -->
                         <el-button v-if="sendCardOperate == 'create'" style="margin-left:40px;" type="primary" @click="sendCard">申请发卡</el-button>
                         <!-- <el-button v-if="sendCardOperate == 'edit'" style="margin-left:40px;" type="success" @click="editSendCard">修改发卡</el-button> -->
                     </div>

@@ -249,7 +249,7 @@ Page({
   },
   // 获取合同详情
   getContractDetail(){
-    api.get('sale/contractDetail', {mobile: wx.getStorageSync('mobile')}).then((res => {
+    api.get('member/contractDetail', {mobile: wx.getStorageSync('mobile')}).then((res => {
       let {
         contractNo,
         memberName,
@@ -282,6 +282,7 @@ Page({
         carPrice: carPrice,
         mileage: mileage,
         vehicle: vehicle,
+        insurancePrice: price,
       }
       let insuranceNo = 0
       for (let i = 0; i < this.data.insuranceOpt.length; i++) {
@@ -311,6 +312,7 @@ Page({
    */
   onLoad: function (options) {
     let id = options.id
+    this.getContractDetail()
     if (id) {
       this.setData({
         id: id
