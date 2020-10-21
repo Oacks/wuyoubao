@@ -2,13 +2,13 @@
 <wxs module="format" src="./orderList.wxs"></wxs>
 
 <view class="container">
-    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#393939'}}" bindback="onBack">
+    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#3EC755'}}" bindback="onBack">
         <view class="white ml20 barTitle" slot="center">订单</view>
     </navBar>
     <view class="order-list-container">
         <view class="order-box" wx:for="{{saleList}}">
             <view class="order-pic" hover-class="none" hover-stop-propagation="false">
-                <image class="order-icon" src="/images/icon/icon-order-grey.png">
+                <image class="order-icon" src="/images/ui/icon-list.png">
                 </image>
 
                 <view class="btns">
@@ -16,9 +16,18 @@
                 </view>
             </view>
             <view class="order-content word-color">
-                <view><text class="blocks">订单号码：</text>{{item.id}}</view>
-                <view><text class="blocks">客户姓名：</text>{{item.memberName}}</view>
-                <view><text class="blocks">订单状态：</text>{{format.getStatus(item.status)}}</view>
+                <view class="order-item">
+                    <text class="blocks">订单号码</text>
+                    <text class="blocks-content">{{item.id}}</text>
+                </view>
+                <view class="order-item">
+                    <text class="blocks">客户姓名</text>
+                    <text class="blocks-content">{{item.memberName}}</text>
+                </view>
+                <view class="order-item">
+                    <text class="blocks">订单状态</text>
+                    <text class="blocks-content">{{format.getStatus(item.status)}}</text>
+                </view>
             </view>
         </view>
     </view>

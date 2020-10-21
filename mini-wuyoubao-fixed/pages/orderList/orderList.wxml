@@ -2,7 +2,7 @@
 <wxs module="format" src="./orderList.wxs"></wxs>
 
 <view class="container">
-    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#393939'}}" bindback="onBack">
+    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#3EC755'}}" bindback="onBack">
         <view class="white ml20 barTitle" slot="center">订单</view>
     </navBar>
     <view class="order-list-container">

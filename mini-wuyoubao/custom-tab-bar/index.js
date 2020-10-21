@@ -1,20 +1,10 @@
 Component({
   data: {
     selected: '',
-    color: "#bbb",
-    selectedColor: "#5cbd41",
-    backgroundColor: "#303030",
-    list: [{
-      pagePath: "/pages/index/index",
-      iconPath: "/images/tab/home.png",
-      selectedIconPath: "/images/tab/home-hl.png",
-      text: "首页"
-    }, {
-      pagePath: "/pages/user/user",
-      iconPath: "/images/tab/user.png",
-      selectedIconPath: "/images/tab/user-hl.png",
-      text: "我的"
-    }]
+    color: "#fff",
+    selectedColor: "#fff",
+    backgroundColor: "#fff",
+    list: []
   },
   attached() {
   },

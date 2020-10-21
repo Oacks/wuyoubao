@@ -1,6 +1,6 @@
 <!--pages/user/user.wxml-->
 <view class="container">
-  <navBar title="" back="{{false}}" home="{{false}}" background="{{'#393939'}}">
+  <navBar title="" back="{{false}}" home="{{false}}" background="{{'#3EC755'}}">
     <view class="white ml20 barTitle" slot="center">我的</view>
   </navBar>
   <view class="top-container user-bg">

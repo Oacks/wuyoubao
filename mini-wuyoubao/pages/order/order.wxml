@@ -1,7 +1,7 @@
 <!--pages/order/order.wxml-->
-<view class="container">
-    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#393939'}}" bindback="onBack">
-        <view class="white ml20 barTitle" slot="center">订单</view>
+<view class="container bggrey">
+    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#3EC755'}}" bindback="onBack">
+        <view class="white ml20 barTitle" slot="center">下单</view>
     </navBar>
     <view class="order-container" hover-class="none" hover-stop-propagation="false">
         <form catchsubmit="formSubmit" catchreset="formReset">
@@ -11,7 +11,7 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">保修合同号</view>
-                    <input class="content-input" disabled="{{true}}" value="{{form.contractNo}}" name="contractNo" />
+                    <input class="content-input"  disabled="{{true}}" value="{{form.contractNo}}" name="contractNo" />
                 </view>
             </view>
 
@@ -21,21 +21,21 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">车主姓名</view>
-                    <input class="content-input" value="{{form.memberName}}" name="memberName" placeholder="请填写" />
+                    <input class="content-input" placeholder-class="phcolor" value="{{form.memberName}}" name="memberName" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">联系电话</view>
-                    <input class="content-input" value="{{form.mobile}}" name="mobile" placeholder="请填写"  bindinput="mobileInput"/>
+                    <input class="content-input" placeholder-class="phcolor" value="{{form.mobile}}" name="mobile" placeholder="请填写"  bindinput="mobileInput"/>
                     <view class="content-code {{canSend ? '': 'disabled'}}"  
-                    wx:if="{{id && orderStatus == '1' || !id}}" catchtap="getCode">{{ canSend ? '获取验证码' : '稍后重新获取'}}</view>
+                    wx:if="{{id && orderStatus == '1' || !id}}" catchtap="getCode">{{ canSend ? '获取验证码' : (sendLater + 's后重发')}}</view>
                 </view>
                 <view class="item-content" wx:if="{{id && orderStatus == '1' || !id}}">
                     <view class="content-title">验证码</view>
-                    <input class="content-input" value="{{form.code}}" name="code" placeholder="请填写" />
+                    <input class="content-input" placeholder-class="phcolor" value="{{form.code}}" name="code" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">联系地址</view>
-                    <input class="content-input" value="{{form.address}}" name="address" placeholder="请填写" />
+                    <input class="content-input" placeholder-class="phcolor" value="{{form.address}}" name="address" placeholder="请填写" />
                 </view>
             </view>
 
@@ -45,19 +45,17 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">车辆品牌</view>
-                    <input class="content-input" bindtap="toSelectBrand" value="{{carBrand}}" placeholder="请选择" />
+                    <input class="content-input" disabled="{{true}}" placeholder-class="phcolor" bindtap="toSelectBrand" value="{{carBrand}}" placeholder="请选择" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">车辆型号</view>
-                    <input class="content-input" value="{{form.vehicle}}" name="vehicle" placeholder="请填写" />
+                    <input class="content-input" placeholder-class="phcolor" value="{{form.vehicle}}" name="vehicle" placeholder="请填写" />
                 </view>
                 
                 <view class="item-content">
                     <view class="content-title">车辆购买时间</view>
                     <picker class="content-input" mode="date" value="{{carBuyTime}}" start="2000-09-01" end="2040-01-01" bindchange="bindBuyTimeChange">
-                        <view class="content-input">
-                            {{carBuyTime ? carBuyTime : '请选择'}}
-                        </view>
+                        <input class="content-input" disabled="{{true}}" placeholder-class="phcolor" value="{{carBuyTime}}" placeholder="请选择" />
                     </picker>
                 </view>
                 <view class="item-content">
@@ -72,18 +70,14 @@
                 <view class="item-content">
                     <view class="content-title">原厂保修起始日期</view>
                     <picker class="content-input" mode="date" value="{{oldStartTime}}" start="2000-09-01" end="2040-01-01" bindchange="bindOldStartTimeChange">
-                        <view class="content-input">
-                            {{oldStartTime}}
-                        </view>
+                        <input class="content-input" disabled="{{true}}" placeholder-class="phcolor" value="{{oldStartTime}}" placeholder="请选择" />
                     </picker>
                 </view>
 
                 <view class="item-content">
                     <view class="content-title">原厂保修结束日期</view>
                     <picker class="content-input" mode="date" value="{{oldEndTime}}" start="2000-09-01" end="2040-01-01" bindchange="bindOldEndTimeChange">
-                        <view class="content-input">
-                            {{oldEndTime}}
-                        </view>
+                        <input class="content-input" disabled="{{true}}" placeholder-class="phcolor" value="{{oldEndTime}}" placeholder="请选择" />
                     </picker>
                 </view>
                 <!-- <view class="item-content">
@@ -92,19 +86,19 @@
                 </view> -->
                 <view class="item-content">
                     <view class="content-title">车架号(VIN)</view>
-                    <input class="content-input" name="vin" value="{{form.vin}}" placeholder="请填写" />
+                    <input class="content-input" placeholder-class="phcolor" name="vin" value="{{form.vin}}" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">发动机号</view>
-                    <input class="content-input" name="engineNum" value="{{form.engineNum}}" placeholder="请填写" />
+                    <input class="content-input" placeholder-class="phcolor" name="engineNum" value="{{form.engineNum}}" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">车牌号码</view>
-                    <input class="content-input" name="licensePlate" value="{{form.licensePlate}}" placeholder="请填写" />
+                    <input class="content-input" placeholder-class="phcolor" name="licensePlate" value="{{form.licensePlate}}" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">车辆售出价格</view>
-                    <input type="number" class="content-input" name="carPrice" value="{{form.carPrice}}" bindinput="carPriceChange" placeholder="人民币元" />
+                    <input type="number" placeholder-class="phcolor-yuan" class="content-input" name="carPrice" value="{{form.carPrice}}" placeholder="¥" />
                 </view>
             </view>
 
@@ -115,9 +109,7 @@
                 <view class="item-content">
                     <view class="content-title">延保销售日期</view>
                     <picker class="content-input" mode="date" value="{{createTime}}" start="2000-09-01" end="2040-01-01" bindchange="bindCreateTimeChange">
-                        <view class="content-input">
-                            {{createTime}}
-                        </view>
+                        <input class="content-input" placeholder-class="phcolor" disabled="{{true}}" value="{{createTime}}" placeholder="请选择" />
                     </picker>
                 </view>
                 <!-- <view class="item-content">
@@ -133,9 +125,7 @@
                 </view> -->
                 <view class="item-content">
                     <view class="content-title">价格</view>
-                    <view class="content-input">
-                        {{insurancePrice}}
-                    </view>
+                    <input class="content-input" placeholder-class="phcolor-yuan" value="{{insurancePrice}}" placeholder="¥" />
                 </view>
                 <!-- <view class="item-content">
                     <view class="content-title">延保方案</view>
@@ -159,7 +149,7 @@
                 </view> -->
                 <view class="item-content">
                     <view class="content-title">行驶里程</view>
-                    <input class="content-input" name="mileage" value="{{form.mileage}}"  placeholder="延保销售时行驶里程" />
+                    <input class="content-input" placeholder-class="phcolor" name="mileage" value="{{form.mileage}}"  placeholder="延保销售时行驶里程" />
                 </view>
             </view>
 

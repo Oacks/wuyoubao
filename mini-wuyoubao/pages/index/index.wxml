@@ -1,42 +1,52 @@
 <!-- index.wxml -->
 <view class="container">
-  <navBar title="" back="{{false}}" home="{{false}}" background="{{'#393939'}}">
+  <navBar title="" back="{{false}}" home="{{false}}" background="{{'#3EC755'}}" iconTheme="{{'dark'}}">
     <view class="white ml20 barTitle" slot="center">无忧保</view>
   </navBar>
-  <view class="top-container index-bg">
-        <!-- <view class="login-title">
-          无忧保
-        </view> -->
-    <view class="svg-left"></view>
-    <view class="svg-right"></view>
+  <view class="index-bg base-color">
+    <text class="login-btn white" bindtap="loginHandler">登录</text>
+    <!-- <button class='login-btn white' type='primary' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="bindGetUserInfo">
+        登录
+    </button> -->
   </view>
 
-  <!-- <view class="swiper-container"> -->
-    <!-- <swiper class="swiper" circular="{{true}}" autoplay="{{true}}" indicator-dots="{{indicatorDots}}" bindchange="swiperChange" previous-margin="{{previousmargin}}" next-margin="{{nextmargin}}">
+  <view class="swiper-container base-color">
+    <swiper class="swiper" circular="{{true}}" autoplay="{{true}}" indicator-dots="{{indicatorDots}}" bindchange="swiperChange" previous-margin="{{previousmargin}}" next-margin="{{nextmargin}}">
       <block wx:for="{{imgsArr}}" wx:key="index">
-        <swiper-item>
-          <image class="{{index == currentSwiper ? ' active' : ' quiet'}}" src="{{item.url}}"></image>
+        <swiper-item class="swiper-item">
+          <image class="{{'active' + currentSwiper}}" src="{{item.url}}"></image>
         </swiper-item>
       </block>
-    </swiper> -->
+    </swiper>
     <!-- 重置小圆点的样式 -->
-    <!-- <view class="dots">
+    <view class="dots">
       <block wx:for="{{imgsArr}}" wx:key="index">
         <view class="dot{{index == currentSwiper ? ' active' : ''}}"></view>
       </block>
-    </view> -->
-  <!-- </view> -->
+    </view>
+  </view>
 
   <!-- 按钮 -->
   <view class="btn-container">
     <view class="btns-box">
-      <view class="center-box" bind:tap="order">
+
+      <view class="btn-box left" bind:tap="order">
         <view class="pic-box">
-          <image class="btns-pic center-box special-pic" src="/images/note.png">
+          <image class="btns-pic" src="/images/ui/icon-order.png">
           </image>
         </view>
-        <text class="btns-word word-color">
+        <text class="btns-word">
           下单
+        </text>
+      </view>
+
+      <view class="btn-box right" bind:tap="checkOrder">
+        <view class="pic-box">
+          <image class="btns-pic" src="/images/ui/icon-list.png">
+          </image>
+        </view>
+        <text class="btns-word">
+          我的订单
         </text>
       </view>
     </view>

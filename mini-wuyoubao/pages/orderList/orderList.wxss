@@ -1,51 +1,84 @@
 /* pages/orderList/orderList.wxss */
 .order-box {
-    width: 98%;
-    margin: 10px auto;
-    border-radius: 6px;
-    border-bottom: 1px solid #ddd;
-    background: linear-gradient(to right, #fff, #ffe);
-    box-shadow: 1px 1px 2px #ddd;
     position: relative;
+    width: 686rpx;
+    margin: 32rpx auto;
+    height: 312rpx;
+    border-radius: 12rpx;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.order-list-container {
+    flex: 1;
+    background-color: #F1F1F1;
 }
 
 .btns {
     position: absolute;
-    right: 0;
-    top: 10px;
+    right: 24rpx;
+    height: 44rpx;
+    line-height: 44rpx;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .btn {
     display: inline-block;
-    width: 50px;
     text-align: center;
-    padding: 3px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-right: 5px;
+    width: 88rpx;
+    height: 44rpx;
+    background: #FFFFFF;
+    border: 1px solid #3EC755;
+    opacity: 1;
+    border-radius: 8rpx;
+    font-size: 12px;
+    color: #3EC755;
 }
 
 .order-pic {
+    position: relative;
     display: inline-block;
-    height: 60px;
+    height: 85rpx;
+    line-height: 85rpx;
     width: 100%;
     vertical-align: top;
-    margin: 10px;
+    border-bottom: 1px solid #F2F2F2;
 }
 
 .order-icon {
-    width: 40px;
-    height: 40px;
+    position: absolute;
     display: inline-block;
+    width: 30rpx;
+    height: 38rpx;
+    top: 50%;
+    left: 24rpx;
+    transform: translateY(-50%);
 }
 
 .order-content {
     display: inline-block;
-    margin-left: 10px;
+    width: 100%;
+    padding: 0 24rpx;
+    color: #333333;
+    font-size: 30rpx;
+}
+
+.order-item {
+    display: flex;
+    height: 76rpx;
+    line-height: 76rpx;
+    width: 100%;
 }
 
 .blocks {
     display: inline-block;
-    width: 80px;
-    font-weight: 800;
+    width: 140rpx;
+    white-space: nowrap;
 }
+
+.blocks-content {
+    flex: 1;
+    text-align: right;
+}
+

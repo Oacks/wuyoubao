@@ -24,6 +24,7 @@ Page({
     carBuyTime: '', // 购买时间
     carBrand: '',
     canSend: true,
+    sendLater: 60,
     form: {
       contractNo: '',
       memberName: '',
@@ -92,11 +93,23 @@ Page({
     this.setData({
       canSend: false
     })
+    this.countDown()
     setTimeout(() => {
       that.setData({
         canSend: true
       })
     }, 60000)
+  },
+  countDown(sec) {
+    if (sec === 0) {return}
+    let second = sec || 60
+    this.setData({
+      sendLater: second
+    })
+    setTimeout(() => {
+      let time = this.data.sendLater
+      this.countDown(time - 1)
+    }, 1000)
   },
   toSelectBrand() {
     wx.navigateTo({

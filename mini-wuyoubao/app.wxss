@@ -1,7 +1,7 @@
 /**app.wxss**/
 @import './WeUI/weui-wxss/dist/style/weui.wxss';
 Page {
-  background-color: #eee;
+  background-color: #3EC755;
 }
 
 .top-container {
@@ -30,17 +30,19 @@ Page {
 }
 
 .base-color {
-  color: #5cbd41;
+  background-color: #3EC755;
 }
 
 .word-color {
-  color: #555;
+  color: #181818;
 }
 
 /* 公共样式 */
 .container {
   position: relative;
-  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+  background-color: #3EC755;
   min-height: 100vh;
   font-family:PingFangSC-Regular,PingFang SC;
 }
@@ -73,14 +75,15 @@ button {
 
 /* 定制样式 */
 .custom-btn {
-  width: 482rpx !important;
-  height: 90rpx;
-  border-radius: 45rpx;
-  background: linear-gradient(to right, #5cbd41, #82cd6e);
-  font-size: 36rpx;
+  width: 686rpx !important;
+  height: 100rpx;
+  line-height: 100rpx;
+  border-radius: 20rpx;
+  background-color: #3EC755;
+  /* background: linear-gradient(to right, #5cbd41, #82cd6e); */
+  font-size: 32rpx;
   color: #fff;
   font-weight: normal;
-  line-height: 90rpx;
   text-align: center;
 }
 
