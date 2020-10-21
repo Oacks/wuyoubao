@@ -1,12 +1,12 @@
 {
   "pages": [
+    "pages/index/index",
     "pages/login/login",
     "pages/orderList/orderList",
     "pages/shopList/shopList",
     "pages/brand/brand",
     "pages/errorForm/errorForm",
     "pages/errorList/errorList",
-    "pages/index/index",
     "pages/user/user",
     "pages/authorization/authorization",
     "pages/authorizationPhone/authorizationPhone",

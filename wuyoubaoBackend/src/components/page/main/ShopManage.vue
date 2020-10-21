@@ -176,6 +176,7 @@ export default {
     data() {
         return {
             // 地图
+            disabled: false,
             markers: [],
             mapCenter: [113.122717,23.028762],
             searchOption: {
@@ -330,6 +331,11 @@ export default {
         },
         // 保存
         save() {
+            if (this.disabled) {return}
+            this.disabled = true
+            setTimeout(() => {
+                this.disabled = false
+            }, 6000)
             let params = cloneDeep(this.form)
             params.lng = this.mapCenter[0]
             params.lat = this.mapCenter[1]
@@ -340,6 +346,7 @@ export default {
                     if (res) {
                         this.$message.success({message: '创建成功',});
                         this.dialogVisible = false
+                        this.disabled = false
                         this.getData()
                     }
                 })
@@ -350,6 +357,7 @@ export default {
                     if (res) {
                         this.$message.success({message: '修改成功',});
                         this.dialogVisible = false
+                        this.disabled = false
                         this.getData()
                     }
                 })

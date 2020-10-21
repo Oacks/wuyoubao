@@ -49,8 +49,8 @@
                 </template>
             </el-table-column>
             
-            <el-table-column prop="priceContract" label="合同定价">
-            </el-table-column>
+            <!-- <el-table-column prop="priceContract" label="合同定价">
+            </el-table-column> -->
           
             <el-table-column prop="status" label="操作" width="180">
                 <template slot-scope="scope">
@@ -95,11 +95,11 @@
                        
                     </el-row>
                     <el-row :gutter="20">
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <el-form-item label="定价">
                                 <el-input v-model.number="form.priceContract"></el-input>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="12">
                             <el-form-item label="状态">
                                 <el-select v-model="form.status" placeholder="请选择">
@@ -161,6 +161,7 @@ export default {
     },
     data() {
         return {
+            disabled: false,
             operate: 'detail',
             tableData: [],
             page: {
@@ -300,11 +301,17 @@ export default {
         },
         // 保存
         save() {
+            if (this.disabled) {return}
             let params = cloneDeep(this.form)
+            this.disabled = true
+            setTimeout(() => {
+                this.disabled = false
+            }, 6000)
             if (this.operate == 'create') {
                 fixedPrice(params).then(res => {
                     this.$message.success({message: '创建成功',});
                     this.dialogVisible = false
+                    this.disabled = false
                     this.getData()
                 })
             }
@@ -313,6 +320,7 @@ export default {
                     if (res) {
                         this.$message.success({message: '修改成功',});
                         this.dialogVisible = false
+                        this.disabled = false
                         this.getData()
                     }
                 })

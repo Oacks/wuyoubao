@@ -68,7 +68,7 @@
                     <input type="number" class="content-input" placeholder-class="phcolor" value="{{form.mobile}}" name="mobile" placeholder="请填写" />
                 </view>
             </view>
-            <view class="item-container" wx:if="{{crtl == 'detail'}}">
+            <view class="item-container" wx:if="{{ctrl == 'detail'}}">
                 <view class="item-title">
                     办理进度
                 </view>

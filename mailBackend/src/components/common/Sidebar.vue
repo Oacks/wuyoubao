@@ -187,8 +187,8 @@ export default {
     },
     created() {
         menuList().then(res => {
-            this.items = this.copyItem
-            return // 测试开启
+            // this.items = this.copyItem
+            // return // 测试开启
             let list = []
             for (let i = 0; i < res.length; i++) {
                 const name = res[i].name;

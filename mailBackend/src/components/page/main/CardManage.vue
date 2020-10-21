@@ -146,6 +146,7 @@ export default {
     },
     data() {
         return {
+            disabled: false,
             operate: 'detail',
             tableData: [],
             page: {
@@ -241,11 +242,17 @@ export default {
         },
         // 保存
         save() {
+            if (this.disabled) {return}
+            this.disabled = true
+            setTimeout(() => {
+                this.disabled = false
+            }, 6000)
             let params = cloneDeep(this.form)
             if (this.operate == 'create') {
                 addInsurance(params).then(res => {
                     this.$message.success({message: '创建成功',});
                     this.dialogVisible = false
+                this.disabled = false
                     this.getData()
                 })
             }
@@ -254,6 +261,7 @@ export default {
                     if (res) {
                         this.$message.success({message: '修改成功',});
                         this.dialogVisible = false
+                this.disabled = false
                         this.getData()
                     }
                 })

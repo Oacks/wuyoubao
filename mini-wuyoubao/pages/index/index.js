@@ -38,8 +38,8 @@ Page({
           mask: false,
         });
         setTimeout(() => {
-          wx.switchTab({
-            url: '/pages/user/user',
+          wx.navigateTo({
+            url: '/pages/login/login',
           })
         }, 1000)
         return
@@ -49,7 +49,7 @@ Page({
       })
   },
 
-  checkOrders() {
+  checkOrder() {
     if (!wx.getStorageSync('wx-token') || !wx.getStorageSync('mobile')) {
       wx.showToast({
         title: '请先授权登录',
@@ -59,8 +59,8 @@ Page({
         mask: false,
       });
       setTimeout(() => {
-        wx.switchTab({
-          url: '/pages/orderList/orderList',
+        wx.navigateTo({
+          url: '/pages/login/login',
         })
       }, 1000)
       return

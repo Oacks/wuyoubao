@@ -20,6 +20,12 @@
                 
                 <el-table-column prop="contractId" label="合同号">
                 </el-table-column>
+
+                <el-table-column prop="createTime" label="时间">
+                    <template slot-scope="scope">
+                        {{transFormTime(scope.row.createTime)}}
+                    </template>
+                </el-table-column>
             </el-table>
 
             <div class="pagination">
@@ -114,6 +120,17 @@ export default {
         this.getData(2) // 邮品
     },
     methods: {
+        transFormTime(time) {
+            if (!time) {return ''}
+            var date = new Date(time);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+            var Y = date.getFullYear() + '-';
+            var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+            var D = date.getDate() + ' ';
+            var h = (date.getHours() < 10 ? '0' + (date.getHours()) : date.getHours()) + ':';
+            var m = date.getMinutes() + ':';
+            var s = date.getSeconds();
+            return Y + M + D + h + m + s;
+        },
         handlePageChange(page) {
             this.page.no = page
             this.getData(1)

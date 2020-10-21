@@ -116,8 +116,8 @@ Page({
         mask: false,
       });
       setTimeout(() => {
-        wx.switchTab({
-          url: '/pages/user/user',
+        wx.navigateTo({
+          url: '/pages/errorList/errorList',
         });
       }, 1000)
     })
@@ -212,7 +212,7 @@ Page({
     previewPic(e) {
       console.log(e);
       let url = e.currentTarget.dataset.url
-      let list = e.currentTarget.dataset.urllist || []
+      let list = e.currentTarget.dataset.urllist || [url]
       wx.previewImage({
         current: url, // 当前显示图片的http链接
         urls: list || []// 需要预览的图片http链接列表

@@ -66,6 +66,7 @@
             <el-table-column prop="status" label="操作" width="auto">
                 <template slot-scope="scope">
                     <el-button size="mini" type="primary" @click="detail(scope.row, 'detail')">明细</el-button>
+                    <el-button v-if="scope.row.status == 1" size="mini" type="primary" @click="checkCardList(scope.row)">卡号列表</el-button>
                     <!-- <el-button size="mini" type="success" @click="edit(scope.row)">修改</el-button> -->
                     <!-- <el-button size="mini" type="danger" @click="del(scope.row)">删除</el-button> -->
                     <el-button v-if="scope.row.status != 1" size="mini" type="success" @click="access(scope.row)">发卡</el-button>
@@ -97,7 +98,19 @@
             </span>
         </el-dialog>
       
-
+        <el-dialog
+            class="user-dialog"
+            :close-on-click-modal='false'
+            :title="'卡号列表'"
+            :visible="cardDialogVisible"
+            :before-close="closeCardDialog"
+            width="900px">
+                    <div v-for="(list, i) in cardList" :key="i">{{list.insuranceId}}</div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="cardDialogVisible = false">完 成</el-button>
+                <!-- <el-button type="primary" @click="save">确 定</el-button> -->
+            </span>
+        </el-dialog>
        
         </div>
     </div>
@@ -107,7 +120,7 @@
 import { 
     // addGuaranteeLog,
     // guaranteeStatus,
-
+    insuranceStart,
     rzLine,
     getLineContract,
     addLine,
@@ -149,7 +162,9 @@ export default {
             cardList: [],
             selectRowId: '',
 
-            contractDialogVisible: false
+            contractDialogVisible: false,
+            cardDialogVisible: false,
+
         };
     },
     created() {
@@ -175,7 +190,12 @@ export default {
                 this.$refs.sendCardList.getData()  // 获取全部合同           
             })
         },
-      
+        checkCardList(row) {
+            getLineContract({id: row.id, page: 1, pageSize: 9999}).then(res => {
+                this.cardList = res.records
+                this.cardDialogVisible = true
+            })
+        },
         // 修改table
         changeTable(status) {
             this.showTableStatus = status
@@ -306,6 +326,10 @@ export default {
         },
         closeContractDialog() {
             this.contractDialogVisible = false
+        },
+
+        closeCardDialog() {
+            this.cardDialogVisible = false
         },
     }
 };

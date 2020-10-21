@@ -130,6 +130,11 @@ export const insuranceList = query => {
     return get('yzht/insuranceList', query)
 }
 
+// 无忧宝卡列表
+export const insuranceStart = query => {
+    return get('yzht/insuranceStart', query)
+}
+
 // 无忧宝卡详细列表
 export const cardList = query => {
     return get('yzht/cardList', query)

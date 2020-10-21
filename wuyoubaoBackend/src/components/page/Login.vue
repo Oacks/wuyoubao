@@ -23,13 +23,15 @@
                 </div>
             </el-form>
         </div>
+
     </div>
 </template>
 
 <script>
-import {  login } from '../../api/index';
-
+import { login } from '../../api/index';
 export default {
+    components: {
+    },
     data: function() {
         return {
             param: {

@@ -403,6 +403,7 @@ export default {
         edit(row) {
             this.operate = 'edit'
             row.status = Number(row.status)
+            this.approvalPic = ''
             this.form = {
                 picList: [],
                 remark: '',
@@ -537,6 +538,11 @@ export default {
         height: 100px;  
         margin-right: 10px;
         overflow: visible;
+    }
+    .pic-list-item-img {
+        display: inline-block;
+        width: 100px;
+        height: 100px;  
     }
 
   

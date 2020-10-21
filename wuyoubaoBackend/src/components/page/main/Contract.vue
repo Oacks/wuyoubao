@@ -91,8 +91,8 @@
                         <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
                         <!-- <a style="margin-right:5px;" href="javascript:;" type="primary" @click="detail(scope.row)">查看</a> -->
                         <el-button size="mini" type="primary" @click="detail(scope.row)">查看详情</el-button>
-                        <el-button size="mini" v-if="scope.row.status == '0'" type="primary" @click="exportContract(scope.row)">下载合同</el-button>
-                        <el-button size="mini" v-if="scope.row.status == '0'" type="success" @click="approvalReady(scope.row)">审批</el-button>
+                        <!-- <el-button size="mini" v-if="scope.row.status == '0'" type="primary" @click="exportContract(scope.row)">下载合同</el-button> -->
+                        <el-button size="mini" v-if="scope.row.status == '0'" type="success" @click="approval(scope.row)">审批</el-button>
                         <el-button size="mini" v-if="scope.row.status == '0'" type="danger" @click="reback(scope.row)">不同意</el-button>
                         <el-button size="mini" v-if="scope.row.status == '3' || scope.row.status == '4'" type="success" @click="showContract(scope.row)">查看合同</el-button>
                         <!-- <el-button size="mini" v-if="scope.row.status == '2'" type="success" @click="uploadContract(scope.row)">上传合同</el-button> -->
@@ -297,8 +297,9 @@
             :visible="contractDialogVisible"
             :before-close="closeContractDialog"
             append-to-body
-            width="700px">
-                <el-image class="stamp-pic" :src="contractPic"></el-image>
+            width="900px">
+                <contract-pic :status="selectStatus" :selectContractData="selectContractData"></contract-pic>
+                <!-- <el-image class="stamp-pic" :src="contractPic"></el-image> -->
             <span slot="footer" class="dialog-footer">
                 <el-button @click="contractDialogVisible = false">确 定</el-button>
             </span>
@@ -312,21 +313,26 @@ import {
     contractDetail,
     contractList,
     approval,
-    exportContract
+    exportContract,
+    eportData
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
 import UploadPic from './UploadPic';
 // import RSA from '../../../utils/rsa'
+import ContractPic from '../main/ContractPic';
 
 export default {
     name: 'Contract',
     components: {
-        UploadPic
+        UploadPic,
+        ContractPic
     },
     data() {
         return {
             contractDialogVisible: false,
             contractPic:'',
+            selectStatus: '', // 选中的合同的状态
+            selectContractData: {},
             operate: 'detail',
             tableData: [],
             name: '',
@@ -448,15 +454,15 @@ export default {
                 }
             }
         },
-        approval() {
-            if (this.approvalPic == '') {
-                this.$message.warning({message: '请先上传合同图片',});
-                return
-            }
+        approval(row) {
+            // if (this.approvalPic == '') {
+            //     this.$message.warning({message: '请先上传合同图片',});
+            //     return
+            // }
             let param = {
-                id: this.approvalId,
+                id: row.id,
                 status: '2',
-                pic: this.approvalPic
+                // pic: this.approvalPic
             }
             approval(param).then(res => {
                 this.$message.success({message: '提交审批成功'});
@@ -530,8 +536,12 @@ export default {
             }
         },
         showContract(row) {
-            this.contractDialogVisible = true
-            this.contractPic = row.pic
+            eportData({id:row.id}).then(res => {
+                this.selectContractData = res
+                this.selectStatus = row.status
+                this.contractDialogVisible = true
+            })
+            // this.contractPic = row.pic
         },
         closeContractDialog() {
             this.contractDialogVisible = false

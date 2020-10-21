@@ -64,8 +64,8 @@ Page({
     console.log(e.detail.value);
     let price = e.detail.value 
     if (price) {
-      // this.debounceGetPrice(price)
-      this.getProjectFromPrice(price)
+      this.debounceGetPrice(price)
+      // this.getProjectFromPrice(price)
     }
   },
   // 获取验证码
@@ -187,7 +187,8 @@ Page({
       carPrice,
       mileage,
       code,
-      vehicle} = form
+      vehicle,
+      price} = form
     let params = {
       code: code,
       memberName: memberName,
@@ -202,7 +203,7 @@ Page({
       projectId: this.data.insuranceId,
       brand: this.data.carBrand,
       carType: this.data.carType,
-      price: this.data.insurancePrice,
+      price: price,
       carBuyTime: this.formatTime(this.data.carBuyTime), // 购买时间
       oldStartTime: this.formatTime(this.data.oldStartTime),
       oldEndTime: this.formatTime(this.data.oldEndTime),
@@ -221,7 +222,7 @@ Page({
       });
       setTimeout(() => {
         wx.switchTab({
-          url: '/pages/user/user',
+          url: '/pages/index/index',
         });
       }, 1000)
     })
@@ -258,7 +259,8 @@ Page({
       licensePlate,
       carPrice,
       mileage,
-      vehicle} = form
+      vehicle,
+      price} = form
     let params = {
       id: this.data.id,
       contractNo: contractNo,
@@ -274,7 +276,7 @@ Page({
       projectId: this.data.insuranceId,
       brand: this.data.carBrand,
       carType: this.data.carType,
-      price: this.data.insurancePrice,
+      price: price,
       carBuyTime: this.formatTime(this.data.carBuyTime), // 购买时间
       oldStartTime: this.formatTime(this.data.oldStartTime),
       oldEndTime: this.formatTime(this.data.oldEndTime),
@@ -295,7 +297,7 @@ Page({
       });
       setTimeout(() => {
         wx.switchTab({
-          url: '/pages/user/user',
+          url: '/pages/index/index',
         });
       }, 1000)
     })
@@ -327,28 +329,28 @@ Page({
     console.log(val);
     api.get('sale/getProject', {money: val}).then(res => {
       if (!res) {
-        // wx.showToast({
-        //   title: '当前车价没有对应产品价钱',
-        //   icon: 'none',
-        //   image: '',
-        //   duration: 1500,
-        //   mask: false,
-        // });
+        wx.showToast({
+          title: '当前车价没有对应产品定价',
+          icon: 'none',
+          image: '',
+          duration: 1500,
+          mask: false,
+        });
         this.setData({
           insuranceId: '',
-          insurancePrice: '',
+          // insurancePrice: '',
         })
         return
       }
       this.setData({
         insuranceId: res.id || '',
-        insurancePrice: res.priceContract || '',
+        // insurancePrice: res.priceContract || '',
       })
     })
   },
   debounce(fn, delay) {
     let timer
-    return () => {
+    return function() { // 这里不能用箭头函数
       let context = this
       let args = arguments
       clearTimeout(timer)
@@ -438,11 +440,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // this.debounceGetPrice = this.debounce(this.getProjectFromPrice, 500) // 初始化debounce方法
+    this.debounceGetPrice = this.debounce(this.getProjectFromPrice, 500) // 初始化debounce方法
     let id = options.id
     if (id) {
       this.setData({
-        id: id
+        id: id,
       })
       // this.getProject(this.getContractDetail)
       this.getContractDetail()
@@ -450,6 +452,14 @@ Page({
     else {
       // this.getProject()
     }
+    let date = new Date()
+    let year = date.getFullYear()
+    let month = String(date.getMonth() + 1).padStart(2, 0)
+    let day = String(date.getDate()).padStart(2, 0)
+    
+    this.setData({
+      createTime: `${year}-${month}-${day}`
+    })
   },
 
  

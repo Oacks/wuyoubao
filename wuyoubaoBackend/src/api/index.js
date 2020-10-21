@@ -226,3 +226,7 @@ export const updateSaler = query => {
     return post('wyht/updateSaler', query)
 }
 
+export const eportData = query => {
+    return get('wyht/eportData', query)
+}
+

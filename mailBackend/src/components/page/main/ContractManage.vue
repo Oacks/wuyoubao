@@ -83,7 +83,8 @@
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
                     <el-button type="primary" @click="detail(scope.row)">查看</el-button>
-                    <el-button v-if="scope.row.status == '2'" type="success" @click="showStamp(scope.row)">生成盖章合同</el-button>
+                    <el-button v-if="scope.row.status == '3'" type="success" @click="change4Status(scope.row)">启保</el-button>
+                    <!-- <el-button v-if="scope.row.status == '2'" type="success" @click="showStamp(scope.row)">生成盖章合同</el-button> -->
                     <el-button v-if="scope.row.status == '2'" type="success" @click="approvalReady(scope.row)">审批</el-button>
                     <!-- <el-button v-if="scope.row.status == '3'" type="success" @click="sendCard(scope.row)">发卡</el-button> -->
                 </template>
@@ -272,13 +273,13 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row :gutter="20">
+                <!-- <el-row :gutter="20">
                     <el-col :span="24">
                         <el-form-item label="盖章合同图片上传">
                             <upload-pic ref="upload" @getUrl="getUrl"></upload-pic>
                         </el-form-item>
                     </el-col>
-                </el-row>
+                </el-row> -->
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="approvalDialogVisible = false">取 消</el-button>
@@ -307,7 +308,8 @@ import {
     contractList,
     approval,
     sendCard,
-    contractDetail
+    contractDetail,
+    insuranceStart
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
 import UploadPic from './UploadPic';
@@ -392,6 +394,12 @@ export default {
         this.getData();
     },
     methods: {
+        change4Status(row) {
+            insuranceStart({id: row.id}).then(res => {
+                this.$message.success('启保成功')
+                this.getData()
+            })
+        },
         // 展示合同
         showStamp(row) {
             this.stampDialogVisible = true
@@ -439,15 +447,15 @@ export default {
             }
         },
         approval(row) {
-            if (this.approvalPic == '') {
-                this.$message.warning({message: '请先上传合同图片',});
-                return
-            }
+            // if (this.approvalPic == '') {
+            //     this.$message.warning({message: '请先上传合同图片',});
+            //     return
+            // }
             let param = {
                 id: this.approvalId,
                 remark: this.approvalRemark,
                 status: '3',
-                pic: this.approvalPic
+                // pic: this.approvalPic
 
             }
             approval(param).then(res => {

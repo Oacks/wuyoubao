@@ -38,7 +38,7 @@ Page({
       });
 
       setTimeout(() => {
-        wx.switchTab({
+        wx.navigateTo({
           url: '/pages/login/login',
         })
       },1000)
@@ -143,6 +143,51 @@ Page({
   },
 
   onLoad: function () {
+    if(wx.getStorageSync('mobile')) {
+      this.setData({
+        mobile: wx.getStorageSync('mobile')
+      })
+    }
+    if (wx.getStorageSync('sessionKey')) {
+      this.checkAuthorization()
+    }
+    let that = this
+    // 查看是否授权
+    wx.checkSession({
+      success () {
+        //session_key 未过期，并且在本生命周期一直有效
+        let sessionKey = wx.getStorageSync('sessionKey');
+        if (!sessionKey) {
+          that.login()
+        }
+        // 获取配置
+        wx.getSetting({
+          success: (res)=>{
+            if (res.authSetting['scope.userInfo']) {
+              wx.getUserInfo({
+                success: function (res) {
+                  that.setData({
+                    hasInfo: true,
+                    avatar: res.userInfo.avatarUrl,
+                    username: res.userInfo.nickName
+                  })
+                }
+              })
+            }
+            else {
+              that.setData({
+                hasInfo: false
+              })
+            }
+          },
+        });
+      },
+      fail () {
+        console.log('session_key 已经失效，需要重新执行登录流程');
+        // session_key 已经失效，需要重新执行登录流程
+        that.login() //重新登录
+      }
+    })
   },
   loginHandler() {
     wx.navigateTo({

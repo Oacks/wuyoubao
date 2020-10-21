@@ -18,7 +18,7 @@
             <view class="order-content word-color">
                 <view class="order-item">
                     <text class="blocks">订单号码</text>
-                    <text class="blocks-content">{{item.id}}</text>
+                    <text class="blocks-content fs13">{{item.id}}</text>
                 </view>
                 <view class="order-item">
                     <text class="blocks">客户姓名</text>
