@@ -13,7 +13,7 @@ Page({
     dialogVisible: false,
     totalCount: 0,
     saleList: [
-    ]
+    ],
   },
   getSaleList(status) {
       api.get('member/myGuarantee', {openId: wx.getStorageSync('openid')}).then(res => {
@@ -27,7 +27,7 @@ Page({
           list = res
         }
         this.setData({
-          saleList: list
+          saleList: list,
         })
       })
   },

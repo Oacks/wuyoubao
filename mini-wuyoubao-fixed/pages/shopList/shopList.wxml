@@ -1,6 +1,6 @@
 <!--pages/brand/brand.wxml-->
 <view class="container">
-    <navBar title="" back="{{true}}" home="{{false}}" bindback="onBack">
+    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#3EC755'}}" bindback="onBack">
         <view class="white barTitle" slot="center">品牌列表</view>
     </navBar>
     <view style="color:#555;">

@@ -1,40 +1,46 @@
 <!--pages/order/order.wxml-->
 <view class="container">
     <navBar title="" back="{{true}}" home="{{false}}" background="{{'#3EC755'}}" bindback="onBack">
-        <view class="white ml20 barTitle" slot="center">订单</view>
+        <view class="white ml20 barTitle" slot="center">我的报障</view>
     </navBar>
     <view class="order-container" hover-class="none" hover-stop-propagation="false">
         <form catchsubmit="formSubmit" catchreset="formReset">
+
             <view class="item-container">
                 <view class="item-title">
-                    <view class="item-title-word word-color">报障内容</view>
+                    报障内容
                 </view>
                 <view class="item-content">
                     <view class="content-title">保修合同号</view>
-                    <input disabled="{{true}}" class="content-input" value="{{form.contractNo}}" name="contractNo" placeholder="请填写" />
+                    <input disabled="{{true}}" placeholder-class="phcolor" class="content-input" value="{{form.contractNo}}" name="contractNo" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">车牌</view>
-                    <input disabled="{{true}}" class="content-input" value="{{form.licensePlate}}" name="licensePlate" placeholder="请填写" />
+                    <input disabled="{{true}}" placeholder-class="phcolor" class="content-input" value="{{form.licensePlate}}" name="licensePlate" placeholder="请填写" />
                 </view>
-                <view class="item-content">
-                    <view class="content-title">客户名</view>
-                    <input class="content-input" value="{{form.memberName}}" name="memberName" placeholder="请填写" />
-                </view>
-                <view class="item-content">
-                    <view class="content-title">联系电话</view>
-                    <input type="number" class="content-input" value="{{form.mobile}}" name="mobile" placeholder="请填写" />
-                </view>
+   
                 <view class="item-content">
                     <view class="content-title">4S店</view>
-                    <input class="content-input" bindtap="toSelectBrand" value="{{shopName}}" placeholder="请选择" />
+                    <input class="content-input" placeholder-class="phcolor" bindtap="toSelectBrand" disabled="{{true}}" value="{{shopName}}" placeholder="请选择" />
                 </view>
-                <view class="item-content">
-                    <view class="content-title">原因</view>
-                    <textarea class="content-input heightAuto" value="{{form.reason}}" name="reason" />
+      
+                
+                <!-- wx:if="{{ctrl == 'detail'}}" -->
+             
+            </view>
+
+            <view class="item-container">
+                <view class="item-title">
+                    故障原因
                 </view>
-                <view class="item-content">
-                    <view class="content-title">报障图片</view>
+                <view class="item-area-content">
+                    <textarea class="content-area" placeholder-class="phcolor" value="{{form.reason}}" name="reason" placeholder="请输入故障原因..."/>
+                </view>
+            </view>
+
+            <view class="item-container">
+                <view class="item-title">
+                    上传图片
                 </view>
                 <view class="pic-upload word-color">
                     <view class="pic-box">
@@ -42,12 +48,29 @@
                             <image class="pic-img" src="{{item}}">
                             </image>
                         </view>
-                        <view class="add-pic" wx:if="{{ctrl !== 'detail'}}" bindtap="uploadPic">+</view>
+                        <view class="add-btns">
+                            <view class="add-pic"  wx:if="{{ctrl !== 'detail' && form.picList.length < 4}}" bindtap="uploadPic"></view>
+                        </view>
                     </view>
                 </view>
-                <!-- wx:if="{{ctrl == 'detail'}}" -->
+            </view>
+
+            <view class="item-container">
                 <view class="item-title">
-                    <view class="item-title-word word-color">当前进度</view>
+                    联系方式
+                </view>
+                <view class="item-content">
+                    <view class="content-title">联系人</view>
+                    <input class="content-input" placeholder-class="phcolor" value="{{form.memberName}}" name="memberName" placeholder="请填写" />
+                </view>
+                <view class="item-content">
+                    <view class="content-title">联系电话</view>
+                    <input type="number" class="content-input" placeholder-class="phcolor" value="{{form.mobile}}" name="mobile" placeholder="请填写" />
+                </view>
+            </view>
+            <view class="item-container" wx:if="{{crtl == 'detail'}}">
+                <view class="item-title">
+                    办理进度
                 </view>
                 <view class="process-box">
                     <time-line list="{{logFile}}"></time-line>

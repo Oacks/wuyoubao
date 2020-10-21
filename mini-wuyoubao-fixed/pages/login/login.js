@@ -10,16 +10,15 @@ Page({
     mobile: '',
     code: '',
     canSend: true,
+    sendLater: 60,
+    mobileFocus: false,
+    codeFocus: false,
   },
   // 返回
   onBack() {
     wx.switchTab({
-      url: '/pages/user/user',
+      url: '/pages/index/index',
     });
-     // 跳到用户页面
-    // wx.navigateBack({
-    //   delta: 1
-    // })
   },
   mobileInput(e) {
     this.setData({
@@ -68,6 +67,17 @@ Page({
       })
     }, 60000)
   },
+  countDown(sec) {
+    if (sec === 0) {return}
+    let second = sec || 60
+    this.setData({
+      sendLater: second
+    })
+    setTimeout(() => {
+      let time = this.data.sendLater
+      this.countDown(time - 1)
+    }, 1000)
+  },
   getCode() {
     if(!this.data.canSend) {return}
     api.get('wx/getSms', {
@@ -94,6 +104,28 @@ Page({
       iv: iv,
     })
     api.login(this.requestPhone)
+  },
+  focusMobile () {
+    this.setTrue('mobileFocus')
+  },
+  blurMobile () {
+    this.setFalse('mobileFocus')
+  },
+  focusCode () {
+    this.setTrue('codeFocus')
+  },
+  blurCode () {
+    this.setFalse('codeFocus')
+  },
+  setTrue(tar) {
+    this.setData({
+      [tar]: true
+    })
+  },
+  setFalse(tar) {
+    this.setData({
+      [tar]: false
+    })
   },
   /**
    * 生命周期函数--监听页面加载

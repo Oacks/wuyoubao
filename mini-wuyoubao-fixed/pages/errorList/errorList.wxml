@@ -17,10 +17,18 @@
                 </view>
             </view>
             <view class="order-content word-color">
-                <view><text class="blocks">报障单号:</text>{{item.id}}</view>
-                <view><text class="blocks">客户名:</text>{{item.memberName}}</view>
-                <view><text class="blocks">订单状态:</text>{{format.getStatus(item.status)}}</view>
-                <view><text class="blocks">报障原因:</text>{{item.reason}}</view>
+                <view class="order-item">
+                    <text class="blocks">订单号码</text>
+                    <text class="blocks-content">{{item.id}}</text>
+                </view>
+                <view class="order-item">
+                    <text class="blocks">客户姓名</text>
+                    <text class="blocks-content">{{item.memberName}}</text>
+                </view>
+                <view class="order-item">
+                    <text class="blocks">订单状态</text>
+                    <text class="blocks-content">{{format.getStatus(item.status)}}</text>
+                </view>
             </view>
         </view>
     </view>

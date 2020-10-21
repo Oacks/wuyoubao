@@ -1,12 +1,12 @@
 <!-- 登录界面 -->
 <view class="container">
-    <navBar title="" back="{{true}}" home="{{false}}" bindback="onBack">
+    <navBar title="" back="{{true}}" home="{{false}}" background="{{'#3EC755'}}" bindback="onBack">
         <view class="white barTitle" slot="center">登录</view>
     </navBar>
     <view class="auth-page" style="color:#555;">
         <view class="login-title">
-            <image class="logo-cn" src="/images/logo.png"></image>
-            <image class="logo-en" src="/images/logo-en.png"></image>
+            <image class="logo-en" src="/images/ui/login-1.png"></image>
+            <view class="white-bg"></view>
         </view>
             
         <form class="login-form" catchsubmit="formSubmit" catchreset="formReset">
@@ -15,7 +15,7 @@
                     <view class="content-title">
                         <image class="content-icon" src="/images/icon/icon-mobile.png"></image>
                     </view>
-                    <input class="content-input" name="contractNo" placeholder="请输入手机号" bindinput="mobileInput"/>
+                    <input class="content-input {{mobileFocus ? 'active' : ''}}" bindblur="blurMobile" bindfocus="focusMobile" placeholder-class="phcolor" name="contractNo" placeholder="请输入手机号" bindinput="mobileInput"/>
                 </view>
             </view>
              <view class="item-container">
@@ -23,8 +23,8 @@
                     <view class="content-title">
                         <image class="content-icon" src="/images/icon/icon-checkcode.png"></image>
                     </view>
-                    <input class="content-input" name="contractNo" placeholder="请填写验证码" bindinput="codeInput"/>
-                    <view class="content-code {{canSend ? '': 'disabled'}}" catchtap="getCode">{{ canSend ? '获取验证码' : '稍后重新获取'}}</view>
+                    <input class="content-input {{codeFocus ? 'active' : ''}}" bindblur="blurCode"  bindfocus="focusCode"  name="code" placeholder-class="phcolor" placeholder="请输入验证码" bindinput="codeInput"/>
+                    <view class="content-code {{canSend ? '': 'disabled'}}" catchtap="getCode">{{ canSend ? '获取验证码' : (sendLater + 's后重发')}}</view>
                 </view>
             </view>
             <view class="login-btn" bindtap="login">登 录</view>

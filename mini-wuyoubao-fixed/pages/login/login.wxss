@@ -5,25 +5,31 @@
 
 .login-title {
     position: relative;
-    height: 46px;
-    margin-top: 60px;
-}
-
-.logo-cn,.logo-en {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-.logo-cn {
-    top: 0;
-    width: 80px;
-    height: 30px;
+    height: 476rpx;
+    width: 100%;
+    background-color: #3EC755;
 }
 
 .logo-en {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.white-bg {
+    background-color: #fff;
+    height: 168rpx;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
     bottom: 0;
-    width: 80px;
-    height: 16px;
+}
+
+.logo-en {
+    width: 900rpx;
+    height: 750rpx;
+    bottom: 0;
 }
 
 .login-title {
@@ -73,6 +79,10 @@
 
 }
 
+.content-input.active {
+    border-bottom: 1px solid #3EC755;
+}
+
 .content-code {
     position: absolute;
     z-index: 999;
@@ -84,16 +94,8 @@
     text-align: center;
     right: 0;
     display: inline-block;
-    border: 1px solid #ccc;
     border-radius: 5px;
-}
-
-.item-title {
-    width: 100%;
-    overflow: hidden;
-    background-color: #5cbd41;
-    height: 36px;
-    border-bottom: 1px solid #eee;
+    color: #3EC755;
 }
 
 .disabled {
@@ -101,15 +103,19 @@
     background-color: #eee;
 }
 
+.phcolor {
+    color: #ACACAC;
+}
+
 .login-btn {
-    width: 320px;
-    margin: 20px auto;
+    margin: 60rpx auto;
     color: #fff;
-    height: 40px;
     font-size: 16px;
-    line-height: 40px;
-    border-radius: 3px;
-    background-color: #6fde51;
+    line-height: 100rpx;
+    width: 566rpx;
+    height: 100rpx;
+    background: #3EC755;
+    border-radius: 20rpx;
 }
 
 .header {

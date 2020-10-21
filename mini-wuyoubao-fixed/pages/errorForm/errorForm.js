@@ -39,7 +39,8 @@ Page({
     uploadOperate: '',
     formDataCopy: {},
     uploadToken: '',
-    logFile: [],
+    logFile: [
+    ],
     shopName: '',
     // 详情返回的字段
     form: {
@@ -184,7 +185,7 @@ Page({
   uploadPic() {
       var _this = this
       wx.chooseImage({
-        count: 9, // 默认9  
+        count: 1, // 默认9  
         sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
         sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有  
         success: function(res) {

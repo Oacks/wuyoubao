@@ -1,11 +1,20 @@
 <view class="line-box">
     <view class="process-con" wx:for="{{list}}">
-        <view class="process-time">时间：{{item.processingTime ? item.processingTime : ''}}</view>
-        <view class="process-remark">处理记录：{{item.remark ? item.remark : ''}}</view>
-        <view class="process-pic">
-            <image class="pic-box" src="{{pic.picUrl}}" bindtap="bigPic" wx:for="{{item.files}}" 
-            wx:for-item="pic" data-url="{{pic.picUrl}}" >
-            </image>
+        <view class="icon-box">
+            <view class="round"></view>
+            <view class="line"></view>
+        </view>
+        <view class="content-box">
+            <view class="process-title">
+                {{item.title}}
+            </view>
+            <view class="process-remark">{{item.remark ? item.remark : ''}}</view>
+            <view class="process-pic">
+                <image class="pic-box" src="{{pic.picUrl}}" bindtap="bigPic" wx:for="{{item.files}}" 
+                wx:for-item="pic" data-url="{{pic.picUrl}}" >
+                </image>
+            </view>
+            <view class="process-time">{{item.processingTime ? item.processingTime : ''}}</view>
         </view>
     </view>
 </view>

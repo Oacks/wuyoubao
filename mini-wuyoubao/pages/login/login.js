@@ -19,9 +19,6 @@ Page({
     wx.switchTab({
       url: '/pages/index/index',
     });// 跳到用户页面
-    // wx.navigateBack({
-    //   delta: 1
-    // })
   },
   mobileInput(e) {
     this.setData({
