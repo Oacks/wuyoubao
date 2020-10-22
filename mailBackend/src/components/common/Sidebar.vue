@@ -70,7 +70,7 @@ export default {
                 {
                     icon: 'el-icon-lx-present',
                     index: 'card',
-                    title: '无忧宝卡管理'
+                    title: '无忧保卡管理'
                 },
                 {
                     icon: 'el-icon-lx-vipcard',

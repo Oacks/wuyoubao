@@ -131,7 +131,7 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button v-if="operate == 'create'" type="primary" @click="save">新 建</el-button>
-                <el-button v-if="operate == 'edit'" type="primary" @click="save">编 辑</el-button>
+                <el-button v-if="operate == 'detail'" type="primary" @click="save">编 辑</el-button>
             </span>
         </el-dialog>
         <el-dialog
@@ -306,6 +306,8 @@ export default {
                 this.operate = 'detail'
                 this.mapCenter = [res.lng, res.lat]
                 this.form = res
+                this.brandPic = res.url
+                this.form.brandPic = res.url
                 this.openDialog()
                 this.$nextTick(() => {
                     this.$refs.upload.clearPic()
@@ -352,7 +354,6 @@ export default {
                 })
             }
             if (this.operate == 'detail') {
-                delete params.password
                 updateShop(params).then(res => {
                     if (res) {
                         this.$message.success({message: '修改成功',});

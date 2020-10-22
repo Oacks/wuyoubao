@@ -375,7 +375,7 @@ export default {
                 },
                 {
                     value: '2',
-                    label: '受理中'
+                    label: '受理审核中'
                 },
                 {
                     value: '3',

@@ -157,30 +157,7 @@ Page({
       success () {
         //session_key 未过期，并且在本生命周期一直有效
         let sessionKey = wx.getStorageSync('sessionKey');
-        if (!sessionKey) {
           that.login()
-        }
-        // 获取配置
-        wx.getSetting({
-          success: (res)=>{
-            if (res.authSetting['scope.userInfo']) {
-              wx.getUserInfo({
-                success: function (res) {
-                  that.setData({
-                    hasInfo: true,
-                    avatar: res.userInfo.avatarUrl,
-                    username: res.userInfo.nickName
-                  })
-                }
-              })
-            }
-            else {
-              that.setData({
-                hasInfo: false
-              })
-            }
-          },
-        });
       },
       fail () {
         console.log('session_key 已经失效，需要重新执行登录流程');
@@ -204,6 +181,44 @@ Page({
   },
 
   // 登录接口
+  bindGetUserInfo: function (e) {
+    if (e.detail.userInfo) {
+        //用户按了允许授权按钮
+        var that = this;
+        //插入登录的用户的相关信息到数据库
+        let {signature, rawData, encryptedData, iv} = e.detail
+        if (this.data.mobile) {
+          return
+        }
+        wx.navigateTo({
+          url: '/pages/login/login',
+        });
+        if (!wx.getStorageSync('sessionKey') || !that.data.mobile){return}
+        api.post('wx/member/getUserInfo', {
+          signature: signature,
+          rawData: rawData,
+          encryptedData: encryptedData,
+          iv: iv,
+          mobile: that.data.mobile,
+          sessionKey: wx.getStorageSync('sessionKey'),
+        }).then(res => {
+          console.log("getuserinfo成功！");
+        })
+      } else {
+        //用户按了拒绝按钮
+        wx.showModal({
+            title:'警告',
+            content:'您点击了拒绝授权，将无法执行用户操作!',
+            showCancel:false,
+            confirmText:'返回授权',
+            success:function(res){
+                if (res.confirm) {
+                    console.log('用户点击了“返回授权”')
+                } 
+            }
+        })
+    }
+  },
     // 登录
     login (callback) {
       let self = this
@@ -234,7 +249,6 @@ Page({
           wx.setStorageSync('sessionKey', res.session_key);
         }
         wx.setStorageSync('openid', res.openId);
-        app.sessionKey = res.session_key
         wx.hideLoading();
   
         self.checkAuthorization()

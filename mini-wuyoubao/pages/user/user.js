@@ -102,7 +102,6 @@ Page({
     let self = this
     api.post('wx/sale/login', {code: code}).then((res) => {
       wx.setStorageSync('sessionKey', res.session_key);
-      app.sessionKey = res.session_key
       wx.hideLoading();
 
       self.checkAuthorization()

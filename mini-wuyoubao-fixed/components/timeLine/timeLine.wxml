@@ -9,7 +9,7 @@
                 {{item.title}}
             </view>
             <view class="process-remark">{{item.remark ? item.remark : ''}}</view>
-            <view class="process-pic">
+            <view class="process-pic" wx:if="{{item.files.length}}">
                 <image class="pic-box" src="{{pic.picUrl}}" bindtap="bigPic" wx:for="{{item.files}}" 
                 wx:for-item="pic" data-url="{{pic.picUrl}}" >
                 </image>

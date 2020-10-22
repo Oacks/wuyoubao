@@ -31,17 +31,12 @@ Page({
     })
   },
   login () {
+    let that = this
     api.post('wx/loginByMobile', {
       mobile: this.data.mobile,
       code: this.data.code,
       type: '0' // 销售0 用户1
     }).then(res => {
-      let that = this
-      let pages = getCurrentPages(); //获取当前页面js里面的pages里的所有信息。
-      let prevPage = pages[ pages.length - 2 ];  
-      prevPage.setData({  // 将我们想要传递的参数在这里直接setData。上个页面就会执行这里的操作。
-        mobile : this.data.mobile
-      })
       wx.setStorageSync('mobile', this.data.mobile);
       wx.showToast({
         title: '登录成功',
@@ -49,13 +44,67 @@ Page({
         duration: 1500,
         mask: false,
       });
-      
+      this.wxlogin()
       setTimeout(() => {
-        that.onBack()
+        this.onBack()
       }, 1000)
       console.log(res);
     })
   },
+  wxlogin (callback) {
+    let self = this
+    wx.showLoading()
+    wx.login({
+      success (res) {
+        console.log(res)
+        if (res.code) {
+          // 登录成功，获取用户信息
+          self.backendLogin(res.code)
+          wx.hideLoading();
+        } else {
+        }
+      },
+      fail () {
+      }
+    })
+  },
+  backendLogin(code) {
+    let self = this
+    api.post('wx/sale/login', {code: code}).then((res) => {
+      wx.setStorageSync('sessionKey', res.session_key);
+      wx.hideLoading();
+
+      self.checkAuthorization()
+    })
+  },
+  // 查询授权
+  checkAuthorization() {
+      let that = this
+      wx.getSetting({
+        success: function (res) {
+            if (res.authSetting['scope.userInfo']) {
+                wx.getUserInfo({
+                    success: function (res) {
+                      let {signature, rawData, encryptedData, iv} = res
+                      // let sessionKey = wx.getStorageSync('sessionKey')
+                      api.post('wx/sale/getSalerInfo', {
+                        signature: signature,
+                        rawData: rawData,
+                        encryptedData: encryptedData,
+                        iv: iv,
+                        mobile: wx.getStorageSync('mobile'),
+                        sessionKey: wx.getStorageSync('sessionKey'),
+                      }).then((res) => {
+                        if (res && res.openId) {wx.setStorageSync('openid', res.openId);}
+                      }).catch((error) => {
+                        console.log(error);
+                      })
+                    }
+                });
+            }
+        }
+      })
+    },
   sendCodeLater() {
     let that = this
     this.setData({

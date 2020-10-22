@@ -149,7 +149,6 @@ Page({
     let self = this
     api.post('wx/sale/login', {code: code}).then((res) => {
       wx.setStorageSync('sessionKey', res.session_key);
-      app.sessionKey = res.session_key
       wx.hideLoading();
 
       self.checkAuthorization()
@@ -163,10 +162,6 @@ Page({
           if (res.authSetting['scope.userInfo']) {
               wx.getUserInfo({
                   success: function (res) {
-                    that.setData({
-                      avatar: res.userInfo.avatarUrl,
-                      username: res.userInfo.nickName
-                    })
                     let {signature, rawData, encryptedData, iv} = res
                     let sessionKey = wx.getStorageSync('sessionKey')
                     console.log(sessionKey);
@@ -180,9 +175,6 @@ Page({
                       sessionKey: sessionKey,
                     }).then((res) => {
                       if (res && res.openId) {wx.setStorageSync('openid', res.openId);}
-                      if (that.data.raceList.length == 0) {
-                        that.getList()
-                      }
                     }).catch((error) => {
                       console.log(error);
                     })
@@ -198,35 +190,16 @@ Page({
       this.checkAuthorization()
     }
     let that = this
+    
     // 查看是否授权
     wx.checkSession({
       success () {
         //session_key 未过期，并且在本生命周期一直有效
         let sessionKey = wx.getStorageSync('sessionKey');
-        if (!sessionKey) {
-          that.login()
-        }
-        // 获取配置
-        wx.getSetting({
-          success: (res)=>{
-            if (res.authSetting['scope.userInfo']) {
-              wx.getUserInfo({
-                success: function (res) {
-                  that.setData({
-                    hasInfo: true,
-                    avatar: res.userInfo.avatarUrl,
-                    username: res.userInfo.nickName
-                  })
-                }
-              })
-            }
-            else {
-              that.setData({
-                hasInfo: false
-              })
-            }
-          },
-        });
+        // if (!sessionKey) {
+           that.login() // 获取wx-token
+        // }
+   
       },
       fail () {
         console.log('session_key 已经失效，需要重新执行登录流程');

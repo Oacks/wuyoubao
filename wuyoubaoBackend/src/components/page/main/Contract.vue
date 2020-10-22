@@ -224,11 +224,11 @@
                   
 
                     <el-row :gutter="20">
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <el-form-item label="延保起期：">
                                 {{(detailInfo.startTime)}}
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="12">
                             <el-form-item label="行驶里程：">
                                 {{(detailInfo.mileage)}}
@@ -249,7 +249,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row :gutter="20">
+                    <!-- <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="合同图片：">
                                 <div class="pic-list">
@@ -262,7 +262,7 @@
                                 </div>
                             </el-form-item>
                         </el-col>
-                    </el-row>
+                    </el-row> -->
                 </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -373,6 +373,10 @@ export default {
                 // 12保单确认
                 // 3未启保
                 {
+                    value: '',
+                    label: '全部'
+                },
+                {
                     value: '0',
                     label: '申请'
                 },
@@ -382,7 +386,7 @@ export default {
                 },
                 {
                     value: '2',
-                    label: '受理中'
+                    label: '受理审核中'
                 },
                 {
                     value: '3',
@@ -447,6 +451,7 @@ export default {
             link.click();
         },
         getStatus(status) {
+            if (status === '') {return ''} 
             for (let i = 0; i < this.statusOpt.length; i++) {
                 const element = this.statusOpt[i];
                 if (status == element.value) {

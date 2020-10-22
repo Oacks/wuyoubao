@@ -139,7 +139,6 @@ Page({
         wx.setStorageSync('sessionKey', res.session_key);
       }
       wx.setStorageSync('openid', res.openId);
-      app.sessionKey = res.session_key
       wx.hideLoading();
 
       self.checkAuthorization()
