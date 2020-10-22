@@ -148,9 +148,6 @@ Page({
         mobile: wx.getStorageSync('mobile')
       })
     }
-    if (wx.getStorageSync('sessionKey')) {
-      this.checkAuthorization()
-    }
     let that = this
     // 查看是否授权
     wx.checkSession({
@@ -251,7 +248,7 @@ Page({
         wx.setStorageSync('openid', res.openId);
         wx.hideLoading();
   
-        self.checkAuthorization()
+        // self.checkAuthorization()
       })
     },
     // 查询授权
@@ -262,14 +259,8 @@ Page({
             if (res.authSetting['scope.userInfo']) {
                 wx.getUserInfo({
                   success: function (res) {
-                    that.setData({
-                      avatar: res.userInfo.avatarUrl,
-                      username: res.userInfo.nickName
-                    })
                     let {signature, rawData, encryptedData, iv} = res
                     let sessionKey = wx.getStorageSync('sessionKey')
-                    console.log(sessionKey);
-                    console.log(that.data.mobile);
                     if (!sessionKey || !that.data.mobile) {return}
                     api.post('wx/member/getUserInfo', {
                       signature: signature,

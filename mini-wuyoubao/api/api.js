@@ -15,6 +15,8 @@ const request = (url, options) => {
                   let token = request.header['wx-token']
                   wx.setStorageSync('wx-token', token)
                 }
+                console.log('http data' + url);
+                console.log(request.data);
                if (request.data && request.data.code == 1) {
                    resolve(request.data.data)
                } else {

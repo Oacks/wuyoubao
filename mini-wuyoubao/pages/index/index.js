@@ -151,7 +151,7 @@ Page({
       wx.setStorageSync('sessionKey', res.session_key);
       wx.hideLoading();
 
-      self.checkAuthorization()
+      // self.checkAuthorization()
     })
   },
    // 查询授权

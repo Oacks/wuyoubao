@@ -210,6 +210,16 @@ Page({
       createTime: this.formatTime(this.data.createTime), // 延保销售日期
       // startTime: this.formatTime(this.data.startTime), // 延保起期
     }
+    if (!params.projectId) {
+      wx.showToast({
+        title: '当前车价没有对应的定价，请修改车价',
+        icon: 'none',
+        image: '',
+        duration: 1500,
+        mask: false,
+      });
+      return
+    }
     let valid = await this.validate(params)
     if (!valid) {return}
     api.post('sale/createContract', params).then(res => {
@@ -284,7 +294,16 @@ Page({
       status: '0',
       // startTime: this.formatTime(this.data.startTime), // 延保起期
     }
-    console.log(params);
+    if (!params.projectId) {
+      wx.showToast({
+        title: '当前车价没有对应的定价，请修改车价',
+        icon: 'none',
+        image: '',
+        duration: 1500,
+        mask: false,
+      });
+      return
+    }
     let valid = await this.validate(params)
     if (!valid) {return}
     api.post('sale/updateContract', params).then(res => {
