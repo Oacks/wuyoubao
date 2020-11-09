@@ -270,7 +270,15 @@ Page({
         oldEndTime,
         createTime,
         projectId,
-        startTime,} = res
+        startTime,
+        picList} = res
+        let handlePicList = []
+        for (let i = 0; i < picList.length; i++) {
+          const element = picList[i];
+          if (element.type) {
+            handlePicList[Number(element.type)] = element
+          }
+        }
       let form = {
         contractNo: contractNo,
         memberName: memberName,
@@ -283,7 +291,9 @@ Page({
         mileage: mileage,
         vehicle: vehicle,
         insurancePrice: price,
+        picList: handlePicList
       }
+      console.log(picList);
       let insuranceNo = 0
       for (let i = 0; i < this.data.insuranceOpt.length; i++) {
         const element = this.data.insuranceOpt[i];

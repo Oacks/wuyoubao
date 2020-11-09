@@ -190,3 +190,8 @@ export const delUser = query => {
 export const userList = query => {
     return get('user/userList', query)
 }
+
+
+export const eportData = query => {
+    return get('yzht/eportData', query)
+}

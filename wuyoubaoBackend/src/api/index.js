@@ -78,6 +78,11 @@ export const getLineContract = query => {
     return get('wyht/getLineContract', query)
 } 
 
+// 获取发卡申请合同详情
+export const countLine = query => {
+    return get('wyht/countLine', query)
+} 
+
 // 发卡申请
 export const addLine = query => {
     return post('wyht/addLine', query)

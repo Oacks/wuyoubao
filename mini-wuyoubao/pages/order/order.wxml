@@ -25,13 +25,13 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">联系电话</view>
-                    <input class="content-input" disabled="{{id && orderStatus != '1'}}" placeholder-class="phcolor" value="{{form.mobile}}" name="mobile" placeholder="请填写"  bindinput="mobileInput"/>
+                    <input class="content-input" type="number" disabled="{{id && orderStatus != '1'}}" placeholder-class="phcolor" value="{{form.mobile}}" name="mobile" placeholder="请填写"  bindinput="mobileInput"/>
                     <view class="content-code {{canSend ? '': 'disabled'}}"  
-                    wx:if="{{!id}}" catchtap="getCode">{{ canSend ? '获取验证码' : (sendLater + 's后重发')}}</view>
+                    wx:if="{{!id}}" bindtap="getCode">{{ canSend ? '获取验证码' : (sendLater + 's后重发')}}</view>
                 </view>
                 <view class="item-content" wx:if="{{!id}}">
                     <view class="content-title">验证码</view>
-                    <input class="content-input" placeholder-class="phcolor" value="{{form.code}}" name="code" placeholder="请填写" />
+                    <input class="content-input"  type="number" placeholder-class="phcolor" value="{{form.code}}" name="code" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">联系地址</view>
@@ -80,10 +80,7 @@
                         <input class="content-input" disabled="{{true}}" placeholder-class="phcolor" value="{{oldEndTime}}" placeholder="请选择" />
                     </picker>
                 </view>
-                <!-- <view class="item-content">
-                    <view class="content-title">保修长度</view>
-                    <input class="content-input" name="input" placeholder="原厂保修起始长度" />
-                </view> -->
+             
                 <view class="item-content">
                     <view class="content-title">车架号(VIN)</view>
                     <input class="content-input" disabled="{{id && orderStatus != '1'}}" placeholder-class="phcolor" name="vin" value="{{form.vin}}" placeholder="请填写" />
@@ -125,39 +122,135 @@
                 </view> -->
                 <view class="item-content">
                     <view class="content-title">延保销售价</view>
-                    <input class="content-input" disabled="{{id && orderStatus != '1'}}" placeholder-class="phcolor-yuan"  name="price" value="{{insurancePrice}}" placeholder="¥" />
+                    <input class="content-input"  type="number" disabled="{{id && orderStatus != '1'}}" placeholder-class="phcolor-yuan"  name="price" value="{{insurancePrice}}" placeholder="¥" />
                 </view>
-                <!-- <view class="item-content">
-                    <view class="content-title">延保方案</view>
-                    <input class="content-input" name="input" placeholder="请填写" />
-                </view> -->
-                <!-- <view class="item-content">
-                    <view class="content-title">延保起期</view>
-                    <picker class="content-input" mode="date" value="{{startTime}}" start="2000-09-01" end="2040-01-01" bindchange="bindStartTimeChange">
-                        <view class="content-input">
-                            {{startTime}}
-                        </view>
-                    </picker>
-                </view> -->
-                <!-- <view class="item-content">
-                    <view class="content-title">保障范围</view>
-                    <input class="content-input" name="input" placeholder="原厂保修起始长度" />
-                </view> -->
-                <!-- <view class="item-content">
-                    <view class="content-title">延保止期</view>
-                    <input class="content-input" name="input" placeholder="请填写" value="延长原厂保修期至 6 年/ 15万公里（以先到者为准）"/>
-                </view> -->
+            
                 <view class="item-content">
                     <view class="content-title">行驶里程</view>
                     <input class="content-input" disabled="{{id && orderStatus != '1'}}" type="number" placeholder-class="phcolor" name="mileage" value="{{form.mileage}}"  placeholder="延保销售时行驶里程" />
                 </view>
             </view>
 
-            <!-- <view class="item-container">
+            <view class="item-container">
                 <view class="item-title">
-                    <view class="item-title-word word-color">礼包金额</view>
+                    <view class="item-title-word word-color">身份证正面</view>
                 </view>
-            </view> -->
+                <view>
+                    <view class="pic-upload word-color">
+                    <view class="pic-box">
+                        <view class="pic-item" wx-if="{{form.picList[0].pic}}" bindtap="previewPic" data-url="{{form.picList[0].pic}}">
+                            <image class="pic-img" src="{{form.picList[0].pic}}">
+                            </image>
+                        </view>
+                        <view class="add-btns">
+                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1') && !form.picList[0] }}" bindtap="uploadPic" data-listno="{{0}}"></view>
+                        </view>
+                    </view>
+                </view>
+                </view>
+            </view>
+            <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">身份证反面</view>
+                </view>
+                <view>
+                    <view class="pic-upload word-color">
+                    <view class="pic-box">
+                        <view class="pic-item" wx-if="{{form.picList[1].pic}}" bindtap="previewPic" data-url="{{form.picList[1].pic}}">
+                            <image class="pic-img" src="{{form.picList[1].pic}}">
+                            </image>
+                        </view>
+                        <view class="add-btns">
+                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1')  && !form.picList[1] }}" bindtap="uploadPic" data-listno="{{1}}"></view>
+                        </view>
+                    </view>
+                </view>
+                </view>
+            </view>
+            <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">行驶证正页</view>
+                </view>
+                <view>
+                    <view class="pic-upload word-color">
+                    <view class="pic-box">
+                        <view class="pic-item" wx-if="{{form.picList[2].pic}}" bindtap="previewPic" data-url="{{form.picList[2].pic}}">
+                            <image class="pic-img" src="{{form.picList[2].pic}}">
+                            </image>
+                        </view>
+                        <view class="add-btns">
+                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1') && !form.picList[2] }}" bindtap="uploadPic" data-listno="{{2}}"></view>
+                        </view>
+                    </view>
+                </view>
+                </view>
+            </view>
+            <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">车身（车头）照片</view>
+                </view>
+                <view>
+                    <view class="pic-upload word-color">
+                    <view class="pic-tips">
+                    提示：牌照无遮挡，开启大灯
+                    </view>
+
+                    <view class="pic-box">
+                        <view class="pic-item" wx-if="{{form.picList[3].pic}}" bindtap="previewPic" data-url="{{form.picList[3].pic}}">
+                            <image class="pic-img" src="{{form.picList[3].pic}}">
+                            </image>
+                        </view>
+                        <view class="add-btns">
+                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1') && !form.picList[3] }}" bindtap="uploadPic" data-listno="{{3}}"></view>
+                        </view>
+                    </view>
+                </view>
+                </view>
+            </view>
+            <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">车身（车尾）照片</view>
+                </view>
+                <view>
+                    <view class="pic-upload word-color">
+                    <view class="pic-tips">
+                    提示：牌照无遮挡，开启大灯
+                    </view>
+                    <view class="pic-box">
+                        <view class="pic-item" wx-if="{{form.picList[4].pic}}" bindtap="previewPic" data-url="{{form.picList[4].pic}}">
+                            <image class="pic-img" src="{{form.picList[4].pic}}">
+                            </image>
+                        </view>
+                        <view class="add-btns">
+                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1')  && !form.picList[4] }}" bindtap="uploadPic" data-listno="{{4}}"></view>
+                        </view>
+                    </view>
+                </view>
+                </view>
+            </view>
+
+            <view class="item-container">
+                <view class="item-title">
+                    <view class="item-title-word word-color">仪表盘照片</view>
+                </view>
+                <view>
+                    <view class="pic-upload word-color">
+                    <view class="pic-tips">
+                        提示1、仪表盘全景，2、点火启动里程数，3、里程数不遮挡
+                    </view>
+                    <view class="pic-box">
+                        <view class="pic-item" wx-if="{{form.picList[5].pic}}" bindtap="previewPic" data-url="{{form.picList[5].pic}}">
+                            <image class="pic-img" src="{{form.picList[5].pic}}">
+                            </image>
+                        </view>
+                        <view class="add-btns">
+                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1')  && !form.picList[5] }}" bindtap="uploadPic" data-listno="{{5}}"></view>
+                        </view>
+                    </view>
+                </view>
+                </view>
+            </view>
+
             <button wx-if="{{!id}}" class='custom-btn' type="primary" formType="submit" data-operate="create">
                 提 交
             </button>

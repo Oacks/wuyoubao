@@ -175,7 +175,8 @@ export default {
             this.openDialog()
         },
         
-        handlePageChange() {
+        handlePageChange(page) {
+            this.page.no = page
             this.getData()
         },
         getData() {

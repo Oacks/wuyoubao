@@ -1,6 +1,10 @@
 <template>
 <div class="contract-box">
-    <div id="contract-info">
+    <div id="contract-info" 
+    v-loading="loading"
+    element-loading-text="图片生成中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.3)">
         <div class="title">
             无忧保汽车延长保修服务礼包
         </div>
@@ -161,7 +165,9 @@
 
 <script>
 import { 
+    uploadToken
  } from '../../../api/index';
+import * as qiniu from 'qiniu-js';
 import {uniqBy, cloneDeep} from 'lodash';
 import html2canvas from 'html2canvas';
 import { MCanvas } from 'mcanvas'
@@ -182,56 +188,78 @@ export default {
     },
     data() {
         return {
-           b64: ''
+           b64: '',
+           loading: false,
         };
     },
     mounted() {
         let that = this
-        html2canvas(document.querySelector('#contract-info'), {
-            width: '700',
-            height: '1000'
-        }).then(function(canvas) {
-                let oImg = new Image();
-                oImg.src = canvas.toDataURL();  // 导出图片
-                if (that.status == 4) {
-                    that.b64 = oImg.src
-                    return
-                }
-            // document.querySelector('#contract-pic').appendChild(oImg);  // 将生成的图片添加到body
-            // document.querySelector('#contract-pic').appendChild(canvas);
-            that.stamp(oImg.src)
-        })
     },
     methods: {
-        async stamp (url) {
+        createPic(target) {
+            this.target = target
+            this.loading = true
+            this.b64 = '' // 先置空
+            let that = this
+            html2canvas(document.querySelector('#contract-info'), {
+                width: '700',
+                height: '1000',
+                scale: 1
+            }).then(function(canvas) {
+                let oImg = new Image();
+                oImg.src = canvas.toDataURL();  // 导出图片
+                that.stamp(oImg.src, target)
+            })
+        },
+        async stamp (url, target) {
             const mc = new MCanvas({
-                width: 700,
-                height: 1000,
+                width: '700px',
+                height: '100px',
                 backgroundColor: 'white',
             });
 
             // background : 准备底图；提供多种模式
             mc.background(url,{
-                left: 0,
-                top: 0,
+                left: '0px',
+                top: '0px',
                 color: '#fff',
                 type: 'origin',
             })
-          
             // add 添加图片素材基础函数；
-            mc.add('http://storage.sankinetwork.com/wuyoubao-mail-post.png',{
-                width: 200,
-                height: 30,
+            await mc.add('http://storage.sankinetwork.com/wuyoubao-mail-post.png?imageView2/0/w/300/h/200',{
+                width: '200px',
+                height: '100px',
                 pos: {
-                    x: 300,
-                    y: 488,
-                    scale: 1,
-                    rotate: 0,
+                    x: '300px',
+                    y: '490px',
                 },
             })
             const b64 = await mc.draw({});
             this.b64 = b64
-        }
+            this.loading = false
+        },
+        setImage(e){
+            uploadToken().then(token => {
+                let that = this
+                function putb64(b64, token){
+                    let firstIndex = b64.indexOf(',')
+                    let str = b64.substr(firstIndex+1)
+                    var url = "https://upload-z2.qiniup.com/putb64/-1/"; //非华东空间需要根据注意事项 1 修改上传域名
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange=function(){
+                        if (xhr.readyState==4){
+                            let key = JSON.parse(xhr.responseText).key
+                            that.$emit('getApprovalUrl', key)
+                        }
+                    }
+                    xhr.open("POST", url, true);
+                    xhr.setRequestHeader("Content-Type", "application/octet-stream");
+                    xhr.setRequestHeader("Authorization", "UpToken " + token);
+                    xhr.send(str);
+                }
+                putb64(this.b64, token)
+            })
+        },
     }
 };
 </script>
@@ -241,6 +269,8 @@ export default {
         position: relative;
         width: 700px;
         .stamp-pic {
+            width: 700px;
+            height: 1000px;
             position: absolute;
             top: 0;
         }

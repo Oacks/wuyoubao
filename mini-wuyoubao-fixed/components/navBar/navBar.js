@@ -10,12 +10,12 @@ Component({
     },
     background: {
       type: String,
-      value: '#191919',
+      value: '#3EC755',
       observer: '_showChange'
     },
     backgroundColorTop: {
       type: String,
-      value: '#191919',
+      value: '#3EC755',
       observer: '_showChangeBackgroundColorTop'
     },
     color: {

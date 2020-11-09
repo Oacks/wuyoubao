@@ -17,6 +17,7 @@ Page({
     previousmargin: '0',//前边距
     nextmargin: '0',//后边距
     mobile: '',
+    userName: '',
   },
 
   swiperChange: function (e) {
@@ -91,12 +92,12 @@ Page({
         var that = this;
         //插入登录的用户的相关信息到数据库
         let {signature, rawData, encryptedData, iv} = e.detail
-        if (this.data.mobile) {
-          return
-        }
         wx.navigateTo({
           url: '/pages/login/login',
         });
+        if (this.data.mobile) {
+          return
+        }
         if (!wx.getStorageSync('sessionKey') || !that.data.mobile){return}
         api.post('wx/sale/getSalerInfo', {
           signature: signature,
@@ -114,7 +115,7 @@ Page({
             title:'警告',
             content:'您点击了拒绝授权，将无法执行用户操作!',
             showCancel:false,
-            confirmText:'返回授权',
+            confirmText:'确定',
             success:function(res){
                 if (res.confirm) {
                     console.log('用户点击了“返回授权”')
@@ -150,6 +151,9 @@ Page({
     api.post('wx/sale/login', {code: code}).then((res) => {
       wx.setStorageSync('sessionKey', res.session_key);
       wx.hideLoading();
+      this.setData({
+        userName: res.memberName
+      })
 
       // self.checkAuthorization()
     })

@@ -47,6 +47,8 @@
             </el-table-column> -->
             <el-table-column prop="description" label="描述">
             </el-table-column>
+            <el-table-column prop="stock" label="库存">
+            </el-table-column>
             <el-table-column label="操作" width="180">
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
@@ -187,7 +189,8 @@ export default {
             }
             this.openDialog()
         },
-        handlePageChange() {
+        handlePageChange(page) {
+            this.page.no = page
             this.getData()
         },
         getData() {

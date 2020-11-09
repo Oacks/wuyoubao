@@ -95,6 +95,7 @@ Page({
       memberName,
       mobile,
       reason,
+      shopName
       } = form
     let params = {
       contractNo:contractNo,
@@ -102,11 +103,22 @@ Page({
       memberName:memberName,
       mobile:mobile,
       reason:reason,
-      shopName:this.data.shopName,
+      // shopName:this.data.shopName, // 选择店名
+      shopName: shopName,
       picList:this.data.form.picList || [],
     }
-    let valid = await this.validate(params)
-    if (!valid) {return}
+    // let valid = await this.validate(params)
+    // if (!valid) {return}
+    if (!params.reason) {
+      wx.showToast({
+        title: '请填写故障原因',
+        icon: 'none',
+        image: '',
+        duration: 1500,
+        mask: false,
+      });
+      return
+    }
     api.post('member/createGuarantee', params).then(res => {
       // 打开重选列表
       wx.showToast({
@@ -166,7 +178,9 @@ Page({
         mobile:res.mobile,
         reason: res.reason,
         picList: picList,
+        shopName: res.shopName,
       }
+      console.log(form);
       this.setData({
         form: form,
         shopName: res.shopName,
@@ -242,6 +256,7 @@ Page({
         'form.licensePlate': form.licensePlate,
         'form.memberName': form.memberName,
         'form.mobile': form.mobile,
+        'form.shopName': form.shopName,
       })
 
     }

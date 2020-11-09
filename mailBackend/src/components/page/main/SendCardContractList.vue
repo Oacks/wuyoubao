@@ -78,11 +78,11 @@
                     {{scope.row.status == 1  ? '激活' : '注销'}}
                 </template> -->
             </el-table-column>
-            <el-table-column prop="status" label="合同状态">
+            <!-- <el-table-column prop="status" label="合同状态">
                  <template slot-scope="scope">
                     {{getStatus(scope.row.status)}}
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop="price" label="合同金额">
             </el-table-column>
 
@@ -221,11 +221,11 @@
                   
 
                     <el-row :gutter="20">
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <el-form-item label="延保起期：">
                                 {{(detailInfo.startTime)}}
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="12">
                             <el-form-item label="行驶里程：">
                                 {{(detailInfo.mileage)}}
@@ -246,7 +246,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row :gutter="20">
+                    <!-- <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="合同图片：">
                                 <div class="pic-list">
@@ -258,7 +258,7 @@
                                 </div>
                             </el-form-item>
                         </el-col>
-                    </el-row>
+                    </el-row> -->
                 </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -447,7 +447,8 @@ export default {
         search() {
             this.getData()
         },
-        handlePageChange() {
+        handlePageChange(page) {
+            this.page.no = page
             this.getData()
         },
         // 获取发卡申请合同详情

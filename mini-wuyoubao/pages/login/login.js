@@ -87,6 +87,7 @@ Page({
                     success: function (res) {
                       let {signature, rawData, encryptedData, iv} = res
                       // let sessionKey = wx.getStorageSync('sessionKey')
+                      if (!wx.getStorageSync('sessionKey') || !wx.getStorageSync('mobile')) {return}
                       api.post('wx/sale/getSalerInfo', {
                         signature: signature,
                         rawData: rawData,
@@ -110,7 +111,7 @@ Page({
     this.setData({
       canSend: false
     })
-    this.countDown()
+    this.countDown(60)
     setTimeout(() => {
       that.setData({
         canSend: true

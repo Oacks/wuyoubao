@@ -5,19 +5,22 @@
         <div class="table-area">
       
         <div style="margin: 10px 0;">
-            <el-form :model="searchForm" class="demo-form-inline" label-width="80px">
-                <!-- <el-col :span="12">
+            <el-form :model="searchForm" class="demo-form-inline" label-width="120px">
+                <el-row :gutter="20">
+
+                <el-col :span="12">
                     <el-form-item label="合同创建时间">
                         <el-date-picker
                         v-model="contractTime"
-                        type="datetimerange"
-                        value-format="yyyy-MM-dd HH:mm:ss"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
+                <!-- 
                 <el-col :span="11">
                     <el-form-item label="合同有效时间">
                         <el-date-picker
@@ -30,6 +33,7 @@
                         </el-date-picker>
                     </el-form-item>
                 </el-col> -->
+                </el-row>
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="合同状态">
@@ -44,6 +48,7 @@
                         </el-form-item>
                     </el-col>
                 <el-button style="margin-left:20px;" type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+                <el-button style="margin-top:0;" type="success" @click="exportContract">导出</el-button>
 
                     <!-- <el-col :span="12">
                         <el-form-item label="会员姓名">
@@ -79,13 +84,28 @@
                     {{getStatus(scope.row.status)}}
                 </template>
             </el-table-column>
+            <el-table-column prop="shopName" label="4S店">
+            </el-table-column>
+            <el-table-column prop="createTime" label="下单时间">
+            </el-table-column>
+            <el-table-column prop="mobile" label="客户电话号码">
+            </el-table-column>
+            <el-table-column prop="insuranceId" label="延保卡号">
+            </el-table-column>
+            <el-table-column prop="engineNum" label="发动机号">
+            </el-table-column>
+            <el-table-column prop="memberName" label="车辆型号/品牌">
+                <template slot-scope="scope">
+                    {{scope.row.vehicle}}/{{scope.row.brand}}
+                </template>
+            </el-table-column>
             <el-table-column prop="status" label="操作">
                 <template slot-scope="scope">
                     <!-- <el-button type="primary" @click="edit(scope.row)">编辑</el-button> -->
-                    <el-button type="primary" @click="detail(scope.row)">查看</el-button>
-                    <el-button v-if="scope.row.status == '3'" type="success" @click="change4Status(scope.row)">启保</el-button>
-                    <!-- <el-button v-if="scope.row.status == '2'" type="success" @click="showStamp(scope.row)">生成盖章合同</el-button> -->
-                    <el-button v-if="scope.row.status == '2'" type="success" @click="approvalReady(scope.row)">审批</el-button>
+                    <el-button size="mini" type="primary" @click="detail(scope.row)">查看</el-button>
+                    <el-button size="mini" v-if="scope.row.status == '3'" type="success" @click="change4Status(scope.row)">启保</el-button>
+                    <el-button size="mini" v-if="scope.row.status == '2'" type="success" @click="approvalReady(scope.row)">审批</el-button>
+                    <el-button size="mini" v-if="scope.row.status == '3' || scope.row.status == '4'" type="success" @click="showContract(scope.row)">查看合同</el-button>
                     <!-- <el-button v-if="scope.row.status == '3'" type="success" @click="sendCard(scope.row)">发卡</el-button> -->
                 </template>
             </el-table-column>
@@ -107,7 +127,7 @@
             :title=" operate === 'detail' ? '查看合同' : ''"
             :visible="dialogVisible"
             :before-close="closeDialog"
-            width="700px">
+            width="900px">
                  <el-form :model="detailInfo" class="demo-form-inline" label-width="140px">
                     <el-row :gutter="20">
                         <el-col :span="12">
@@ -204,21 +224,21 @@
                                 {{(detailInfo.createTime)}}
                             </el-form-item>
                         </el-col>
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <el-form-item label="延保卡券：">
                                 {{(detailInfo.projectId)}}
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                     </el-row>
 
                   
 
                     <el-row :gutter="20">
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <el-form-item label="延保起期：">
                                 {{(detailInfo.startTime)}}
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="12">
                             <el-form-item label="行驶里程：">
                                 {{(detailInfo.mileage)}}
@@ -229,17 +249,37 @@
                       <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item :label="detailInfo.status != 4 ? '邮品：' : '邮品卡号：'">
-                                <div v-if="detailInfo.status != 4">
+                                {{detailInfo.insuranceId}}
+                                <!-- <div v-if="detailInfo.status != 4">
                                     <div  v-for="(post,i) in detailInfo.accessoriesList" :key="i">{{post.title}}</div>
                                 </div>
                                 <div v-if="detailInfo.status == 4">
                                     <div v-for="(post,i) in detailInfo.saleList" v-if="post.saleType == 1" :key="i">{{post.title}}</div>
+                                </div> -->
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="24">
+                            <el-form-item label="图片信息">
+                                <div class="pic-list" v-for="(pic, i) in detailInfo.picList" :key="i">
+                                    <!-- <div v-if="i === 0">身份证正面：</div>
+                                    <div v-if="i === 1">身份证反面：</div>
+                                    <div v-if="i === 2">行驶证正页：</div>
+                                    <div v-if="i === 3">车身（车头）照片：</div>
+                                    <div v-if="i === 4">车身（车尾）照片：</div>
+                                    <div v-if="i === 5">仪表盘照片：</div> -->
+                                    <el-image 
+                                        v-if="pic.pic"
+                                        class="pic-list-item-img"
+                                        :src="pic.pic" 
+                                        :preview-src-list="[pic.pic]">
+                                    </el-image>
                                 </div>
                             </el-form-item>
                         </el-col>
                     </el-row>
-
-                    <el-row :gutter="20">
+                    <!-- <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="合同图片：">
                                 <div class="pic-list">
@@ -251,7 +291,7 @@
                                 </div>
                             </el-form-item>
                         </el-col>
-                    </el-row>
+                    </el-row> -->
                 </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -264,8 +304,9 @@
             :title="'审批资料'"
             :visible="approvalDialogVisible"
             :before-close="closeApprovalDialog"
-            width="700px">
+            width="900px">
             <el-form :model="form" class="demo-form-inline" label-width="130px">
+                <contract-pic ref="approvalContract" :status="selectStatus" :selectContractData="selectContractData"  @getApprovalUrl="approvalWithPic"></contract-pic>
                 <el-row :gutter="20">
                     <el-col :span="24">
                         <el-form-item label="审批意见">
@@ -273,30 +314,26 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <!-- <el-row :gutter="20">
-                    <el-col :span="24">
-                        <el-form-item label="盖章合同图片上传">
-                            <upload-pic ref="upload" @getUrl="getUrl"></upload-pic>
-                        </el-form-item>
-                    </el-col>
-                </el-row> -->
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="approvalDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="approval">提交审批</el-button>
             </span>
         </el-dialog>
+   
         <el-dialog
             class="user-dialog"
             :close-on-click-modal='false'
-            :title="'盖章图片'"
-            :visible="stampDialogVisible"
-            :before-close="closeStampDialog"
+            :title="'合同图片'"
+            :visible="contractDialogVisible"
+            :before-close="closeContractDialog"
             append-to-body
-            width="700px">
-                <el-image class="stamp-pic" :src="b64"></el-image>
+            width="900px">
+         
+            <contract-pic ref="contract" :status="selectStatus" :selectContractData="selectContractData"  @getApprovalUrl="approvalWithPic"></contract-pic>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="stampDialogVisible = false">确 定</el-button>
+                <!-- <el-button type="success" @click="exportPDF">导 出</el-button> -->
+                <el-button @click="contractDialogVisible = false">确 定</el-button>
             </span>
         </el-dialog>
         </div>
@@ -309,18 +346,27 @@ import {
     approval,
     sendCard,
     contractDetail,
-    insuranceStart
+    insuranceStart,
+    eportData
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
 import UploadPic from './UploadPic';
 import { MCanvas } from 'mcanvas'
+import ContractPic from '../main/ContractPic';
+import qs from 'qs';
+
 export default {
     name: 'Contract',
     components: {
-        UploadPic
+        UploadPic,
+        ContractPic
     },
     data() {
         return {
+            contractDialogVisible: false,
+            selectStatus: '', // 选中的合同的状态
+            selectId: '',
+            selectContractData: {},
             b64: '',
             operate: 'detail',
             detailInfo: {},
@@ -352,15 +398,14 @@ export default {
             },
             dialogVisible: false,
             approvalDialogVisible: false,
-            stampDialogVisible: false,
             selectRow: [],
             contractValid: [], // 合同有效期
             contractTime: [], // 合同时间
-            status: '', // 状态
+            status: '2,3,4,7', // 状态
             name: '', // 会员名字
             statusOpt: [
                 {
-                    value: '',
+                    value: '2,3,4,7',
                     label: '全部'
                 },
                 // {
@@ -383,6 +428,10 @@ export default {
                     value: '4',
                     label: '保单启保中'
                 },
+                {
+                    value: '7',
+                    label: '锁定'
+                },
                 // {
                 //     value: '5',
                 //     label: '生效'
@@ -395,15 +444,14 @@ export default {
     },
     methods: {
         change4Status(row) {
+            if (!row.insuranceId) {
+                this.$message.warning('未申请发卡的合同无法启保')
+                return
+            }
             insuranceStart({id: row.id}).then(res => {
                 this.$message.success('启保成功')
                 this.getData()
             })
-        },
-        // 展示合同
-        showStamp(row) {
-            this.stampDialogVisible = true
-            this.stamp(row.pic)
         },
         // 发卡
         sendCard(row) {
@@ -416,27 +464,27 @@ export default {
             sendCard(param).then(res => {
                 this.$message.success('发卡成功')
                 this.getData()
-                console.log(res);
             })
         },
         getUrl(url) {
             this.approvalPic = url
         },
-        // 审批dialog
-        approvalReady(row) {
-            this.approvalId = row.id
-            this.approvalRemark = '',
-            this.approvalPic = '',
-            this.approvalDialogVisible = true
-            this.$nextTick(() => {
-                this.$refs.upload.clearPic()
-            })
-        },
-        closeApprovalDialog() {
-            this.approvalDialogVisible = false
-        },
-        closeStampDialog() {
-            this.stampDialogVisible = false
+         // 下载合同
+        exportContract() {
+            const link = document.createElement('a');  
+                let obj = {
+                    startTime: this.contractTime ? this.contractTime[0] : '',
+                    endTime: this.contractTime ? this.contractTime[1] : '',
+                    page: this.page.no,
+                    pageSize: this.page.size,
+                    status: this.status,
+                    memberName: this.name || ''
+                }
+            let str = qs.stringify(obj)
+            link.href = 'https://wuyoubao.sankinetwork.com/api/yzht/eportContract?' + str
+            // link.href = 'http://2o6465101l.wicp.vip/yzht/eportContract?' + str
+            link.setAttribute('target', '_blank');  
+            link.click();
         },
         getStatus(status) {
             for (let i = 0; i < this.statusOpt.length; i++) {
@@ -446,28 +494,46 @@ export default {
                 }
             }
         },
-        approval(row) {
-            // if (this.approvalPic == '') {
-            //     this.$message.warning({message: '请先上传合同图片',});
-            //     return
-            // }
+        // 审批dialog
+        approvalReady(row) {
+            this.approvalId = row.id
+            this.approvalRemark = '',
+            this.approvalPic = '',
+            eportData({id:row.id}).then(res => {
+                this.selectContractData = res
+                this.selectStatus = row.status
+                this.approvalDialogVisible = true
+                this.$nextTick(() => {
+                    this.$refs.approvalContract.createPic('approval')
+                })
+            })
+        },
+        closeApprovalDialog() {
+            this.approvalDialogVisible = false
+        },
+        // 提交图片并审批
+        approvalWithPic(url) {
+            let urlStr = 'http://storage.sankinetwork.com/' + url
             let param = {
                 id: this.approvalId,
-                remark: this.approvalRemark,
                 status: '3',
-                // pic: this.approvalPic
-
+                pic: urlStr
             }
             approval(param).then(res => {
-                this.$message.success({message: '审批成功'});
-                this.closeApprovalDialog()
+                this.approvalDialogVisible = false
+                this.$message.success({message: '提交审批成功'});
                 this.getData()
             })
+        },
+        // 提出确认
+        approval() {
+            this.$refs.approvalContract.setImage(this.$refs.approvalContract.approvalUrl)
         },
         search() {
             this.getData()
         },
-        handlePageChange() {
+        handlePageChange(page) {
+            this.page.no = page
             this.getData()
         },
         getData() {
@@ -507,6 +573,7 @@ export default {
                 console.log(res);
                 this.detailInfo = res.contract
                 this.detailInfo.accessoriesList = res.accessories
+                this.detailInfo.picList = res.picList
                 this.operate = 'detail'
                 this.form = res
                 this.openDialog()
@@ -540,35 +607,21 @@ export default {
         closeDialog() {
             this.dialogVisible = false
         },
-        async stamp(url) {
-            const mc = new MCanvas({
-                width: 500,
-                height: 1000,
-                backgroundColor: 'white',
-            });
-
-            // background : 准备底图；提供多种模式
-            mc.background(url,{
-                left: 0,
-                top: 0,
-                color: '#fff',
-                type: 'crop',
+        showContract(row) {
+            this.selectId = row.id
+            eportData({id:row.id}).then(res => {
+                this.selectContractData = res
+                this.selectStatus = row.status
+                this.contractDialogVisible = true
+                this.$nextTick(() => {
+                    this.$refs.contract.createPic()
+                })
             })
-          
-            // add 添加图片素材基础函数；
-            mc.add('http://storage.sankinetwork.com/wuyoubao-mail-post.png',{
-                width: 200,
-                height: 30,
-                pos: {
-                    x: 20,
-                    y: 900,
-                    scale: 1,
-                    rotate: 1,
-                },
-            })
-            const b64 = await mc.draw({});
-            this.b64 = b64
-        }
+        },
+        closeContractDialog() {
+            this.contractDialogVisible = false
+        },
+        
     }
 };
 </script>
@@ -624,5 +677,9 @@ export default {
     }
     .el-button + .el-button {
         margin-left: 0;
+    }
+    .pic-list-item-img {
+        width: 200px;
+        height: 200px;
     }
 </style>

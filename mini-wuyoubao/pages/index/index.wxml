@@ -4,6 +4,7 @@
     <view class="white ml20 barTitle" slot="center">无忧保</view>
   </navBar>
   <view class="index-bg base-color">
+    <view class="index-user" wx:if="{{userName}}">你好，{{userName}}</view>
     <!-- <text class="login-btn white" bindtap="loginHandler">登录</text> -->
     <button class='login-btn white' type='primary' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="bindGetUserInfo">
         登录

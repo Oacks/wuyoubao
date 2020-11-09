@@ -55,7 +55,7 @@
             :before-close="closeDialog"
             append-to-body
             width="800px">
-                <el-form :model="form" class="demo-form-inline" label-width="80px">
+                <el-form :model="form" class="demo-form-inline" label-width="100px">
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="销售名称">
@@ -77,6 +77,22 @@
                                         :key="i"
                                         :label="shop.shopName"
                                         :value="shop.id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="是否管理员">
+                                <el-select v-model="form.isManager" placeholder="请选择">
+                                    <el-option
+                                        :label="'是'"
+                                        :value="1">
+                                    </el-option>
+                                    <el-option
+                                        :label="'否'"
+                                        :value="0">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -116,6 +132,7 @@ export default {
                 memberName: '',
                 mobile: '',
                 shopId: '',
+                isManager: 1,
                 status: 1 // 1有效
             },
             page: {
@@ -164,6 +181,7 @@ export default {
             this.form = {
                 memberName: '',
                 mobile: '',
+                isManager: 1,
                 shopId: this.shopId,
                 status: 1 // 1有效
             },
@@ -174,6 +192,7 @@ export default {
             row.status = Number(row.status)
             this.form = cloneDeep(row)
             this.form.shopId = this.shopId
+            this.form.isManager = Number(this.form.isManager)
             this.openDialog()
         },
         // 详情

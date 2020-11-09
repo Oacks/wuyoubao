@@ -21,6 +21,17 @@
   height: 88rpx;
 }
 
+.index-user {
+  float: left;
+  width: 152rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  color: #fff;
+  margin-left: 10px;
+  background-color: transparent !important;
+}
+
 .login-btn {
   float: right;
   width: 152rpx;

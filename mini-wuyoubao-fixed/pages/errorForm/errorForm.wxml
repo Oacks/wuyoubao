@@ -12,16 +12,17 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">保修合同号</view>
-                    <input disabled="{{true}}" placeholder-class="phcolor" class="content-input" value="{{form.contractNo}}" name="contractNo" placeholder="请填写" />
+                    <input disabled="{{true}}" placeholder-class="phcolor" class="content-input" value="{{form.contractNo}}" name="contractNo" placeholder="" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">车牌</view>
-                    <input disabled="{{true}}" placeholder-class="phcolor" class="content-input" value="{{form.licensePlate}}" name="licensePlate" placeholder="请填写" />
+                    <input disabled="{{true}}" placeholder-class="phcolor" class="content-input" value="{{form.licensePlate}}" name="licensePlate" placeholder="" />
                 </view>
    
                 <view class="item-content">
                     <view class="content-title">4S店</view>
-                    <input class="content-input" placeholder-class="phcolor" bindtap="toSelectBrand" disabled="{{true}}" value="{{shopName}}" placeholder="请选择" />
+                    <input disabled="{{true}}" placeholder-class="phcolor" class="content-input" value="{{form.shopName}}" name="shopName" placeholder="" />
+                    <!-- <input class="content-input" placeholder-class="phcolor" bindtap="toSelectBrand" disabled="{{true}}" value="{{shopName}}" placeholder="请选择" /> -->
                 </view>
       
                 
@@ -34,7 +35,7 @@
                     故障原因
                 </view>
                 <view class="item-area-content">
-                    <textarea class="content-area" placeholder-class="phcolor" value="{{form.reason}}" name="reason" placeholder="请输入故障原因..."/>
+                    <textarea disabled="{{ctrl == 'detail'}}" class="content-area" placeholder-class="phcolor" value="{{form.reason}}" name="reason" placeholder="请输入故障原因..."/>
                 </view>
             </view>
 
@@ -61,11 +62,11 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">联系人</view>
-                    <input class="content-input" placeholder-class="phcolor" value="{{form.memberName}}" name="memberName" placeholder="请填写" />
+                    <input class="content-input" disabled="{{ctrl == 'detail'}}" placeholder-class="phcolor" value="{{form.memberName}}" name="memberName" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">联系电话</view>
-                    <input type="number" class="content-input" placeholder-class="phcolor" value="{{form.mobile}}" name="mobile" placeholder="请填写" />
+                    <input type="number" disabled="{{ctrl == 'detail'}}" class="content-input" placeholder-class="phcolor" value="{{form.mobile}}" name="mobile" placeholder="请填写" />
                 </view>
             </view>
             <view class="item-container" wx:if="{{ctrl == 'detail' && logFile.length > 0}}">

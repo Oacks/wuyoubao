@@ -56,6 +56,7 @@ export default {
                     login(param).then(res => {
                         if (res !== undefined) {
                             localStorage.setItem('ms_username', this.param.username);
+                            localStorage.setItem('wy_menu', JSON.stringify(res.menuList));
                             this.$router.push('/');
                         }
                     })

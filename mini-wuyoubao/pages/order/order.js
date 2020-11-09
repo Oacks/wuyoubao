@@ -1,6 +1,7 @@
 // pages/order/order.js
 let app = getApp().globalData;
 import api from '../../api/api'
+const qiniuUploader = require("../../utils/qiniuUploader");
 Page({
 
   /**
@@ -12,6 +13,7 @@ Page({
     uploadOperate: '',
     orderStatus: '', // 订单状态
     // 详情返回的字段
+    uploadToken: '',
 
     insuranceId: '', // 所选卡券
     insurancePrice: '',
@@ -39,6 +41,7 @@ Page({
       insuranceNo: '',
       mileage: '',
       code: '',
+      picList: []
     },
     dialogVisible: false,
     carTypeOpt: [
@@ -91,9 +94,9 @@ Page({
   sendCodeLater() {
     let that = this
     this.setData({
-      canSend: false
+      canSend: false,
     })
-    this.countDown()
+    this.countDown(60)
     setTimeout(() => {
       that.setData({
         canSend: true
@@ -175,6 +178,55 @@ Page({
   formatTime(str) {
     return str + ' 00:00:00'
   },
+  // 预览图片
+  previewPic(e) {
+    let url = e.currentTarget.dataset.url
+    let list = e.currentTarget.dataset.urllist || [url]
+    wx.previewImage({
+      current: url, // 当前显示图片的http链接
+      urls: list || []// 需要预览的图片http链接列表
+    })
+  },
+  getToken() {
+    api.get('file/uploadQniuToken', {}).then((res => {
+      this.setData({
+        uploadToken: res
+      })
+    }))
+  },
+  // 上传图片
+  uploadPic(tar) {
+    var _this = this
+    wx.chooseImage({
+      count: 1, // 默认9  
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有  
+      sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有  
+      success: function(res) {
+        const filepath = res.tempFilePaths[0]
+        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片  
+        qiniuUploader.upload(filepath, res => {
+          console.log(res)
+          let list = _this.data.form.picList
+          // list[tar.target.dataset.listno] = ('http://storage.sankinetwork.com' + res.imageURL)
+          list[tar.target.dataset.listno] = {
+            pic: 'http://storage.sankinetwork.com' + res.imageURL,
+            type: Number(tar.target.dataset.listno)
+          }
+          console.log(list);
+          
+          _this.setData({
+            'form.picList': list
+          })
+        }, (error) => {
+          console.log('error' + error)
+        }, {
+          bucket: 'sanki',
+          region: 'SCN',
+          uptoken: _this.data.uploadToken,
+        })
+      }
+    })
+  },
   // 下单
   async order(form) {
     let {
@@ -196,9 +248,9 @@ Page({
       address: address,
       vin: vin,
       engineNum: engineNum,
-      licensePlate: licensePlate,
       carPrice: carPrice,
       mileage: mileage,
+      licensePlate: licensePlate, // 车牌
       vehicle: vehicle,
       projectId: this.data.insuranceId,
       brand: this.data.carBrand,
@@ -209,6 +261,7 @@ Page({
       oldEndTime: this.formatTime(this.data.oldEndTime),
       createTime: this.formatTime(this.data.createTime), // 延保销售日期
       // startTime: this.formatTime(this.data.startTime), // 延保起期
+      picList: this.data.form.picList
     }
     if (!params.projectId) {
       wx.showToast({
@@ -255,6 +308,22 @@ Page({
         }
       }
     }
+    if (obj.picList.length !== 6) {
+      wx.showToast({
+        title: '请上传相关图片',
+        icon: 'none',
+        image: '',
+        duration: 1500,
+        mask: false,
+      });
+      return false
+    }
+    for (let i = 0; i < obj.picList.length; i++) {
+      const element = obj.picList[i];
+      if (element === null || element === undefined || element === '') {
+        return false
+      }
+    }
     return true
   },
   // 更新订单
@@ -279,7 +348,6 @@ Page({
       address: address,
       vin: vin,
       engineNum: engineNum,
-      licensePlate: licensePlate,
       carPrice: carPrice,
       mileage: mileage,
       vehicle: vehicle,
@@ -292,6 +360,7 @@ Page({
       oldEndTime: this.formatTime(this.data.oldEndTime),
       createTime: this.formatTime(this.data.createTime), // 延保销售日期
       status: '0',
+      picList: this.data.form.picList
       // startTime: this.formatTime(this.data.startTime), // 延保起期
     }
     if (!params.projectId) {
@@ -306,6 +375,8 @@ Page({
     }
     let valid = await this.validate(params)
     if (!valid) {return}
+    params.licensePlate = licensePlate // 车牌跳过校验
+
     api.post('sale/updateContract', params).then(res => {
       // 打开重选列表
       wx.showToast({
@@ -417,7 +488,15 @@ Page({
         createTime,
         projectId,
         status,
-        startTime,} = res
+        startTime,
+        picList} = res
+        let handlePicList = []
+        for (let i = 0; i < picList.length; i++) {
+          const element = picList[i];
+          if (element.type) {
+            handlePicList[Number(element.type)] = element
+          }
+        }
       let form = {
         contractNo: contractNo,
         memberName: memberName,
@@ -429,8 +508,9 @@ Page({
         carPrice: carPrice,
         mileage: mileage,
         vehicle: vehicle,
-
+        picList: handlePicList
       }
+      console.log(picList);
       let insuranceNo = 0
       for (let i = 0; i < this.data.insuranceOpt.length; i++) {
         const element = this.data.insuranceOpt[i];
@@ -459,6 +539,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    this.getToken()
     this.debounceGetPrice = this.debounce(this.getProjectFromPrice, 500) // 初始化debounce方法
     let id = options.id
     if (id) {

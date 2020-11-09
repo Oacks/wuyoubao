@@ -99,3 +99,76 @@
     margin-top: 30px;
     margin-bottom: 30px;
 }
+
+.pic-tips {
+    width: 100%;
+    color: red;
+    padding-left: 20px;
+    font-size: 12px;
+    text-align: left;
+}
+
+.pic-upload {
+    width: 100%;
+    line-height: 40px;
+    background-color: #fff;
+    overflow: hidden;
+    text-align: center;
+}
+
+.pic-box {
+    position: relative;
+    display: inline-block;
+    width: 660rpx;
+    padding: 10rpx;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.pic-item {
+    display: inline-block;
+    width: 308rpx;
+    height: 214rpx;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.pic-img {
+    display: inline-block;
+    width: 308rpx;
+    height: 214rpx;
+}
+
+.add-btns {
+    width: 100%;
+}
+
+.add-pic {
+    position: relative;
+    width: 140rpx;
+    height: 140rpx;
+    background-color: #fff;
+    border-radius: 8rpx;
+    border: 1px solid #D2D2D2;
+}
+
+.add-pic::before {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 70rpx;
+    background-color: #D2D2D2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.add-pic::after {
+    content: '';
+    position: absolute;
+    height: 70rpx;
+    width: 2px;
+    background-color: #D2D2D2;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

@@ -16,6 +16,7 @@ Page({
     currentSwiper: 0,
     previousmargin: '0',//前边距
     nextmargin: '0',//后边距
+    userName: '',
   },
 
   swiperChange: function (e) {
@@ -64,6 +65,7 @@ Page({
           brand,
           carType,
           price,
+          shopName,
           carBuyTime,
           oldStartTime,
           oldEndTime,
@@ -82,6 +84,7 @@ Page({
           mileage: mileage,
           vehicle: vehicle,
           insurancePrice: price,
+          shopName: shopName
         }
         try {
           let strForm = JSON.stringify(form)
@@ -184,12 +187,12 @@ Page({
         var that = this;
         //插入登录的用户的相关信息到数据库
         let {signature, rawData, encryptedData, iv} = e.detail
-        if (this.data.mobile) {
-          return
-        }
         wx.navigateTo({
           url: '/pages/login/login',
         });
+        if (this.data.mobile) {
+          return
+        }
         if (!wx.getStorageSync('sessionKey') || !that.data.mobile){return}
         api.post('wx/member/getUserInfo', {
           signature: signature,
@@ -207,7 +210,7 @@ Page({
             title:'警告',
             content:'您点击了拒绝授权，将无法执行用户操作!',
             showCancel:false,
-            confirmText:'返回授权',
+            confirmText:'确定',
             success:function(res){
                 if (res.confirm) {
                     console.log('用户点击了“返回授权”')
@@ -237,7 +240,20 @@ Page({
         }
       })
     },
-    
+    // 查看章程
+    openRules() {
+      wx.downloadFile({
+        url: 'https://storage.sankinetwork.com/wuyoubao-rules.docx',
+        success: function (res) {
+      console.log(res);
+              var filePath = res.tempFilePath;
+              console.log(res)
+              wx.openDocument({
+                filePath: filePath,
+              })
+        }
+      })
+    },
     // 调用后台登录接口
     backendLogin(code) {
       let self = this
@@ -247,7 +263,9 @@ Page({
         }
         wx.setStorageSync('openid', res.openId);
         wx.hideLoading();
-  
+        this.setData({
+          userName: res.memberName
+        })
         // self.checkAuthorization()
       })
     },

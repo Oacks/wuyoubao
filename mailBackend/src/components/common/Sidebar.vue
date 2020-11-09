@@ -186,26 +186,25 @@ export default {
         }
     },
     created() {
-        menuList().then(res => {
-            // this.items = this.copyItem
-            // return // 测试开启
-            let list = []
-            for (let i = 0; i < res.length; i++) {
-                const name = res[i].name;
-                for (let j = 0; j < this.copyItem.length; j++) {
-                    const title = this.copyItem[j].title;
-                    if (title === name) {
-                        list.push(this.copyItem[j])
-                    }
-                }
-            }
-            this.items = list
-        })
         // 通过 Event Bus 进行组件间通信，来折叠侧边栏
         bus.$on('collapse', msg => {
             this.collapse = msg;
             bus.$emit('collapse-content', msg);
         });
+    },
+    mounted() {
+        let menu = JSON.parse(localStorage.getItem('yz_menu'));
+        let list = []
+        for (let i = 0; i < menu.length; i++) {
+            const name = menu[i].name;
+            for (let j = 0; j < this.copyItem.length; j++) {
+                const title = this.copyItem[j].title;
+                if (title === name) {
+                    list.push(this.copyItem[j])
+                }
+            }
+        }
+        this.items = list
     }
 };
 </script>

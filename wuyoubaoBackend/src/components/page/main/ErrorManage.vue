@@ -376,7 +376,8 @@ export default {
         getData() {
             let obj = {
                 page: this.page.no,
-                pageSize: this.page.size
+                pageSize: this.page.size,
+                contractNo: ''
             }
             if (this.showTableStatus == 'undo') {
                 guaranteeList(obj).then(res => {

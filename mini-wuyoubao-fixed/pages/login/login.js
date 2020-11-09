@@ -114,6 +114,7 @@ Page({
     this.setData({
       canSend: false
     })
+    this.countDown(60)
     setTimeout(() => {
       that.setData({
         canSend: true
