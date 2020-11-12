@@ -211,11 +211,11 @@
                                 {{(detailInfo.createTime)}}
                             </el-form-item>
                         </el-col>
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <el-form-item label="延保卡券：">
                                 {{(detailInfo.projectId)}}
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                     </el-row>
 
                   
@@ -471,7 +471,12 @@ export default {
                 status: this.status,
             }
             contractList(obj).then(res => {
-                this.tableData = res.records
+                if (res.records) {
+                    let list = res.records.filter(data => {
+                        return data.insuranceId == null || data.insuranceId == 'null'}
+                    )
+                    this.tableData = list
+                }
                 this.page.total = res.total
                 this.page.no = res.current
             })

@@ -226,7 +226,7 @@
                         </el-col>
                         <!-- <el-col :span="12">
                             <el-form-item label="延保卡券：">
-                                {{(detailInfo.projectId)}}
+                                {{detailInfo.insuranceId}}
                             </el-form-item>
                         </el-col> -->
                     </el-row>
@@ -249,13 +249,12 @@
                       <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item :label="detailInfo.status != 4 ? '邮品：' : '邮品卡号：'">
-                                {{detailInfo.insuranceId}}
-                                <!-- <div v-if="detailInfo.status != 4">
+                                <div v-if="detailInfo.status != 4">
                                     <div  v-for="(post,i) in detailInfo.accessoriesList" :key="i">{{post.title}}</div>
                                 </div>
                                 <div v-if="detailInfo.status == 4">
                                     <div v-for="(post,i) in detailInfo.saleList" v-if="post.saleType == 1" :key="i">{{post.title}}</div>
-                                </div> -->
+                                </div>
                             </el-form-item>
                         </el-col>
                     </el-row>
