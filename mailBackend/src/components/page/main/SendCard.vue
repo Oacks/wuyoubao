@@ -187,6 +187,7 @@ export default {
             this.$nextTick(() => {
                 this.$refs.sendCardList.sendCardOperate = 'create'
                 this.$refs.sendCardList.selectContractId = ''
+                this.$refs.sendCardList.selectRowStatus = ''
                 this.$refs.sendCardList.getData()  // 获取全部合同           
             })
         },
@@ -290,6 +291,7 @@ export default {
             this.$nextTick(() => {
                 this.$refs.sendCardList.sendCardOperate = 'edit'
                 this.$refs.sendCardList.selectContractId = row.id
+                this.$refs.sendCardList.selectRowStatus = row.status
                 this.$refs.sendCardList.getContractData(row.id)  // 获取指定id下合同    
             })
         },

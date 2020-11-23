@@ -26,13 +26,13 @@
                 <view class="item-content">
                     <view class="content-title">联系电话</view>
                     <input class="content-input" type="number" disabled="{{id && orderStatus != '1'}}" placeholder-class="phcolor" value="{{form.mobile}}" name="mobile" placeholder="请填写"  bindinput="mobileInput"/>
-                    <view class="content-code {{canSend ? '': 'disabled'}}"  
-                    wx:if="{{!id}}" bindtap="getCode">{{ canSend ? '获取验证码' : (sendLater + 's后重发')}}</view>
+                    <!-- <view class="content-code {{canSend ? '': 'disabled'}}"  
+                    wx:if="{{!id}}" bindtap="getCode">{{ canSend ? '获取验证码' : (sendLater + 's后重发')}}</view> -->
                 </view>
-                <view class="item-content" wx:if="{{!id}}">
+                <!-- <view class="item-content" wx:if="{{!id}}">
                     <view class="content-title">验证码</view>
                     <input class="content-input"  type="number" placeholder-class="phcolor" value="{{form.code}}" name="code" placeholder="请填写" />
-                </view>
+                </view> -->
                 <view class="item-content">
                     <view class="content-title">联系地址</view>
                     <input class="content-input" disabled="{{id && orderStatus != '1'}}" placeholder-class="phcolor" value="{{form.address}}" name="address" placeholder="请填写" />

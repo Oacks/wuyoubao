@@ -58,6 +58,9 @@
             <el-table-column prop="totalPrice" label="总价">
             </el-table-column>
 
+            <el-table-column prop="contractTotal" label="合同总价">
+            </el-table-column>
+
             <!-- <el-table-column prop="picList" label="图片">
             </el-table-column> -->
           

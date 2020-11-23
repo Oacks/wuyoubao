@@ -211,11 +211,11 @@
                                 {{(detailInfo.createTime)}}
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :span="12">
+                        <el-col :span="12">
                             <el-form-item label="延保卡券：">
-                                {{(detailInfo.projectId)}}
+                                <span v-if="selectRowStatus == 1">{{(detailInfo.insuranceId)}}</span>
                             </el-form-item>
-                        </el-col> -->
+                        </el-col>
                     </el-row>
 
                   
@@ -330,6 +330,7 @@ export default {
             contractPic:'',
             operate: 'detail',
             tableData: [],
+            selectRowStatus: '',
             name: '',
             detailInfo: {},
             page: {

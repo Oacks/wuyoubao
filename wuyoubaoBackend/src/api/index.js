@@ -169,6 +169,11 @@ export const exportContract = query => {
     return get('wyht/eportContract', query)
 }
 
+// 生成报障单
+export const createGuarantee = query => {
+    return post('wyht/createGuarantee', query)
+}
+
 // 报障列表
 export const guaranteeList = query => {
     return get('wyht/guaranteeList', query)

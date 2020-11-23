@@ -14,7 +14,9 @@
                     :value="'done'">
                     </el-option>
                 </el-select>
-                <el-button @click="getData">刷新</el-button>
+                <el-button style="margin-left:10px;" @click="getData">刷新</el-button>
+                <el-button style="margin-left:10px;" type="success" @click="addGuaranteeReady">生成报障单</el-button>
+
            </div>
 
         <el-table
@@ -73,6 +75,99 @@
                 @current-change="handlePageChange"
             ></el-pagination>
         </div>
+        <el-dialog
+            class="user-dialog"
+            :close-on-click-modal='false'
+            :title="'生成报障单'"
+            :visible="dialogGuaranteeVisible"
+            :before-close="closeGuranteeDialog"
+            width="900px">
+                <div>车架号：
+                    <div style="width:400px;display:inline-block;">
+                        <el-input v-model="contractVin"></el-input>
+                    </div>
+                    <el-button style="margin-left:10px;" type="primary" @click="getContractList">搜索</el-button>
+                </div>
+                <el-table
+                :data="contractTableData"
+                border
+                class="table"
+                style="margin-top:10px;"
+                ref="multipleTable"
+                row-key="id"
+                header-cell-class-name="table-header"
+                >
+                    <el-table-column prop="memberName" label="客户名">
+                    </el-table-column>
+                    <el-table-column prop="status" label="合同状态">
+                        <template slot-scope="scope">
+                            {{getStatus(scope.row.status)}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="shopName" label="4S店">
+                    </el-table-column>
+                    <el-table-column prop="createTime" label="下单时间">
+                    </el-table-column>
+                    <el-table-column prop="mobile" label="客户电话号码">
+                    </el-table-column>
+                    <el-table-column prop="insuranceId" label="延保卡号">
+                    </el-table-column>
+                    <el-table-column prop="engineNum" label="发动机号">
+                    </el-table-column>
+                    <el-table-column prop="memberName" label="车辆型号/品牌">
+                        <template slot-scope="scope">
+                            {{scope.row.vehicle}}/{{scope.row.brand}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <div >
+                                <el-button size="mini" type="primary" @click="addGuaranteeDetailReady(scope.row)">生成报障单</el-button>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogGuaranteeVisible = false">取 消</el-button>
+            </span>
+        </el-dialog>
+
+        <el-dialog
+            class="user-dialog"
+            :close-on-click-modal='false'
+            :title="'创建报障单'"
+            :visible="guaranteeFormDialogVisible"
+            :before-close="closeGuranteeDialog"
+            append-to-body
+            width="900px">
+                 <el-form :model="guaranteeForm" class="demo-form-inline" label-width="80px">
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="报障时间">
+                                <el-date-picker
+                                    v-model="guaranteeForm.createTime"
+                                    value-format="yyyy-MM-dd HH:mm:ss"
+                                    type="datetime"
+                                    placeholder="选择日期时间">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="24">
+                            <el-form-item label="原因">
+                                <el-input type="textarea" v-model="guaranteeForm.reason"  class="handle-input mr10"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="guaranteeFormDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addGuarantee">确 定</el-button>
+            </span>
+        </el-dialog>
+
         <el-dialog
             class="user-dialog"
             :close-on-click-modal='false'
@@ -270,7 +365,9 @@ import {
     guaranteeDetail,
     delGuarantee,
     guaranteeStatus,
-    guaranteeFishList
+    guaranteeFishList,
+    contractList,
+    createGuarantee
  } from '../../../api/index';
 import {uniqBy, cloneDeep} from 'lodash';
 // import RSA from '../../../utils/rsa'
@@ -286,6 +383,8 @@ export default {
             showTableStatus: 'undo',
             operate: 'detail',
             tableData: [],
+            contractTableData: [],
+            contractVin: '',
             logList: [],
             approvalPic: '',
             page: {
@@ -293,7 +392,9 @@ export default {
                 total: 0,
                 size: 20
             },
-          
+            guaranteeForm: {
+
+            },
             form: {
                 remark:'',
                 processingTime: '',
@@ -304,6 +405,8 @@ export default {
                 detail: {},
             },
             dialogVisible: false,
+            dialogGuaranteeVisible: false,
+            guaranteeFormDialogVisible: false,
             dialogDetailVisible: false,
             dialogLogVisible: false,
             selectRow: [],
@@ -318,6 +421,52 @@ export default {
         this.getData();
     },
     methods: {
+        // 查看合同
+        addGuaranteeReady() {
+            this.dialogGuaranteeVisible = true
+            this.contractVin = ''
+            this.contractTableData = []
+        },
+        // 填写报障单
+        addGuaranteeDetailReady(row) {
+            this.guaranteeForm = {
+                contractId: row.id,
+                createTime: '',
+                reason: ''
+            }
+            this.guaranteeFormDialogVisible = true
+        },
+        // 生成报障单
+        addGuarantee() {
+            let params = this.guaranteeForm
+            createGuarantee(params).then(res => {
+                this.$message.success('创建成功！')
+                this.guaranteeFormDialogVisible = false
+                this.dialogGuaranteeVisible = false
+                this.getData()
+            })
+        },
+        // 获取合同列表
+        getContractList() {
+            let obj = {
+                pageSize:  this.page.size,
+                page:  this.page.no,
+                contractEndTime: this.contractValid ? this.contractValid[1] : '',
+                contractStartTime: this.contractValid ? this.contractValid[0] : '',
+                memberName: this.name,
+                startTime: this.contractTime ? this.contractTime[0] : '',
+                endTime: this.contractTime ? this.contractTime[1] : '',
+                status: '0,1,2,3,4,7',
+                vin: this.contractVin,
+            }
+            contractList(obj).then(res => {
+                this.contractTableData = res.records
+            })
+        },
+        closeGuranteeDialog() {
+            this.dialogGuaranteeVisible = false
+        },
+        // 图片url
         getUrl(url) {
             this.approvalPic = url
         },

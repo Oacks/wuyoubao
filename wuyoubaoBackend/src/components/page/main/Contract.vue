@@ -227,11 +227,11 @@
                                 {{(detailInfo.createTime)}}
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :span="12">
+                        <el-col :span="12">
                             <el-form-item label="延保卡券：">
-                                {{(detailInfo.projectId)}}
+                                <span>{{(detailInfo.insuranceId)}}</span>
                             </el-form-item>
-                        </el-col> -->
+                        </el-col>
                     </el-row>
 
                     <el-row :gutter="20">
@@ -240,6 +240,11 @@
                                 {{(detailInfo.startTime)}}
                             </el-form-item>
                         </el-col> -->
+                        <el-col :span="12">
+                            <el-form-item label="销售价格：">
+                                <span>{{(detailInfo.price)}}</span>
+                            </el-form-item>
+                        </el-col>
                         <el-col :span="12">
                             <el-form-item label="行驶里程：">
                                 {{(detailInfo.mileage)}}

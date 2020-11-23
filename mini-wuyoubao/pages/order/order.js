@@ -132,8 +132,10 @@ Page({
   },
   bindBuyTimeChange: function(e) {
     this.bindTimeChange('carBuyTime', e.detail.value)
+    this.bindTimeChange('oldStartTime', e.detail.value)
   },
   bindOldStartTimeChange: function(e) {
+    this.bindTimeChange('carBuyTime', e.detail.value)
     this.bindTimeChange('oldStartTime', e.detail.value)
   },
   bindOldEndTimeChange: function(e) {
@@ -242,7 +244,7 @@ Page({
       vehicle,
       price} = form
     let params = {
-      code: code,
+      // code: code,
       memberName: memberName,
       mobile: mobile,
       address: address,
