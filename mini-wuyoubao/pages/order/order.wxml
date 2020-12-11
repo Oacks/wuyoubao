@@ -91,7 +91,7 @@
                 </view>
                 <view class="item-content">
                     <view class="content-title">车牌号码</view>
-                    <input class="content-input" disabled="{{id && orderStatus != '1'}}" placeholder-class="phcolor" name="licensePlate" value="{{form.licensePlate}}" placeholder="请填写" />
+                    <input class="content-input" placeholder-class="phcolor" name="licensePlate" value="{{form.licensePlate}}" placeholder="请填写" />
                 </view>
                 <view class="item-content">
                     <view class="content-title">车辆售出价格</view>
@@ -143,7 +143,7 @@
                             </image>
                         </view>
                         <view class="add-btns">
-                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1') && !form.picList[0] }}" bindtap="uploadPic" data-listno="{{0}}"></view>
+                            <view class="add-pic" wx:if="{{ !form.picList[0] }}" bindtap="uploadPic" data-listno="{{0}}"></view>
                         </view>
                     </view>
                 </view>
@@ -161,7 +161,7 @@
                             </image>
                         </view>
                         <view class="add-btns">
-                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1')  && !form.picList[1] }}" bindtap="uploadPic" data-listno="{{1}}"></view>
+                            <view class="add-pic" wx:if="{{!form.picList[1] }}" bindtap="uploadPic" data-listno="{{1}}"></view>
                         </view>
                     </view>
                 </view>
@@ -179,7 +179,7 @@
                             </image>
                         </view>
                         <view class="add-btns">
-                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1') && !form.picList[2] }}" bindtap="uploadPic" data-listno="{{2}}"></view>
+                            <view class="add-pic" wx:if="{{ !form.picList[2] }}" bindtap="uploadPic" data-listno="{{2}}"></view>
                         </view>
                     </view>
                 </view>
@@ -201,7 +201,7 @@
                             </image>
                         </view>
                         <view class="add-btns">
-                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1') && !form.picList[3] }}" bindtap="uploadPic" data-listno="{{3}}"></view>
+                            <view class="add-pic" wx:if="{{ !form.picList[3] }}" bindtap="uploadPic" data-listno="{{3}}"></view>
                         </view>
                     </view>
                 </view>
@@ -222,7 +222,7 @@
                             </image>
                         </view>
                         <view class="add-btns">
-                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1')  && !form.picList[4] }}" bindtap="uploadPic" data-listno="{{4}}"></view>
+                            <view class="add-pic" wx:if="{{ !form.picList[4] }}" bindtap="uploadPic" data-listno="{{4}}"></view>
                         </view>
                     </view>
                 </view>
@@ -244,7 +244,7 @@
                             </image>
                         </view>
                         <view class="add-btns">
-                            <view class="add-pic" wx:if="{{!(id && orderStatus != '1')  && !form.picList[5] }}" bindtap="uploadPic" data-listno="{{5}}"></view>
+                            <view class="add-pic" wx:if="{{!form.picList[5] }}" bindtap="uploadPic" data-listno="{{5}}"></view>
                         </view>
                     </view>
                 </view>
@@ -254,7 +254,7 @@
             <button wx-if="{{!id}}" class='custom-btn' type="primary" formType="submit" data-operate="create">
                 提 交
             </button>
-            <button wx-if="{{id && orderStatus == '1'}}" class='custom-btn' type="primary" formType="submit" data-operate="update">
+            <button wx-if="{{id}}" class='custom-btn' type="primary" formType="submit" data-operate="update">
                 提交修改
             </button>
             <mp-dialog title="提示" show="{{dialogVisible}}" bindbuttontap="tapDialogButton" buttons="{{[{text: '取消'}, {text: '确认'}]}}">

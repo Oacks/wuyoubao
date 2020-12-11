@@ -366,7 +366,7 @@ Page({
       createTime: this.formatTime(this.data.createTime), // 延保销售日期
       // startTime: this.formatTime(this.data.startTime), // 延保起期
       // picList: this.data.form.picList,
-      status: '0',
+      status: this.data.orderStatus == '1' ? '0' : this.data.orderStatus, // 不同意的1的话改成0，其余保持
     }
     if (!params.projectId) {
       wx.showToast({
