@@ -68,7 +68,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="用户密码" v-if="operate == 'create'">
-                                <el-input v-model="form.password"></el-input>
+                                <el-input type="password" v-model="form.password" :placeholder="operate == 'create' ? '' : '需要修改请输入原密码'"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -76,6 +76,18 @@
                         <el-col :span="12">
                             <el-form-item label="手机号">
                                 <el-input v-model="form.mobile"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item label="新密码"  v-if="operate !== 'create'">
+                                <el-input type="password" v-model="form.newPwd" placeholder="需要修改请输入新密码"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="确认密码"  v-if="operate !== 'create'">
+                                <el-input type="password" v-model="form.confirmPwd" placeholder="需要修改请确认新密码"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -134,7 +146,9 @@ export default {
                 orgin: 'wy',
                 password: '',
                 state: 1,
-                userName: ''
+                userName: '',
+                newPwd: '',
+                confirmPwd: '',
             },
             dialogVisible: false,
             selectRow: [],
@@ -190,7 +204,9 @@ export default {
                 orgin: 'wy',
                 password: '',
                 state: 1,
-                userName: ''
+                userName: '',
+                newPwd: '',
+                confirmPwd: '',
             }
             this.openDialog()
         },
@@ -234,6 +250,8 @@ export default {
                 params.password = window.btoa(params.password)
             }
             if (this.operate == 'create') {
+                delete params.newPwd;
+                delete params.confirmPwd;
                 createUser(params).then(res => {
                     if (res) {
                         this.$message.success({message: '创建成功',});
@@ -244,6 +262,15 @@ export default {
             }
             if (this.operate == 'edit') {
                 console.log(this.selectedMenu);
+                if (params.newPwd != '' || params.confirmPwd != '') {
+                    if (params.newPwd !== params.confirmPwd) {
+                        this.$message.warning({message: '两次新密码输入不一样',});
+                        return
+                    }
+                    else {
+                        params.password = window.btoa(params.newPwd)
+                    }
+                }
                 addMenu({
                     userId: params.id,
                     menuList: this.selectedMenu

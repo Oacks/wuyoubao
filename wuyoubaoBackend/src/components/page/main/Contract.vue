@@ -627,7 +627,6 @@ export default {
                 let param = {
                     id: row.id,
                     status: '1',
-                    pic: ''
                 }
                 approval(param).then(res => {
                     this.$message.success({message: '操作成功',});
@@ -681,7 +680,6 @@ export default {
             let param = {
                 id: row.id,
                 status: '2',
-                pic: ''
             }
             approval(param).then(res => {
                 this.$message.success({message: '提交审批成功'});

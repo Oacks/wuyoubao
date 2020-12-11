@@ -439,6 +439,8 @@ export default {
         // 生成报障单
         addGuarantee() {
             let params = this.guaranteeForm
+            console.log(params);
+            return
             createGuarantee(params).then(res => {
                 this.$message.success('创建成功！')
                 this.guaranteeFormDialogVisible = false

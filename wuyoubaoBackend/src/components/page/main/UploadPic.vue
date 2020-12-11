@@ -47,7 +47,7 @@
                         complete(res){
                             that.$message.success({message: '上传成功',});
                             let url = 'http://storage.sankinetwork.com/' + res.key
-                            that.$emit('getApprovalUrl', url)
+                            that.$emit('getUrl', url)
                         }
                     }
                     const subscription = observable.subscribe(observer) // 上传开始

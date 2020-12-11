@@ -473,10 +473,14 @@ export default {
             }
             contractList(obj).then(res => {
                 if (res.records) {
-                    let list = res.records.filter(data => {
+                    let list = []
+                    list = res.records.filter(data => {
                         return data.insuranceId == null || data.insuranceId == 'null'}
                     )
                     this.tableData = list
+                }
+                else {
+                    this.tableData = []
                 }
                 this.page.total = res.total
                 this.page.no = res.current

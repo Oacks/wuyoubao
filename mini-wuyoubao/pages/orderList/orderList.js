@@ -13,9 +13,17 @@ Page({
     saleList: [
     ]
   },
-  getSaleList() {
+  getSaleList(operate) {
       api.get('sale/mySale', {page: this.data.pageNo, pageSize: this.data.pageSize, memberName: ''}).then(res => {
-        console.log(res);
+        if (operate == 'add') {
+          let list = this.data.saleList
+          list.push(...res.records)
+          this.setData({
+            saleList: list,
+            totalCount: res.total
+          })
+          return
+        }
         this.setData({
           saleList: res.records,
           totalCount: res.total
@@ -83,11 +91,12 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    let page = this.data.pageNo
+    let {pageNo, totalCount, saleList} = this.data
+    if (totalCount <= saleList.length) {return}
     this.setData({
-      pageNo: page + 1
+      pageNo: pageNo + 1
     })
-    this.getSaleList()
+    this.getSaleList('add')
   },
 
 })
