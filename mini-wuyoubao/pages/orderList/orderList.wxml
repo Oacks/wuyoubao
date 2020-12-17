@@ -1,18 +1,21 @@
-<!--pages/orderList/orderList.wxml-->
+<!-- pages/orderList/orderList.wxml -->
 <wxs module="format" src="./orderList.wxs"></wxs>
-
 <view class="container">
     <navBar title="" back="{{true}}" home="{{false}}" background="{{'#3EC755'}}" bindback="onBack">
         <view class="white ml20 barTitle" slot="center">订单</view>
     </navBar>
     <view class="order-list-container">
+        <view class="searchWrapper">
+            <input type="text" placeholder="请输入客户姓名" bindinput="bindInput" />
+            <view class="search-btn" bindtap="search">搜索</view>
+        </view>
         <view class="order-box" wx:for="{{saleList}}">
             <view class="order-pic" hover-class="none" hover-stop-propagation="false">
-                <image class="order-icon" src="/images/ui/icon-list.png">
-                </image>
-
+                <image class="order-icon" src="/images/ui/icon-list.png"></image>
                 <view class="btns">
-                    <view class="btn word-color" bindtap="showDetail"  data-id="{{item.id}}">查看</view>
+                    <view class="btn word-color" bindtap="showDetail" data-id="{{item.id}}">
+                        查看
+                    </view>
                 </view>
             </view>
             <view class="order-content word-color">
@@ -32,4 +35,3 @@
         </view>
     </view>
 </view>
-

@@ -134,8 +134,11 @@ Page({
         this.bindTimeChange('carBuyTime', e.detail.value)
         this.bindTimeChange('oldStartTime', e.detail.value)
         let time = e.detail.value.split('-');
-        let oldEndTime = Number(time[0]) + 3 + '-' + time[1] + '-' + time[2]
-        this.bindTimeChange('oldEndTime', oldEndTime)
+        //let oldEndTime = Number(time[0]) + 3 + '-' + time[1] + '-' + time[2];
+        let oldEndTime = new Date(((Number(time[0]) + 3 + '-' + time[1] + '-' + time[2]).replace(/-/g, '/'))).getTime()
+        let oldEndTime2 = new Date(oldEndTime - (24 * 60 * 60 * 1000));
+        let oldEndTime3 = oldEndTime2.getFullYear() + '-' + (oldEndTime2.getMonth() + 1) + '-' + oldEndTime2.getDate()
+        this.bindTimeChange('oldEndTime', oldEndTime3)
     },
     bindOldStartTimeChange: function (e) {
         this.bindTimeChange('carBuyTime', e.detail.value)
